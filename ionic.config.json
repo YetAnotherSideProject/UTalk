@@ -1,0 +1,7 @@
+{
+  "name": "UTalk",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

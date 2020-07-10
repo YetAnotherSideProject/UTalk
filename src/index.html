@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>UTalk</title>
+
+  <base href="/" />
+
+  <meta name="color-scheme" content="light dark" />
+  <meta name="viewport"
+    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!--
+    Ionic core direkt über CDN/Internet angebunden
+  
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />-->
+
+  <!--
+    Ionic core Einbindung lokal, durch webpack in der distro abgelegt.
+    Im der dev webpack config (dev server) wird ionic core aus node_modules geladen
+  -->
+  <script type="module" src="<%= htmlWebpackPlugin.options.base %>/dist/ionic/ionic.esm.js"></script>
+  <script nomodule src="<%= htmlWebpackPlugin.options.base %>/dist/ionic/ionic.js"></script>
+  <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.base %>/css/ionic.bundle.css" />
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>
