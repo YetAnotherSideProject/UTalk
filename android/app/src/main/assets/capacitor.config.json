@@ -1,0 +1,13 @@
+{
+  "appId": "de.fhms.me.utalk",
+  "appName": "UTalk",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

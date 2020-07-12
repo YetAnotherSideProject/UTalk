@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">UTalk</string>
+    <string name="title_activity_main">UTalk</string>
+    <string name="package_name">de.fhms.me.utalk</string>
+    <string name="custom_url_scheme">de.fhms.me.utalk</string>
+</resources>
