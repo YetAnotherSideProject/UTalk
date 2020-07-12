@@ -1,7 +1,7 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');     // installed via npm
-const HtmlWebpackPlugin = require('html-webpack-plugin');           // installed via npm
+const HtmlPlugin = require('html-webpack-plugin');           // installed via npm
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');    // installed via npm
-const CopyWebpackPlugin = require('copy-webpack-plugin');           // installed via npm
+const CopyPlugin = require('copy-webpack-plugin');                  // installed via npm
 module.exports = {
     mode: 'production', resolve: { extensions: ['.ts', '.js'] },
     module: {
@@ -26,12 +26,14 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         //Base ist wichtig, da sich hiervon relativ die index.html Ionic Core zieht
-        new HtmlWebpackPlugin({ template: './src/index.html', base: './ionic/core' }),
+        new HtmlPlugin({ template: './src/index.html', base: './ionic/core' }),
         new MiniCssExtractPlugin(),
-        new CopyWebpackPlugin([
-            //Prod: Ionic Core wird Teil der lokalen Distro und wird deshalb kopiert
-            { from: './node_modules/@ionic/core/css', to: 'ionic/core/css' },
-            { from: './node_modules/@ionic/core/dist/ionic', to: 'ionic/core/dist/ionic' },
-        ])
+        new CopyPlugin({
+            patterns: [
+                //Prod: Ionic Core wird Teil der lokalen Distro und wird deshalb kopiert
+                { from: './node_modules/@ionic/core/css', to: 'ionic/core/css' },
+                { from: './node_modules/@ionic/core/dist/ionic', to: 'ionic/core/dist/ionic' }
+            ],
+        })
     ]
 };

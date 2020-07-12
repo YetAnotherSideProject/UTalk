@@ -5,22 +5,22 @@ import "./components/app-start";
 @customElement("app-root")
 class AppRoot extends LitElement {
 
-  createRenderRoot() {
-    return this;
-  }
+	createRenderRoot() {
+		return this;
+	}
 
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  render() {
-    return html`
+	render() {
+		return html`
         <ion-app>
-          <ion-router use-hash="false">
-            <ion-route url="/test" component="app-start"></ion-route>
-          </ion-router>
-          <ion-nav id="nav-main"></ion-nav>
+			<ion-router use-hash="false">
+				<ion-route url="/test" component="app-start"></ion-route>
+			</ion-router>
+			<ion-nav id="nav-main"></ion-nav>
         </ion-app>
-      `;
-  }
+      	`;
+	}
 }
