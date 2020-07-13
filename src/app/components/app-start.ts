@@ -3,10 +3,6 @@ import { LitElement, html, customElement, property, query } from 'lit-element';
 @customElement('app-start')
 class AppStart extends LitElement {
 
-    createRenderRoot() {
-        return this;
-    }
-
     constructor() {
         super();
     }
