@@ -10,7 +10,6 @@ class AppStart extends LitElement {
     render() {
         return html`           
             <ion-content class="ion-padding">        
-                <form @submit="HALLO" method="POST">
                 <p>TEST</p>
             </ion-content>
         `;

@@ -5,10 +5,6 @@ import "./components/app-start";
 @customElement("app-root")
 class AppRoot extends LitElement {
 
-	createRenderRoot() {
-		return this;
-	}
-
 	constructor() {
 		super();
 	}
@@ -17,7 +13,7 @@ class AppRoot extends LitElement {
 		return html`
         <ion-app>
 			<ion-router use-hash="false">
-				<ion-route url="/test" component="app-start"></ion-route>
+				<ion-route url="/" component="app-start"></ion-route>
 			</ion-router>
 			<ion-nav id="nav-main"></ion-nav>
         </ion-app>

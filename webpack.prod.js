@@ -1,5 +1,5 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');     // installed via npm
-const HtmlPlugin = require('html-webpack-plugin');           // installed via npm
+const HtmlPlugin = require('html-webpack-plugin');                  // installed via npm
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');    // installed via npm
 const CopyPlugin = require('copy-webpack-plugin');                  // installed via npm
 module.exports = {
