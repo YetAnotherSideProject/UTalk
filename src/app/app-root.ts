@@ -9,6 +9,10 @@ class AppRoot extends LitElement {
 		super();
 	}
 
+	createRenderRoot() {
+		return this;
+	}
+
 	render() {
 		return html`
         <ion-app>
