@@ -1,17 +1,24 @@
-import { LitElement, html, customElement, property, query } from 'lit-element';
+import { LitElement, html, customElement, property, query } from "lit-element";
 
-@customElement('app-start')
+@customElement("app-start")
 class AppStart extends LitElement {
+  constructor() {
+    super();
+  }
 
-    constructor() {
-        super();
-    }
-
-    render() {
-        return html`           
-            <ion-content class="ion-padding">        
-                <p>TEST</p>
-            </ion-content>
-        `;
-    }
+  render() {
+    return html`
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>uTalk</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content padding>
+        <p>Interviews</p>
+      </ion-content>
+    `;
+  }
 }
