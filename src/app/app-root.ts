@@ -9,6 +9,7 @@ class AppRoot extends LitElement {
 		super();
 	}
 
+	//App root muss in seine Child Objects und nicht in einen Shadow DOM rendern!
 	createRenderRoot() {
 		return this;
 	}
