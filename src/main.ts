@@ -1,1 +1,2 @@
-import './app/app-root.ts';
+import "./app/app-root.ts";
+import "./index.scss";
