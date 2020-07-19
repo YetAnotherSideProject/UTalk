@@ -11,6 +11,7 @@ import "./components/app-backup/app-backup";
 import "./components/app-about-us/app-about-us";
 import "./components/app-run-interview/app-run-interview";
 import "./components/app-settings/app-settings";
+import "./components/app-fab/app-fab";
 @customElement("app-root")
 export class AppRoot extends LitElement {
   constructor() {
@@ -57,6 +58,7 @@ export class AppRoot extends LitElement {
         </ion-router>
         <ion-nav id="main"></ion-nav>
         <app-menu></app-menu>
+        <app-fab></app-fab>
       </ion-app>
     `;
   }
