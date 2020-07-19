@@ -2,11 +2,15 @@ import { LitElement, html, customElement } from "lit-element";
 
 @customElement("app-fab")
 class AppFab extends LitElement {
+  createRenderRoot() {
+    return this;
+  }
+
   render() {
     return html`
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button>
-          <ion-icon name="add"></ion-icon>
+        <ion-fab-button color="tertiary">
+          <ion-icon name="play-outline"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
           <ion-fab-button>
