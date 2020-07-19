@@ -12,6 +12,7 @@ class AppMenu extends LitElement {
       <ion-menu side="start" menu-id="main" content-id="main">
         <ion-header>
           <ion-toolbar translucent>
+            <img src="src/assets/img/utalk_logo_v2.png" width="80px" />
             <ion-title>Menu</ion-title>
           </ion-toolbar>
         </ion-header>
