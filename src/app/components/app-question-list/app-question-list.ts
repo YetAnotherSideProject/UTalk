@@ -1,19 +1,26 @@
-import { LitElement, html, customElement } from "lit-element";
+import { LitElement, html, customElement, property } from "lit-element";
+import NavParams from "@ionic/core";
 
 @customElement("app-question-list")
 class AppQuestionList extends LitElement {
+  @property({ type: String }) categoryId = "";
+
+  interval: any;
+
   constructor() {
     super();
+    /* this.interval = setInterval(() => {
+      console.log("Kategorie: " + this.categoryId);
+    }, 1000); */
   }
 
   render() {
     return html`
       <app-toolbar></app-toolbar>
-
       <ion-content class="padding">
         <ion-list>
           <ion-list-header>
-            Fragen
+            Fragen zu ${this.categoryId}
           </ion-list-header>
           <ion-item>
             <ion-card>
