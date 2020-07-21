@@ -20,16 +20,19 @@ class AppAboutUs extends LitElement {
         margin: 0;
         text-align: center;
       }
-      #version hr {
+      hr {
         width: 80%;
         border: 2px solid black;
-        margin-bottom: 40px;
+        margin-bottom: 2em;
       }
       #about-content {
         width: 80%;
         margin: auto;
-        margin-bottom: 4em;
+        margin-bottom: 2em;
         text-align: justify;
+      }
+      #spacer {
+        margin-bottom: 4em;
       }
     `;
   }
@@ -66,6 +69,38 @@ class AppAboutUs extends LitElement {
             findest!
           </p>
         </div>
+        <hr />
+        <p style="text-align: center; font-weight: bold; margin-bottom: 1em">
+          Credits
+        </p>
+        <div id="about-content">
+          <span
+            >Photo by
+            <a
+              href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+              >David von Diemar</a
+            >
+            on
+            <a
+              href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+              >Unsplash</a
+            ></span
+          >
+          <br />
+          <span
+            >Photo by
+            <a
+              href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+              >bruce mars</a
+            >
+            on
+            <a
+              href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+              >Unsplash</a
+            ></span
+          >
+        </div>
+        <div id="spacer"></div>
       </ion-content>
     `;
   }

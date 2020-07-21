@@ -9,9 +9,6 @@ class AppQuestionList extends LitElement {
 
   constructor() {
     super();
-    /* this.interval = setInterval(() => {
-      console.log("Kategorie: " + this.categoryId);
-    }, 1000); */
   }
 
   render() {
