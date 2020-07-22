@@ -9,7 +9,8 @@ class AppInterviewList extends LitElement {
   render() {
     return html`
       <app-toolbar></app-toolbar>
-      <ion-content class="padding"><ion-list>
+      <ion-content class="padding"
+        ><ion-list>
           <ion-list-header>
             Interviews
           </ion-list-header>
@@ -81,7 +82,9 @@ class AppInterviewList extends LitElement {
               </ion-card-content>
             </ion-card>
           </ion-item>
-        </ion-list></h1> </ion-content>
+        </ion-list>
+      </ion-content>
+      <app-fab icon="add-outline"></app-fab>
     `;
   }
 }

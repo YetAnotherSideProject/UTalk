@@ -1,16 +1,13 @@
 import { LitElement, html, customElement, property, query } from "lit-element";
 
 import "./app-toolbar/app-toolbar";
+import "./app-fab/app-fab";
 import { SampleDataService } from "../services/SampleDataService";
 
 @customElement("app-start")
 class AppStart extends LitElement {
   constructor() {
     super();
-  }
-
-  createRenderRoot() {
-    return this;
   }
 
   render() {
@@ -168,6 +165,7 @@ class AppStart extends LitElement {
           </ion-slide>
         </ion-slides>
       </ion-content>
+      <app-fab icon="play-outline"></app-fab>
     `;
   }
 }

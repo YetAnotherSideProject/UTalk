@@ -5,8 +5,6 @@ import NavParams from "@ionic/core";
 class AppQuestionList extends LitElement {
   @property({ type: String }) categoryId = "";
 
-  interval: any;
-
   constructor() {
     super();
   }
@@ -169,8 +167,9 @@ class AppQuestionList extends LitElement {
               </ion-card-content>
             </ion-card>
           </ion-item>
-        </ion-list></ion-content
-      >
+        </ion-list>
+      </ion-content>
+      <app-fab icon="add-outline"></app-fab>
     `;
   }
 }
