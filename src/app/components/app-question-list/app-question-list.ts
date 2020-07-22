@@ -11,7 +11,7 @@ class AppQuestionList extends LitElement {
 
   render() {
     return html`
-      <app-toolbar></app-toolbar>
+      <app-toolbar backButton="true" defaultHref="/categorylist"></app-toolbar>
       <ion-content class="padding">
         <ion-list>
           <ion-list-header>

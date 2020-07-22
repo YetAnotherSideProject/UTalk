@@ -56,17 +56,19 @@ class AppAboutUs extends LitElement {
         </div>
         <div id="about-content">
           <p>
-            uTalk ist aus einem Projekt der FH Münster entstanden und wurde für
-            eine Prüfungsleistung im Fach Mobile Engineering entwickelt. Mit
-            Hilfe des Ionic-Frameworks, der Template-Bibliothek LitElement sowie
-            der cross-platform native Runtime Capacitor kann die App für Android
-            sowie iOS durch lediglich eine Codebasis bedient werden.
+            <b>uTalk</b> ist aus einem Projekt der FH Münster entstanden und
+            wurde für eine Prüfungsleistung im Fach
+            <b>Mobile Engineering</b> entwickelt. Mit Hilfe des
+            <b>Ionic</b>-Frameworks, der Template-Bibliothek
+            <b>LitElement</b> sowie der cross-platform native Runtime
+            <b>Capacitor</b> kann die App für Android sowie iOS durch lediglich
+            eine Codebasis bedient werden.
           </p>
           <p>
-            uTalk soll dir beim Vorbereiten, Durchführen und Nachbereiten von
-            Interviews oder Befragungen helfen. Wir hoffen Dir gefällt die App
-            und Du schreibst uns was du gut und noch viel mehr was du schlecht
-            findest!
+            uTalk soll dir beim <b>Vorbereiten</b>, <b>Durchführen</b> und
+            <b>Nachbereiten</b> von Interviews oder Befragungen helfen. Wir
+            hoffen Dir gefällt die App und Du schreibst uns was du gut und noch
+            viel mehr was du schlecht findest!
           </p>
         </div>
         <hr />
