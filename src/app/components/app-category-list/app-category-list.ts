@@ -1,4 +1,5 @@
 import { LitElement, html, css, customElement } from "lit-element";
+import { alertController } from "@ionic/core";
 
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
@@ -54,6 +55,7 @@ class AppCategoryList extends LitElement {
           })}
         </ion-list>
       </ion-content>
+      <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
     `;
   }
 
@@ -67,5 +69,44 @@ class AppCategoryList extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.push("app-question-list", { categoryId: event.target.innerText });
+  }
+
+  async onFabClick() {
+    console.log("OnFabClick");
+    const alert = await alertController.create({
+      header: "Kategorie hinzufügen",
+      message: "Bitte Text eingeben",
+      inputs: [
+        {
+          name: "category",
+          placeholder: "Neue Kategorie",
+        },
+      ],
+      buttons: [
+        {
+          text: "Abbrechen",
+          role: "cancel",
+          handler: () => {
+            console.log("Confirm Cancel");
+          },
+        },
+        {
+          text: "Speichern",
+          handler: (data) => {
+            console.log("Confirm Ok");
+            console.log("Category data: ", data.category);
+            this.addCategory(data.category);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  addCategory(category: string) {
+    console.log("Passed category: " + category);
+    this.list = [...this.list, category];
+    this.requestUpdate();
   }
 }
