@@ -2,8 +2,13 @@ import { LitElement, html, customElement, property } from "lit-element";
 
 @customElement("app-toolbar")
 class AppToolbar extends LitElement {
+  // Back button properties
   @property({ type: Boolean }) backButton = false;
   @property({ type: String }) defaultHref = "/";
+
+  // Edit button properties
+  @property({ type: Boolean }) editButton = false;
+  @property({ type: Function }) onEditClick = new Function();
 
   constructor() {
     super();
@@ -18,6 +23,9 @@ class AppToolbar extends LitElement {
             ${this.setBackButton()}
           </ion-buttons>
           <ion-title>uTalk</ion-title>
+          <ion-buttons slot="end">
+            ${this.setEditButton()}
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
     `;
@@ -30,6 +38,14 @@ class AppToolbar extends LitElement {
       ></ion-back-button>`;
     } else {
       return;
+    }
+  }
+
+  setEditButton() {
+    if (this.editButton) {
+      return html`<ion-button @click=${this.onEditClick}>
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>`;
     }
   }
 }
