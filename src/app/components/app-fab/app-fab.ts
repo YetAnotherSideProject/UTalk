@@ -3,6 +3,7 @@ import { LitElement, html, css, customElement, property } from "lit-element";
 @customElement("app-fab")
 class AppFab extends LitElement {
   @property({ type: String }) icon = "play-outline";
+  @property({ type: Function }) onFabClick = new Function();
 
   constructor() {
     super();
@@ -20,7 +21,7 @@ class AppFab extends LitElement {
   render() {
     return html`
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button id="fab-button">
+        <ion-fab-button id="fab-button" @click=${this.onFabClick}>
           <ion-icon name=${this.icon}></ion-icon>
         </ion-fab-button>
       </ion-fab>

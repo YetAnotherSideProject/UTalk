@@ -1,8 +1,9 @@
-import { LitElement, html, customElement } from "lit-element";
+import { LitElement, html, customElement, property } from "lit-element";
 
 @customElement("app-question-detail")
 class AppQuestionDetail extends LitElement {
-  editable: boolean = false;
+  @property({ type: Boolean }) editable = false;
+  @property({ type: String }) categoryId = "";
   text: string = "Trallafitti";
   opacity: number = 0.5;
 
@@ -15,7 +16,7 @@ class AppQuestionDetail extends LitElement {
       <!-- TODO edit defaultHref to navigate back to suitable category id -->
       <app-toolbar
         backButton="true"
-        defaultHref="/questionlist/2"
+        defaultHref=${`/questionlist/${this.categoryId}`}
         editButton="true"
         .onEditClick=${() => this.toggle()}
       ></app-toolbar>
@@ -48,23 +49,6 @@ class AppQuestionDetail extends LitElement {
             ></ion-textarea>
           </ion-card-content>
         </ion-card>
-        <!-- <div
-          style="height: 100%; margin: 10px 10px 0px 10px; display: flex; flex-direction: column; justify-content: center"
-        >
-          <ion-label>Frage</ion-label>
-          <ion-textarea
-            disabled=${!this.editable}
-            readonly=${!this.editable}
-            placeholder="Deine Frage ..."
-            value=${this.text}
-            auto-grow="true"
-          ></ion-textarea>
-          <ion-button
-            @click=${this.toggle}
-            style="width: 90%; margin: auto; margin-bottom: 30px;"
-            >Speichern</ion-button
-          >
-        </div> -->
         <div
           style="position: absolute; bottom: 5px; width: 100%; text-align: center"
         >
@@ -102,5 +86,16 @@ class AppQuestionDetail extends LitElement {
 
     document.body.appendChild(toast);
     return toast.present();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Set opacity
+    if (this.editable) {
+      this.opacity = 1.0;
+    } else {
+      this.opacity = 0.5;
+    }
+    console.log("Category id: ", this.categoryId);
   }
 }
