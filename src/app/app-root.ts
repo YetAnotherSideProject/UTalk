@@ -36,7 +36,7 @@ export class AppRoot extends LitElement {
             component="app-question-list"
           ></ion-route>
           <ion-route
-            url="/questiondetail/:id"
+            url="/questiondetail/:questionId"
             component="app-question-detail"
           ></ion-route>
           <ion-route
