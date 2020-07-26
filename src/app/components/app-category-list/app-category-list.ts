@@ -1,9 +1,11 @@
 import { LitElement, html, css, customElement } from "lit-element";
-import { alertController } from "@ionic/core";
+import { alertController, actionSheetController } from "@ionic/core";
+import Hammer from "hammerjs";
 
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
   list: Array<string>;
+  mcArray: Array<HammerManager>;
 
   constructor() {
     super();
@@ -26,6 +28,7 @@ class AppCategoryList extends LitElement {
       "New Work",
       "Wetter",
     ];
+    this.mcArray = [];
   }
 
   static get styles() {
@@ -52,7 +55,7 @@ class AppCategoryList extends LitElement {
           <ion-list-header>
             Fragen-Kategorien
           </ion-list-header>
-          ${this.list.map((item, id) => {
+          ${this.list.map((item) => {
             return html` <ion-item-sliding>
               <ion-item button @click=${this.onItemClick}>
                 <ion-label>${item}</ion-label>
@@ -101,8 +104,23 @@ class AppCategoryList extends LitElement {
       });
   }
 
+  async onItemPress(category: string) {
+    const actionSheet = await actionSheetController.create({
+      header: "Kategorie löschen",
+      buttons: [
+        {
+          text: "Delete",
+          role: "destructive",
+          handler: () => this.deleteCategory(category),
+        },
+        { text: "Cancel", role: "cancel" },
+      ],
+    });
+
+    await actionSheet.present();
+  }
+
   async onFabClick() {
-    console.log("OnFabClick");
     const alert = await alertController.create({
       header: "Kategorie hinzufügen",
       message: "Bitte Text eingeben",
@@ -157,5 +175,34 @@ class AppCategoryList extends LitElement {
 
     document.body.appendChild(toast);
     return toast.present();
+  }
+
+  destroyHammerManager() {
+    this.mcArray.forEach((manager) => manager.destroy());
+    this.mcArray = [];
+    console.log("MC Array after destroying: ", this.mcArray);
+  }
+
+  updated() {
+    console.log("Updated");
+    var items = this.shadowRoot?.querySelectorAll("ion-item");
+
+    this.destroyHammerManager();
+
+    items?.forEach((item) => {
+      // Hammer instance for press gesture handling
+      let mc = new Hammer(item);
+
+      // Listen to events
+      mc.on("press", (ev) => {
+        const category = ev.target.innerText;
+        this.onItemPress(category);
+        console.log("Item pressed");
+      });
+
+      // Add to mcArray
+      this.mcArray.push(mc);
+    });
+    console.log("MC Array after filling: ", this.mcArray);
   }
 }
