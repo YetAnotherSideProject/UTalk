@@ -53,6 +53,7 @@ class AppQuestionDetail extends LitElement {
           style="position: absolute; bottom: 5px; width: 100%; text-align: center"
         >
           <ion-button
+            style="color: white"
             disabled=${!this.editable}
             expand="block"
             @click=${this.saveQuestion}
@@ -96,6 +97,5 @@ class AppQuestionDetail extends LitElement {
     } else {
       this.opacity = 0.5;
     }
-    console.log("Category id: ", this.categoryId);
   }
 }
