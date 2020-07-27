@@ -6,4 +6,4 @@ import "./app/app-root.ts";
 import "./index.scss";
 
 import { AuthService } from "./app/services/AuthService";
-AuthService.register("martin.sb@outlook.de", "testpassword");
+//AuthService.register("martin.sb@outlook.de", "testpassword");
