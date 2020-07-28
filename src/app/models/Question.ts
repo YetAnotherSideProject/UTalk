@@ -1,3 +1,4 @@
 export interface Question {
-    text: string;
+  firebaseId?: string;
+  text: string;
 }

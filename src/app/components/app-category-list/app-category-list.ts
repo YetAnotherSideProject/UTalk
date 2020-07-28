@@ -2,32 +2,19 @@ import { LitElement, html, css, customElement } from "lit-element";
 import { alertController, actionSheetController } from "@ionic/core";
 import Hammer from "hammerjs";
 
+import { Category } from "../../models/Category";
+import { CategoryDao } from "../../dao/CategoryDao";
+
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
-  list: Array<string>;
+  categories: Category[] = [];
   mcArray: Array<HammerManager>;
 
   constructor() {
     super();
-    this.list = [
-      "Politik",
-      "Sport",
-      "Freizeit",
-      "Bildung",
-      "Urlaub",
-      "Uni",
-      "Münster",
-      "Softwareentwicklung",
-      "Ernährung",
-      "Klima",
-      "Corona",
-      "Schützenfest",
-      "Netflix",
-      "Technologie",
-      "Ausflugsziele",
-      "New Work",
-      "Wetter",
-    ];
+
+    this.updateCategories();
+
     this.mcArray = [];
   }
 
@@ -55,20 +42,35 @@ class AppCategoryList extends LitElement {
           <ion-list-header>
             Fragen-Kategorien
           </ion-list-header>
-          ${this.list.map((item) => {
-            return html` <ion-item-sliding>
-              <ion-item button @click=${this.onItemClick}>
-                <ion-label>${item}</ion-label>
-              </ion-item>
-              <ion-item-options side="end">
-                <ion-item-option
-                  id="ion-option"
-                  @click=${() => this.onClickDelete(item)}
-                  >Löschen</ion-item-option
+          ${this.categories
+            .sort((a, b) => {
+              let nameA = a.name.toLowerCase();
+              let nameB = b.name.toLowerCase();
+              return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
+            })
+            .map((category) => {
+              return html` <ion-item-sliding>
+                <ion-item
+                  button
+                  @click=${() =>
+                    this.onItemClick(
+                      category.firebaseId ? category.firebaseId : ""
+                    )}
                 >
-              </ion-item-options>
-            </ion-item-sliding>`;
-          })}
+                  <ion-label>${category.name}</ion-label>
+                </ion-item>
+                <ion-item-options side="end">
+                  <ion-item-option
+                    id="ion-option"
+                    @click=${() =>
+                      this.onClickDelete(
+                        category.firebaseId ? category.firebaseId : ""
+                      )}
+                    >Löschen</ion-item-option
+                  >
+                </ion-item-options>
+              </ion-item-sliding>`;
+            })}
         </ion-list>
       </ion-content>
       <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
@@ -79,39 +81,36 @@ class AppCategoryList extends LitElement {
     console.log(`Searchbar test: ${event.target.value}`);
   }
 
-  onItemClick(event: any) {
-    console.log("Item clicked: " + event.target.innerText);
-    let nav: HTMLIonNavElement = document.querySelector(
-      "ion-nav"
-    ) as HTMLIonNavElement;
-    nav.push("app-question-list", { categoryId: event.target.innerText });
+  onItemClick(categoryId: string) {
+    let category: Category = {} as Category;
+    CategoryDao.getCategoryById(categoryId).then((item) => {
+      category = item;
+      let nav: HTMLIonNavElement = document.querySelector(
+        "ion-nav"
+      ) as HTMLIonNavElement;
+      nav.push("app-question-list", { category: category });
+    });
   }
 
-  onClickDelete(category: string) {
-    // Import to entry the shadow root to get the reference on ion-list
+  onClickDelete(categoryId: string) {
+    // Important to entry the shadow root to get the reference on ion-list
     let array: HTMLIonListElement = this.shadowRoot?.querySelector(
       "ion-list"
     ) as HTMLIonListElement;
-    array
-      .closeSlidingItems()
-      .then(() => {
-        console.log("Category to delete: ", category);
-        this.deleteCategory(category);
-        this.showDeleteToast();
-      })
-      .catch((error) => {
-        console.log("Error: ", error.message);
-      });
+    array.closeSlidingItems();
+    this.deleteCategory(categoryId);
   }
 
-  async onItemPress(category: string) {
+  async onItemPress(categoryText: string) {
+    const category = this.getCategoryByName(categoryText);
+    const categoryId = category.firebaseId;
     const actionSheet = await actionSheetController.create({
       header: "Kategorie löschen",
       buttons: [
         {
           text: "Delete",
           role: "destructive",
-          handler: () => this.deleteCategory(category),
+          handler: () => this.deleteCategory(categoryId),
         },
         { text: "Cancel", role: "cancel" },
       ],
@@ -126,7 +125,7 @@ class AppCategoryList extends LitElement {
       message: "Bitte Text eingeben",
       inputs: [
         {
-          name: "category",
+          name: "categoryname",
           placeholder: "Neue Kategorie",
         },
       ],
@@ -134,16 +133,11 @@ class AppCategoryList extends LitElement {
         {
           text: "Abbrechen",
           role: "cancel",
-          handler: () => {
-            console.log("Confirm Cancel");
-          },
         },
         {
           text: "Speichern",
           handler: (data) => {
-            console.log("Confirm Ok");
-            console.log("Category data: ", data.category);
-            this.addCategory(data.category);
+            this.addCategory(data.categoryname);
           },
         },
       ],
@@ -153,24 +147,48 @@ class AppCategoryList extends LitElement {
   }
 
   // Array operations
-  addCategory(category: string) {
-    console.log("Passed category: " + category);
-    this.list = [...this.list, category];
-    this.requestUpdate();
+  addCategory(categoryname: string) {
+    let category: Category = { name: categoryname };
+    CategoryDao.addCategory(category);
+    this.updateCategories();
   }
 
-  deleteCategory(category: string) {
-    const index = this.list.indexOf(category);
+  deleteCategory(categoryId: string | undefined) {
+    /* const index = this.list.indexOf(category);
     if (index > -1) {
       this.list.splice(index, 1);
       this.requestUpdate();
-    }
+    } */
+    CategoryDao.deleteCategory(categoryId)
+      .then(() => {
+        this.showToast("Kategorie wurde gelöscht!");
+        this.updateCategories();
+      })
+      .catch((error) => {
+        this.showToast(
+          "Es ist ein Fehler aufgetreten. Bitte versuche es erneut!"
+        );
+        console.log("Error: ", error.message);
+      });
+  }
+
+  getCategoryByName(categoryName: string) {
+    return this.categories.filter((category) => {
+      return category.name === categoryName;
+    })[0];
+  }
+
+  updateCategories() {
+    CategoryDao.getAllCategories().then((categories) => {
+      this.categories = categories;
+      this.requestUpdate();
+    });
   }
 
   // Utils
-  async showDeleteToast() {
+  async showToast(message: string) {
     const toast = document.createElement("ion-toast");
-    toast.message = "Kategorie wurde gelöscht!";
+    toast.message = message;
     toast.duration = 2000;
 
     document.body.appendChild(toast);
@@ -183,8 +201,13 @@ class AppCategoryList extends LitElement {
     console.log("MC Array after destroying: ", this.mcArray);
   }
 
+  sortAlphabetically(a: Category, b: Category) {
+    let nameA = a.name.toLowerCase();
+    let nameB = b.name.toLowerCase();
+    return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
+  }
+
   updated() {
-    console.log("Updated");
     var items = this.shadowRoot?.querySelectorAll("ion-item");
 
     this.destroyHammerManager();
@@ -197,7 +220,6 @@ class AppCategoryList extends LitElement {
       mc.on("press", (ev) => {
         const category = ev.target.innerText;
         this.onItemPress(category);
-        console.log("Item pressed");
       });
 
       // Add to mcArray

@@ -4,7 +4,10 @@ import { LitElement, html, customElement, property } from "lit-element";
 class AppToolbar extends LitElement {
   // Back button properties
   @property({ type: Boolean }) backButton = false;
+  @property({ type: Boolean }) customBackButton = false;
+  @property({ type: Function }) customClick = new Function();
   @property({ type: String }) defaultHref = "/";
+  @property({ type: Function }) customClickAction = new Function();
 
   // Edit button properties
   @property({ type: Boolean }) editButton = false;
@@ -20,7 +23,7 @@ class AppToolbar extends LitElement {
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
-            ${this.setBackButton()}
+            ${this.setBackButton()} ${this.setCustomBackButton()}
           </ion-buttons>
           <ion-title>uTalk</ion-title>
           <ion-buttons slot="end">
@@ -36,6 +39,21 @@ class AppToolbar extends LitElement {
       return html`<ion-back-button
         default-href=${this.defaultHref}
       ></ion-back-button>`;
+    } else {
+      return;
+    }
+  }
+
+  setCustomBackButton() {
+    if (this.customBackButton) {
+      return html`<ion-button @click=${this.customClick}
+        ><ion-icon
+          style="margin-right: 0px"
+          name="chevron-back-outline"
+          slot="start"
+        ></ion-icon>
+        <ion-label>Back</ion-label></ion-button
+      >`;
     } else {
       return;
     }

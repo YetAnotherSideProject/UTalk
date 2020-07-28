@@ -5,16 +5,22 @@ import {
   property,
   TemplateResult,
 } from "lit-element";
-import NavParams from "@ionic/core";
+
+import { Category } from "../../models/Category";
+import { Question } from "../../models/Question";
+import { QuestionDao } from "../../dao/QuestionDao";
+import { CategoryDao } from "../../dao/CategoryDao";
 
 @customElement("app-question-list")
 class AppQuestionList extends LitElement {
-  @property({ type: String }) categoryId = "";
+  @property({ type: Object }) category = {} as Category;
+
+  questions: Question[] = [];
+
   array: Array<TemplateResult> = [];
 
   constructor() {
     super();
-    this.generateMockItems();
   }
 
   render() {
@@ -22,11 +28,23 @@ class AppQuestionList extends LitElement {
       <app-toolbar backButton="true" defaultHref="/categorylist"></app-toolbar>
       <ion-content class="padding">
         <ion-list>
-          <ion-list-header>
-            Fragen zu ${this.categoryId}
-          </ion-list-header>
-          ${this.array.map((item, id) => {
-            return html`${item}`;
+          <ion-list-header>Fragen zu ${this.category.name} </ion-list-header>
+          ${this.questions.map((question, id) => {
+            return html`<ion-item @click=${() => this.onItemClick(question)}>
+              <ion-card>
+                <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
+                <img src="src/assets/img/question.jpg" width="100%" />
+                <ion-card-header>
+                  <ion-card-subtitle>Question ${id}</ion-card-subtitle>
+                  <ion-card-title
+                    >Kategorie: ${this.category.name}</ion-card-title
+                  >
+                </ion-card-header>
+                <ion-card-content>
+                  ${question.text}
+                </ion-card-content>
+              </ion-card>
+            </ion-item>`;
           })}
         </ion-list>
       </ion-content>
@@ -44,37 +62,36 @@ class AppQuestionList extends LitElement {
 
     nav.push("app-question-detail", {
       editable: true,
-      categoryId: this.categoryId,
+      category: this.category,
     });
   }
 
-  generateMockItems() {
-    for (let index = 0; index < 19; index++) {
-      this.array.push(html`
-        <ion-item @click=${this.onItemClick}>
-          <ion-card>
-            <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-            <img src="src/assets/img/question.jpg" width="100%" />
-            <ion-card-header>
-              <ion-card-subtitle>Question ${index}</ion-card-subtitle>
-              <ion-card-title>Kategorie: Sport</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              Wie groß ist der Frust nach der verpassten Gelegenheit des
-              Aufstiegs in die Bezirksliga, nachdem der SC Münster 08 II
-              zurückgezogen hat?
-            </ion-card-content>
-          </ion-card>
-        </ion-item>
-      `);
-    }
+  updateQuestions() {
+    QuestionDao.getAllQuestions(this.category.firebaseId).then((questions) => {
+      this.questions = questions;
+      this.requestUpdate();
+    });
   }
 
-  onItemClick() {
+  onItemClick(question: Question) {
     let nav: HTMLIonNavElement = document.querySelector(
       "ion-nav"
     ) as HTMLIonNavElement;
 
-    nav.push("app-question-detail", { categoryId: this.categoryId });
+    nav.push("app-question-detail", {
+      category: this.category,
+      question: question,
+    });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener("ionViewWillEnter", this.updateQuestions);
+    this.updateQuestions();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener("ionViewWillEnter", this.updateQuestions);
   }
 }

@@ -1,10 +1,15 @@
 import { LitElement, html, customElement, property } from "lit-element";
+import { NavOptions } from "@ionic/core";
+
+import { Category } from "../../models/Category";
+import { QuestionDao } from "../../dao/QuestionDao";
+import { Question } from "../../models/Question";
 
 @customElement("app-question-detail")
 class AppQuestionDetail extends LitElement {
   @property({ type: Boolean }) editable = false;
-  @property({ type: String }) categoryId = "";
-  text: string = "Trallafitti";
+  @property({ type: Object }) category = {} as Category;
+  @property({ type: Object }) question = {} as Question;
   opacity: number = 0.5;
 
   constructor() {
@@ -15,8 +20,8 @@ class AppQuestionDetail extends LitElement {
     return html`
       <!-- TODO edit defaultHref to navigate back to suitable category id -->
       <app-toolbar
-        backButton="true"
-        defaultHref=${`/questionlist/${this.categoryId}`}
+        customBackButton="true"
+        .customClick=${() => this.navigateBack()}
         editButton="true"
         .onEditClick=${() => this.toggle()}
       ></app-toolbar>
@@ -32,10 +37,10 @@ class AppQuestionDetail extends LitElement {
             <ion-card-subtitle>Question</ion-card-subtitle>
             <ion-card-title><u>Kategorie</u></ion-card-title>
             <ion-input
-              disabled=${!this.editable}
-              readonly=${!this.editable}
+              disabled
+              readonly
               placeholder="Kategorie eingeben ..."
-              value="Sport"
+              value=${this.category.name}
             ></ion-input>
           </ion-card-header>
           <ion-card-content>
@@ -44,13 +49,14 @@ class AppQuestionDetail extends LitElement {
               disabled=${!this.editable}
               readonly=${!this.editable}
               placeholder="Deine Frage ..."
-              value=${this.text}
+              value=${this.question.text ? this.question.text : ""}
               auto-grow="true"
             ></ion-textarea>
           </ion-card-content>
         </ion-card>
+        <!-- TODO Position absolute funktioniert nur solange wie der Text in Frage nicht über eine Seite hinausgeht. Lösung finden! -->
         <div
-          style="position: absolute; bottom: 5px; width: 100%; text-align: center"
+          style="position: absolute; bottom: 5px;width: 100%; text-align: center"
         >
           <ion-button
             style="color: white"
@@ -64,6 +70,15 @@ class AppQuestionDetail extends LitElement {
     `;
   }
 
+  // Aus irgendeinem Grund funktioniert der BackButton nicht. Scheinbar wird die pop()-Methode nicht aufgerufen, sondern auf die angegebene defaultHref geleitet. Deshalb dieser kleine Workaround (s. app-toolbar customBackButton)
+  navigateBack() {
+    let nav: HTMLIonNavElement = document.querySelector(
+      "ion-nav"
+    ) as HTMLIonNavElement;
+
+    nav.pop();
+  }
+
   toggle() {
     this.editable = !this.editable;
     if (this.editable) {
@@ -75,6 +90,9 @@ class AppQuestionDetail extends LitElement {
   }
 
   saveQuestion() {
+    const text = this.shadowRoot?.querySelector("ion-textarea")?.value || "";
+    const question: Question = { text: text };
+    QuestionDao.addQuestion(this.category.firebaseId, question);
     this.showSaveToast();
     this.toggle();
   }
