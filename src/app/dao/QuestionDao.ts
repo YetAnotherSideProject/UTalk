@@ -39,7 +39,7 @@ export class QuestionDao {
   }
 
   static deleteQuestion(
-    questionCategoryId: string,
+    questionCategoryId: string | undefined,
     questionId: string | undefined
   ) {
     return this.categoryDb

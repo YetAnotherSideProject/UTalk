@@ -42,35 +42,29 @@ class AppCategoryList extends LitElement {
           <ion-list-header>
             Fragen-Kategorien
           </ion-list-header>
-          ${this.categories
-            .sort((a, b) => {
-              let nameA = a.name.toLowerCase();
-              let nameB = b.name.toLowerCase();
-              return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
-            })
-            .map((category) => {
-              return html` <ion-item-sliding>
-                <ion-item
-                  button
+          ${this.categories.sort(this.sortAlphabetically).map((category) => {
+            return html` <ion-item-sliding>
+              <ion-item
+                button
+                @click=${() =>
+                  this.onItemClick(
+                    category.firebaseId ? category.firebaseId : ""
+                  )}
+              >
+                <ion-label>${category.name}</ion-label>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option
+                  id="ion-option"
                   @click=${() =>
-                    this.onItemClick(
+                    this.onClickDelete(
                       category.firebaseId ? category.firebaseId : ""
                     )}
+                  >Löschen</ion-item-option
                 >
-                  <ion-label>${category.name}</ion-label>
-                </ion-item>
-                <ion-item-options side="end">
-                  <ion-item-option
-                    id="ion-option"
-                    @click=${() =>
-                      this.onClickDelete(
-                        category.firebaseId ? category.firebaseId : ""
-                      )}
-                    >Löschen</ion-item-option
-                  >
-                </ion-item-options>
-              </ion-item-sliding>`;
-            })}
+              </ion-item-options>
+            </ion-item-sliding>`;
+          })}
         </ion-list>
       </ion-content>
       <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
@@ -108,11 +102,11 @@ class AppCategoryList extends LitElement {
       header: "Kategorie löschen",
       buttons: [
         {
-          text: "Delete",
+          text: "Löschen",
           role: "destructive",
           handler: () => this.deleteCategory(categoryId),
         },
-        { text: "Cancel", role: "cancel" },
+        { text: "Abbrechen", role: "cancel" },
       ],
     });
 
@@ -146,7 +140,6 @@ class AppCategoryList extends LitElement {
     await alert.present();
   }
 
-  // Array operations
   addCategory(categoryname: string) {
     let category: Category = { name: categoryname };
     CategoryDao.addCategory(category);
@@ -154,11 +147,6 @@ class AppCategoryList extends LitElement {
   }
 
   deleteCategory(categoryId: string | undefined) {
-    /* const index = this.list.indexOf(category);
-    if (index > -1) {
-      this.list.splice(index, 1);
-      this.requestUpdate();
-    } */
     CategoryDao.deleteCategory(categoryId)
       .then(() => {
         this.showToast("Kategorie wurde gelöscht!");
