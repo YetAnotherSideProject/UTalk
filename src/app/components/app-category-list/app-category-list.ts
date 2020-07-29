@@ -1,9 +1,11 @@
 import { LitElement, html, css, customElement } from "lit-element";
+import { until } from "lit-html/directives/until.js";
 import { alertController, actionSheetController } from "@ionic/core";
 import Hammer from "hammerjs";
 
 import { Category } from "../../models/Category";
 import { CategoryDao } from "../../dao/CategoryDao";
+import { QuestionDao } from "../../dao/QuestionDao";
 
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
@@ -52,6 +54,14 @@ class AppCategoryList extends LitElement {
                   )}
               >
                 <ion-label>${category.name}</ion-label>
+                <ion-badge slot="end"
+                  >${until(
+                    this.getNumberOfQuestionsforCategory(
+                      category.firebaseId ? category.firebaseId : ""
+                    ),
+                    0
+                  )}</ion-badge
+                >
               </ion-item>
               <ion-item-options side="end">
                 <ion-item-option
@@ -171,6 +181,11 @@ class AppCategoryList extends LitElement {
       this.categories = categories;
       this.requestUpdate();
     });
+  }
+
+  async getNumberOfQuestionsforCategory(categoryId: string) {
+    let questions = await QuestionDao.getAllQuestions(categoryId);
+    return questions.length;
   }
 
   // Utils
