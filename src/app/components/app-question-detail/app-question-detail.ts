@@ -11,6 +11,7 @@ class AppQuestionDetail extends LitElement {
   @property({ type: Object }) category = {} as Category;
   @property({ type: Object }) question = {} as Question;
   opacity: number = 0.5;
+  updatable: Boolean = false;
 
   constructor() {
     super();
@@ -86,21 +87,47 @@ class AppQuestionDetail extends LitElement {
     } else {
       this.opacity = 0.5;
     }
+    console.log("Updatable status on toggle: ", this.updatable);
     this.requestUpdate();
   }
 
   saveQuestion() {
     const text = this.shadowRoot?.querySelector("ion-textarea")?.value || "";
     const question: Question = { text: text };
-    QuestionDao.addQuestion(this.category.firebaseId, question);
-    this.showSaveToast();
+    if (this.updatable) {
+      QuestionDao.updateQuestion(
+        this.category.firebaseId ? this.category.firebaseId : "",
+        this.question.firebaseId ? this.question.firebaseId : "",
+        question
+      )
+        .then(() => {
+          this.showToast("Frage wurde gespeichert");
+        })
+        .catch((error) => {
+          this.showToast(
+            "Es ist ein Fehler aufgetreten. Bitte versuche es erneut!"
+          );
+        });
+    } else {
+      QuestionDao.addQuestion(this.category.firebaseId, question)
+        .then(() => {
+          this.showToast("Frage wurde gespeichert");
+          this.navigateBack();
+        })
+        .catch((error) => {
+          this.showToast(
+            "Es ist ein Fehler aufgetreten. Bitte versuche es erneut!"
+          );
+        });
+    }
+
     this.toggle();
   }
 
   // Utils
-  async showSaveToast() {
+  async showToast(message: string) {
     const toast = document.createElement("ion-toast");
-    toast.message = "Frage wurde gespeichert!";
+    toast.message = message;
     toast.duration = 2000;
 
     document.body.appendChild(toast);
@@ -109,6 +136,9 @@ class AppQuestionDetail extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.updatable = !this.editable;
+    console.log("Updatable status on connected: ", this.updatable);
     // Set opacity
     if (this.editable) {
       this.opacity = 1.0;
