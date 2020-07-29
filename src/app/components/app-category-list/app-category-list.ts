@@ -230,4 +230,14 @@ class AppCategoryList extends LitElement {
     });
     console.log("MC Array after filling: ", this.mcArray);
   }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener("ionViewWillEnter", this.updateCategories);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener("ionViewWillEnter", this.updateCategories);
+  }
 }

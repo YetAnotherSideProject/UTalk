@@ -196,7 +196,6 @@ class AppQuestionList extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("ionViewWillEnter", this.updateQuestions);
-    this.updateQuestions();
   }
 
   disconnectedCallback() {
