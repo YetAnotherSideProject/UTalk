@@ -1,10 +1,10 @@
 import { LitElement, html, customElement, property } from "lit-element";
 import { Interview } from "../../models/Interview";
 import { InterviewDao } from "../../dao/InterviewDao";
+import { UserDataService } from "../../services/UserDataService";
 
 @customElement("app-interview-detail")
 class AppInterviewDetail extends LitElement {
-
   @property({ type: String }) interviewId = "";
   interview?: Interview = undefined;
 
@@ -15,7 +15,9 @@ class AppInterviewDetail extends LitElement {
   render() {
     return html`
       <app-toolbar></app-toolbar>
-      <ion-content class="padding"><h1>Interview Detail: ${this.interview?.title}</h1> </ion-content>
+      <ion-content class="padding"
+        ><h1>Interview Detail: ${this.interview?.title}</h1>
+      </ion-content>
     `;
   }
 
@@ -26,5 +28,6 @@ class AppInterviewDetail extends LitElement {
       this.interview = interview;
       this.requestUpdate();
     });
+    UserDataService.updateLastInterview(this.interviewId);
   }
 }
