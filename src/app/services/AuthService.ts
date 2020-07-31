@@ -4,12 +4,21 @@ import firebase from "firebase/app";
 import "firebase/auth";
 
 export class AuthService {
+  static register(email: string, password: string): void {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .catch((error) => {
+        console.log(`Register user ${email} failed: ${error}`);
+      });
+  }
 
-    static register(email: string, password: string): Promise<void | firebase.auth.UserCredential> {
-        return firebase.auth().createUserWithEmailAndPassword(email, password);
-    }
-
-    static async login(email: string, password: string): Promise<firebase.auth.UserCredential> {
-        return firebase.auth().signInWithEmailAndPassword(email, password);
-    }
+  static login(email: string, password: string): void {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => {
+        console.log(`Login user ${email} failed: ${error}`);
+      });
+  }
 }
