@@ -5,5 +5,6 @@ import "./app/app-root.ts";
 //initialize global sytling/theming
 import "./index.scss";
 
+//TODO richtiges USermanagement
 import { AuthService } from "./app/services/AuthService";
-//AuthService.register("martin.sb@outlook.de", "testpassword");
+AuthService.login("martin.sb@outlook.de", "testpassword");
