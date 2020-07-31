@@ -1,35 +1,25 @@
 // Firebase App (the core Firebase SDK) is always required
-import firebase, { User } from "firebase/app";
-// Used firebase products
-import "firebase/firestore";
-import { UserData } from "../models/UserData";
-import { Interview } from "../models/Interview";
+import firebase from "firebase/app";
+
+import { UserDataDao } from "../dao/UserDataDao";
+import { InterviewDao } from "../dao/InterviewDao";
 
 export class UserDataService {
-  private static dbUsers = firebase.firestore().collection("users");
-
   static async getLastInterviews() {
-    let interviewIds = (await this.getUserData()).lastInterviews;
+    let interviewIds = (await UserDataDao.getUserData()).lastInterviews;
     if (interviewIds.length <= 0) {
       return [];
     }
 
-    let interviews: Interview[] = [];
-    await UserDataService.dbUsers
-      .doc(firebase.auth().currentUser?.uid)
-      .collection("interviews")
-      .where(firebase.firestore.FieldPath.documentId(), "in", interviewIds)
-      .get()
-      .then((querySnap) => {
-        querySnap.forEach((doc) => {
-          interviews.push(doc.data() as Interview);
-        });
-      });
-    return interviews;
+    return await InterviewDao.getInterviewsWhere(
+      firebase.firestore.FieldPath.documentId(),
+      "in",
+      interviewIds
+    );
   }
 
   static async updateLastInterview(interviewId: string) {
-    let userData = await this.getUserData();
+    let userData = await UserDataDao.getUserData();
     //Wenn es noch keine letzten gibt als einziges anlegen
     if (userData.lastInterviews === undefined) {
       userData.lastInterviews = [interviewId];
@@ -46,17 +36,6 @@ export class UserDataService {
       }
       userData.lastInterviews.unshift(interviewId);
     }
-    await UserDataService.dbUsers
-      .doc(firebase.auth().currentUser?.uid)
-      .update(userData);
-  }
-
-  private static async getUserData() {
-    return UserDataService.dbUsers
-      .doc(firebase.auth().currentUser?.uid)
-      .get()
-      .then((doc) => {
-        return doc.data() as UserData;
-      });
+    await UserDataDao.updateUserData(userData);
   }
 }

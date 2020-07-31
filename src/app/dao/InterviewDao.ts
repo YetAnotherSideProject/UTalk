@@ -59,4 +59,23 @@ export class InterviewDao {
       });
     return interviews;
   }
+
+  static async getInterviewsWhere(
+    field: firebase.firestore.FieldPath,
+    operator: firebase.firestore.WhereFilterOp,
+    operand: any
+  ) {
+    let interviews: Interview[] = [];
+    await InterviewDao.usersDb
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("interviews")
+      .where(field, operator, operand)
+      .get()
+      .then((querySnap) => {
+        querySnap.forEach((doc) => {
+          interviews.push(doc.data() as Interview);
+        });
+      });
+    return interviews;
+  }
 }
