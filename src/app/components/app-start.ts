@@ -2,7 +2,6 @@ import { LitElement, html, customElement, property, query } from "lit-element";
 
 import "./app-toolbar/app-toolbar";
 import "./app-fab/app-fab";
-import { SampleDataService } from "../services/SampleDataService";
 
 @customElement("app-start")
 class AppStart extends LitElement {
@@ -14,7 +13,6 @@ class AppStart extends LitElement {
     return html`
       <app-toolbar></app-toolbar>
       <ion-content class="ion-padding">
-        <p>${SampleDataService.sampleInterview1().title}</p>
         <h1>Letzte Interviews</h1>
         <ion-slides pager="true">
           <ion-slide>
