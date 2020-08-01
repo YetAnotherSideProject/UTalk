@@ -7,28 +7,36 @@ import "firebase/auth";
 import { Category } from "../models/Category";
 
 export class CategoryDao {
-  //TODO ändern, sobald Auth implementiert!!!
-  //static categoryDb = firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid).collection("interviews");
-  static categoryDb = firebase
-    .firestore()
-    .collection("users")
-    .doc("8shSQqwEjAh6GMnON7iAvhSHC3B3")
-    .collection("questioncategories");
+  private static dbUsers = firebase.firestore().collection("users");
 
   static addCategory(category: Category) {
-    return this.categoryDb.doc().set(category);
+    return this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
+      .doc()
+      .set(category);
   }
 
   static updateCategory(categoryId: string, category: Category) {
-    return this.categoryDb.doc(categoryId).update(category);
+    return this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
+      .doc(categoryId)
+      .update(category);
   }
 
   static deleteCategory(categoryId: string | undefined) {
-    return this.categoryDb.doc(categoryId).delete();
+    return this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
+      .doc(categoryId)
+      .delete();
   }
 
   static getCategoryById(categoryId: string) {
-    return this.categoryDb
+    return this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
       .doc(categoryId)
       .get()
       .then((categoryDoc) => {
@@ -41,13 +49,17 @@ export class CategoryDao {
 
   static async getAllCategories() {
     let categories: Category[] = [];
-    await this.categoryDb.get().then((querySnapshot) => {
-      querySnapshot.forEach((categoryDoc) => {
-        let category: Category = categoryDoc.data() as Category;
-        category.firebaseId = categoryDoc.id;
-        categories.push(category);
+    await this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((categoryDoc) => {
+          let category: Category = categoryDoc.data() as Category;
+          category.firebaseId = categoryDoc.id;
+          categories.push(category);
+        });
       });
-    });
     return categories;
   }
 }

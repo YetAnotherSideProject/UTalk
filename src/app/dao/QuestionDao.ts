@@ -7,19 +7,15 @@ import "firebase/auth";
 import { Question } from "../models/Question";
 
 export class QuestionDao {
-  //TODO ändern, sobald Auth implementiert!!!
-  //static categoryDb = firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid).collection("interviews");
-  static categoryDb = firebase
-    .firestore()
-    .collection("users")
-    .doc("8shSQqwEjAh6GMnON7iAvhSHC3B3")
-    .collection("questioncategories");
+  private static dbUsers = firebase.firestore().collection("users");
 
   static addQuestion(
     questionCategoryId: string | undefined,
     question: Question
   ) {
-    return this.categoryDb
+    return this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
       .doc(questionCategoryId)
       .collection("questions")
       .doc()
@@ -31,7 +27,9 @@ export class QuestionDao {
     questionId: string,
     question: Question
   ) {
-    return this.categoryDb
+    return this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
       .doc(questionCategoryId)
       .collection("questions")
       .doc(questionId)
@@ -42,7 +40,9 @@ export class QuestionDao {
     questionCategoryId: string | undefined,
     questionId: string | undefined
   ) {
-    return this.categoryDb
+    return this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
       .doc(questionCategoryId)
       .collection("questions")
       .doc(questionId)
@@ -50,7 +50,9 @@ export class QuestionDao {
   }
 
   static getCategoryById(questionCategoryId: string, questionId: string) {
-    return this.categoryDb
+    return this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
       .doc(questionCategoryId)
       .collection("questions")
       .doc(questionId)
@@ -62,7 +64,9 @@ export class QuestionDao {
 
   static async getAllQuestions(questionCategoryId: string | undefined) {
     let questions: Question[] = [];
-    await this.categoryDb
+    await this.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("questioncategories")
       .doc(questionCategoryId)
       .collection("questions")
       .get()
