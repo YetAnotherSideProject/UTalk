@@ -8,27 +8,35 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { UserDataService } from "../services/UserDataService";
 import { Interview } from "../models/Interview";
+import { Question } from "../models/Question";
 
 @customElement("app-start")
 class AppStart extends LitElement {
-  interviews: Interview[] = [];
+  lastInterviews: Interview[] = [];
+  lastQuestions: Question[] = [];
 
   constructor() {
     super();
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         console.log(
           "User logged in, getting recent data for app-start component"
         );
-        UserDataService.getLastInterviews().then((interviews) => {
-          this.interviews = interviews;
-          this.requestUpdate();
+        await UserDataService.getLastInterviews().then((interviews) => {
+          this.lastInterviews = interviews;
+        });
+        await UserDataService.getLastquestions().then((questions) => {
+          console.log(questions);
+          this.lastQuestions = questions;
         });
       } else {
         "User logged out, no recent data for app-start component";
-        this.interviews = [];
-        this.requestUpdate();
+        this.lastInterviews = [];
+        this.lastQuestions = [];
       }
+      console.log(`Last Interviews: ${this.lastInterviews.length}`);
+      console.log(`Last Questions: ${this.lastQuestions.length}`);
+      this.requestUpdate();
     });
   }
 
@@ -38,13 +46,13 @@ class AppStart extends LitElement {
       <ion-content class="ion-padding">
         <h1>Letzte Interviews</h1>
         <ion-slides pager="true">
-          ${this.interviews.map(
-            (i) => html`
+          ${this.lastInterviews.map(
+            (interview) => html`
               <ion-slide
                 button
                 @click=${() => {
                   //TODO
-                  this.onItemClick("Hallo");
+                  this.onInterviewClick("Hallo");
                 }}
               >
                 <ion-card>
@@ -52,7 +60,7 @@ class AppStart extends LitElement {
                   <img src="src/assets/img/interview.jpg" width="100%" />
                   <ion-card-header>
                     <ion-card-subtitle>Interview</ion-card-subtitle>
-                    <ion-card-title>${i.title}</ion-card-title>
+                    <ion-card-title>${interview.title}</ion-card-title>
                   </ion-card-header>
                 </ion-card>
               </ion-slide>
@@ -61,90 +69,55 @@ class AppStart extends LitElement {
         </ion-slides>
         <h1>Letzte Fragen</h1>
         <ion-slides pager="true">
-          <ion-slide>
-            <ion-card>
-              <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-              <img src="src/assets/img/question.jpg" width="100%" />
-              <ion-card-header>
-                <ion-card-subtitle>Question</ion-card-subtitle>
-                <ion-card-title>Kategorie: Sport</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                Wie groß ist der Frust nach der verpassten Gelegenheit des
-                Aufstiegs in die Bezirksliga, nachdem der SC Münster 08 II
-                zurückgezogen hat?
-              </ion-card-content>
-            </ion-card>
-          </ion-slide>
-          <ion-slide>
-            <ion-card>
-              <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-              <img src="src/assets/img/question.jpg" width="100%" />
-              <ion-card-header>
-                <ion-card-subtitle>Question</ion-card-subtitle>
-                <ion-card-title>Kategorie: Sport</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                Wie groß ist der Frust nach der verpassten Gelegenheit des
-                Aufstiegs in die Bezirksliga, nachdem der SC Münster 08 II
-                zurückgezogen hat?
-              </ion-card-content>
-            </ion-card>
-          </ion-slide>
-          <ion-slide>
-            <ion-card>
-              <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-              <img src="src/assets/img/question.jpg" width="100%" />
-              <ion-card-header>
-                <ion-card-subtitle>Question</ion-card-subtitle>
-                <ion-card-title>Kategorie: Sport</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                Wie groß ist der Frust nach der verpassten Gelegenheit des
-                Aufstiegs in die Bezirksliga, nachdem der SC Münster 08 II
-                zurückgezogen hat?
-              </ion-card-content>
-            </ion-card>
-          </ion-slide>
-          <ion-slide>
-            <ion-card>
-              <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-              <img src="src/assets/img/question.jpg" width="100%" />
-              <ion-card-header>
-                <ion-card-subtitle>Question</ion-card-subtitle>
-                <ion-card-title>Kategorie: Sport</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                Wie groß ist der Frust nach der verpassten Gelegenheit des
-                Aufstiegs in die Bezirksliga, nachdem der SC Münster 08 II
-                zurückgezogen hat?
-              </ion-card-content>
-            </ion-card>
-          </ion-slide>
-          <ion-slide>
-            <ion-card>
-              <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-              <img src="src/assets/img/question.jpg" width="100%" />
-              <ion-card-header>
-                <ion-card-subtitle>Question</ion-card-subtitle>
-                <ion-card-title>Kategorie: Sport</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                Wie groß ist der Frust nach der verpassten Gelegenheit des
-                Aufstiegs in die Bezirksliga, nachdem der SC Münster 08 II
-                zurückgezogen hat?
-              </ion-card-content>
-            </ion-card>
-          </ion-slide>
+          ${this.lastQuestions.map(
+            (question) => html`
+              <ion-slide
+                button
+                @click=${() => {
+                  //TODO
+                  this.onQuestionClick(
+                    question.categoryId,
+                    question.firebaseId
+                  );
+                }}
+              >
+                <ion-card>
+                  <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
+                  <img src="src/assets/img/question.jpg" width="100%" />
+                  <ion-card-header>
+                    <ion-card-subtitle>Question</ion-card-subtitle>
+                    <ion-card-title
+                      >Kategorie: ${question.categoryId}</ion-card-title
+                    >
+                    <ion-card-title>Frage: ${question.text}</ion-card-title>
+                  </ion-card-header>
+                </ion-card>
+              </ion-slide>
+            `
+          )}
         </ion-slides>
       </ion-content>
       <app-fab icon="play-outline"></app-fab>
     `;
   }
 
-  onItemClick(interviewId: string | undefined) {
+  onInterviewClick(interviewId: string | undefined) {
     //TODO
-    console.log(interviewId);
+    console.log(`Clicked on last Interview : ${interviewId}`);
+    // let nav: HTMLIonNavElement = document.querySelector(
+    //   "ion-nav"
+    // ) as HTMLIonNavElement;
+    // nav.push("app-interview-detail", { interviewId: interviewId });
+  }
+
+  onQuestionClick(
+    categoryId: string | undefined,
+    questionId: string | undefined
+  ) {
+    //TODO
+    console.log(
+      `Clicked on last Question: ${questionId} of Category ${categoryId}`
+    );
     // let nav: HTMLIonNavElement = document.querySelector(
     //   "ion-nav"
     // ) as HTMLIonNavElement;

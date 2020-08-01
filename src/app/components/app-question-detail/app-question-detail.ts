@@ -4,6 +4,7 @@ import { NavOptions } from "@ionic/core";
 import { Category } from "../../models/Category";
 import { QuestionDao } from "../../dao/QuestionDao";
 import { Question } from "../../models/Question";
+import { UserDataService } from "../../services/UserDataService";
 
 @customElement("app-question-detail")
 class AppQuestionDetail extends LitElement {
@@ -145,5 +146,10 @@ class AppQuestionDetail extends LitElement {
     } else {
       this.opacity = 0.5;
     }
+    //TODO ändern
+    UserDataService.updateLastQuestion(
+      this.category.firebaseId || "",
+      this.question.firebaseId || ""
+    );
   }
 }

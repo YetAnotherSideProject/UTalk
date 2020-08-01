@@ -13,7 +13,7 @@ export class QuestionDao {
     questionCategoryId: string | undefined,
     question: Question
   ) {
-    return this.dbUsers
+    return QuestionDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")
       .doc(questionCategoryId)
@@ -27,7 +27,7 @@ export class QuestionDao {
     questionId: string,
     question: Question
   ) {
-    return this.dbUsers
+    return QuestionDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")
       .doc(questionCategoryId)
@@ -40,7 +40,7 @@ export class QuestionDao {
     questionCategoryId: string | undefined,
     questionId: string | undefined
   ) {
-    return this.dbUsers
+    return QuestionDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")
       .doc(questionCategoryId)
@@ -50,7 +50,7 @@ export class QuestionDao {
   }
 
   static getCategoryById(questionCategoryId: string, questionId: string) {
-    return this.dbUsers
+    return QuestionDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")
       .doc(questionCategoryId)
@@ -64,7 +64,7 @@ export class QuestionDao {
 
   static async getAllQuestions(questionCategoryId: string | undefined) {
     let questions: Question[] = [];
-    await this.dbUsers
+    await QuestionDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")
       .doc(questionCategoryId)

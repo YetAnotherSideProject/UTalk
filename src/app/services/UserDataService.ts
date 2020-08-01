@@ -3,6 +3,8 @@ import firebase from "firebase/app";
 
 import { UserDataDao } from "../dao/UserDataDao";
 import { InterviewDao } from "../dao/InterviewDao";
+import { QuestionDao } from "../dao/QuestionDao";
+import { Question } from "../models/Question";
 
 export class UserDataService {
   static async getLastInterviews() {
@@ -35,6 +37,41 @@ export class UserDataService {
         userData.lastInterviews.pop();
       }
       userData.lastInterviews.unshift(interviewId);
+    }
+    await UserDataDao.updateUserData(userData);
+  }
+
+  static async getLastquestions() {
+    let questions: Question[] = [];
+    const questionIds = (await UserDataDao.getUserData()).lastQuestions;
+    questionIds.forEach(async (questionId) => {
+      let question = await QuestionDao.getCategoryById(
+        questionId.categoryId,
+        questionId.questionId
+      );
+      questions.push(question);
+    });
+    return questions;
+  }
+
+  static async updateLastQuestion(categoryId: string, questionId: string) {
+    let userData = await UserDataDao.getUserData();
+    let last = { categoryId, questionId };
+    //Wenn es noch keine letzten gibt als einziges anlegen
+    if (userData.lastQuestions === undefined) {
+      userData.lastQuestions = [last];
+    } else {
+      let index = userData.lastQuestions.indexOf(last);
+      //Wenn es bereits in der liste vorhanden ist und bereits auf platz 1 nichts tun, ansonsten an alter Stelle entfernen und an neuer hinzufügen
+      if (index > -1) {
+        if (index === 0) {
+          return;
+        }
+        userData.lastQuestions.splice(index, 1);
+      } else if (userData.lastQuestions.length >= 5) {
+        userData.lastQuestions.pop();
+      }
+      userData.lastQuestions.unshift(last);
     }
     await UserDataDao.updateUserData(userData);
   }
