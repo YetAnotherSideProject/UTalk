@@ -17,7 +17,7 @@ export class CategoryDao {
       .set(category);
   }
 
-  static updateCategory(categoryId: string, category: Category) {
+  static updateCategory(categoryId: string | undefined, category: Category) {
     return this.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")

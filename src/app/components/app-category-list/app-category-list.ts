@@ -6,6 +6,7 @@ import Hammer from "hammerjs";
 import { Category } from "../../models/Category";
 import { CategoryDao } from "../../dao/CategoryDao";
 import { QuestionDao } from "../../dao/QuestionDao";
+import { Question } from "../../models/Question";
 
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
@@ -109,12 +110,16 @@ class AppCategoryList extends LitElement {
     const category = this.getCategoryByName(categoryText);
     const categoryId = category.firebaseId;
     const actionSheet = await actionSheetController.create({
-      header: "Kategorie löschen",
+      header: "Kategorie",
       buttons: [
         {
           text: "Löschen",
           role: "destructive",
           handler: () => this.deleteCategory(categoryId),
+        },
+        {
+          text: "Umbenennen",
+          handler: () => this.onRenameClick(categoryId),
         },
         { text: "Abbrechen", role: "cancel" },
       ],
@@ -170,10 +175,54 @@ class AppCategoryList extends LitElement {
       });
   }
 
+  renameCategory(categoryId: string | undefined, newName: string) {
+    const category: Category = {
+      name: newName,
+    };
+    CategoryDao.updateCategory(categoryId, category)
+      .then(() => {
+        this.updateCategories();
+        this.showToast("Kategorie umbenannt!");
+      })
+      .catch((error) => {
+        this.showToast(
+          "Es ist ein Fehler aufgetreten. Bitte versuche es erneut!"
+        );
+        console.log("Error: ", error.message);
+      });
+  }
+
   getCategoryByName(categoryName: string) {
     return this.categories.filter((category) => {
       return category.name === categoryName;
     })[0];
+  }
+
+  async onRenameClick(categoryId: string | undefined) {
+    const alert = await alertController.create({
+      header: "Kategorie umbenennen",
+      message: "Bitte Text eingeben",
+      inputs: [
+        {
+          name: "categoryname",
+          placeholder: "Neuer Name",
+        },
+      ],
+      buttons: [
+        {
+          text: "Abbrechen",
+          role: "cancel",
+        },
+        {
+          text: "Speichern",
+          handler: (data) => {
+            this.renameCategory(categoryId, data.categoryname);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
   updateCategories() {
