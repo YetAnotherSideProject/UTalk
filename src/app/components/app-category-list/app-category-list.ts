@@ -11,6 +11,7 @@ import { Question } from "../../models/Question";
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
   categories: Category[] = [];
+  displayArray: Category[] = [];
   mcArray: Array<HammerManager>;
 
   constructor() {
@@ -39,13 +40,17 @@ class AppCategoryList extends LitElement {
       <ion-searchbar
         @ionChange=${this.onChangeSearchbar}
         id="searchbar"
+        animated
+        autocomplete="on"
+        clear-icon="undefined"
+        inputmode="text"
       ></ion-searchbar>
       <ion-content class="padding">
         <ion-list id="test">
           <ion-list-header>
             Fragen-Kategorien
           </ion-list-header>
-          ${this.categories.sort(this.sortAlphabetically).map((category) => {
+          ${this.displayArray.sort(this.sortAlphabetically).map((category) => {
             return html` <ion-item-sliding>
               <ion-item
                 button
@@ -84,6 +89,12 @@ class AppCategoryList extends LitElement {
 
   onChangeSearchbar(event: any) {
     console.log(`Searchbar test: ${event.target.value}`);
+
+    const query = event.target.value.toLowerCase();
+    this.displayArray = this.categories.filter((item) => {
+      return item.name.toLowerCase().indexOf(query) > -1;
+    });
+    this.requestUpdate();
   }
 
   onItemClick(categoryId: string) {
@@ -158,6 +169,7 @@ class AppCategoryList extends LitElement {
   addCategory(categoryname: string) {
     let category: Category = { name: categoryname };
     CategoryDao.addCategory(category);
+    this.clearSearchbar();
     this.updateCategories();
   }
 
@@ -165,6 +177,7 @@ class AppCategoryList extends LitElement {
     CategoryDao.deleteCategory(categoryId)
       .then(() => {
         this.showToast("Kategorie wurde gelöscht!");
+        this.clearSearchbar();
         this.updateCategories();
       })
       .catch((error) => {
@@ -182,6 +195,7 @@ class AppCategoryList extends LitElement {
     CategoryDao.updateCategory(categoryId, category)
       .then(() => {
         this.updateCategories();
+        this.clearSearchbar();
         this.showToast("Kategorie umbenannt!");
       })
       .catch((error) => {
@@ -225,9 +239,17 @@ class AppCategoryList extends LitElement {
     await alert.present();
   }
 
+  clearSearchbar() {
+    let searchbar = this.shadowRoot?.querySelector(
+      "ion-searchbar"
+    ) as HTMLIonSearchbarElement;
+    searchbar?.value ? (searchbar.value = "") : "";
+  }
+
   updateCategories() {
     CategoryDao.getAllCategories().then((categories) => {
       this.categories = categories;
+      this.displayArray = categories;
       this.requestUpdate();
     });
   }
