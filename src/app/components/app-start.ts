@@ -22,12 +22,11 @@ class AppStart extends LitElement {
         console.log(
           "User logged in, getting recent data for app-start component"
         );
+        await UserDataService.getLastquestions().then((questions) => {
+          this.lastQuestions = questions;
+        });
         await UserDataService.getLastInterviews().then((interviews) => {
           this.lastInterviews = interviews;
-        });
-        await UserDataService.getLastquestions().then((questions) => {
-          console.log(questions);
-          this.lastQuestions = questions;
         });
       } else {
         "User logged out, no recent data for app-start component";
@@ -36,6 +35,7 @@ class AppStart extends LitElement {
       }
       console.log(`Last Interviews: ${this.lastInterviews.length}`);
       console.log(`Last Questions: ${this.lastQuestions.length}`);
+      console.log(`Now rendering app-start`);
       this.requestUpdate();
     });
   }

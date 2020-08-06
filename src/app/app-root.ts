@@ -63,6 +63,5 @@ export class AppRoot extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback();
-    console.log("test");
   }
 }
