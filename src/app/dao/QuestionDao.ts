@@ -49,11 +49,11 @@ export class QuestionDao {
       .delete();
   }
 
-  static getCategoryById(questionCategoryId: string, questionId: string) {
+  static getQuestionByCategoryAndId(categoryId: string, questionId: string) {
     return QuestionDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")
-      .doc(questionCategoryId)
+      .doc(categoryId)
       .collection("questions")
       .doc(questionId)
       .get()

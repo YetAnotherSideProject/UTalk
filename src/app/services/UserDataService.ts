@@ -45,7 +45,7 @@ export class UserDataService {
     let questions: Question[] = [];
     const questionIds = (await UserDataDao.getUserData()).lastQuestions;
     questionIds.forEach(async (questionId) => {
-      let question = await QuestionDao.getCategoryById(
+      let question = await QuestionDao.getQuestionByCategoryAndId(
         questionId.categoryId,
         questionId.questionId
       );
