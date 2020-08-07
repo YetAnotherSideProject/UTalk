@@ -9,27 +9,26 @@ import { Interview } from "../models/Interview";
 export class InterviewDao {
   static usersDb = firebase.firestore().collection("users");
 
-  static addInterview(interview: Interview) {
+  static addInterview(interviewTitle: string) {
     return this.usersDb
       .doc(firebase.auth().currentUser?.uid)
       .collection("interviews")
-      .doc()
-      .set(interview);
+      .add({ title: interviewTitle });
   }
 
-  static updateInterview(interviewId: string, interview: Interview) {
+  static updateInterview(interview: Interview) {
     return this.usersDb
       .doc(firebase.auth().currentUser?.uid)
       .collection("interviews")
-      .doc(interviewId)
+      .doc(interview.firebaseId)
       .update(interview);
   }
 
-  static deleteInterview(interviewId: string) {
+  static deleteInterview(interview: Interview) {
     return this.usersDb
       .doc(firebase.auth().currentUser?.uid)
       .collection("interviews")
-      .doc(interviewId)
+      .doc(interview.firebaseId)
       .delete();
   }
 
@@ -40,7 +39,9 @@ export class InterviewDao {
       .doc(interviewId)
       .get()
       .then((interviewDoc) => {
-        return interviewDoc.data() as Interview;
+        let interview: Interview = interviewDoc.data() as Interview;
+        interview.firebaseId = interviewDoc.id;
+        return interview;
       });
   }
 
