@@ -82,6 +82,8 @@ export class UserDataService {
             //Frage an der Stelle entfernen
             userData.lastQuestions.splice(i, 1);
           }
+          //Escape loop, because identical obejct was found and handled
+          break;
         }
       }
       if (!existing) {
