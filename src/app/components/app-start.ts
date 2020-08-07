@@ -51,7 +51,7 @@ class AppStart extends LitElement {
                 button
                 @click=${() => {
                   //TODO
-                  this.onInterviewClick("Hallo");
+                  this.onInterviewClick(interview);
                 }}
               >
                 <ion-card>
@@ -100,13 +100,11 @@ class AppStart extends LitElement {
     `;
   }
 
-  onInterviewClick(interviewId: string | undefined) {
-    //TODO
-    console.log(`Clicked on last Interview : ${interviewId}`);
-    // let nav: HTMLIonNavElement = document.querySelector(
-    //   "ion-nav"
-    // ) as HTMLIonNavElement;
-    // nav.push("app-interview-detail", { interviewId: interviewId });
+  onInterviewClick(interview: Interview) {
+    let nav: HTMLIonNavElement = document.querySelector(
+      "ion-nav"
+    ) as HTMLIonNavElement;
+    nav.push("app-interview-detail", { interview: interview });
   }
 
   onQuestionClick(

@@ -73,8 +73,10 @@ export class InterviewDao {
       .where(field, operator, operand)
       .get()
       .then((querySnap) => {
-        querySnap.forEach((doc) => {
-          interviews.push(doc.data() as Interview);
+        querySnap.forEach((interviewDoc) => {
+          let interview: Interview = interviewDoc.data() as Interview;
+          interview.firebaseId = interviewDoc.id;
+          interviews.push(interview);
         });
       });
     return interviews;

@@ -6,9 +6,7 @@ import {
   internalProperty,
 } from "lit-element";
 import { alertController } from "@ionic/core";
-import Hammer from "hammerjs";
 import { Interview } from "../../models/Interview";
-import { InterviewDao } from "../../dao/InterviewDao";
 import { InterviewService } from "../../services/InterviewService";
 
 @customElement("app-interview-list")
@@ -94,10 +92,10 @@ class AppInterviewList extends LitElement {
   }
 
   onItemClick(interview: Interview) {
-    // let nav: HTMLIonNavElement = document.querySelector(
-    //   "ion-nav"
-    // ) as HTMLIonNavElement;
-    // nav.push("app-interview-detail", { interviewId: interviewId });
+    let nav: HTMLIonNavElement = document.querySelector(
+      "ion-nav"
+    ) as HTMLIonNavElement;
+    nav.push("app-interview-detail", { interview: interview });
   }
 
   onSlideRename(interview: Interview) {

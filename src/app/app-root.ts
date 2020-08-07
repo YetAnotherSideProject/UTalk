@@ -45,7 +45,7 @@ export class AppRoot extends LitElement {
             component="app-interview-list"
           ></ion-route>
           <ion-route
-            url="/interviewdetail/:interviewId"
+            url="/interviewdetail/:interview"
             component="app-interview-detail"
           ></ion-route>
           <ion-route url="/backup" component="app-backup"></ion-route>
