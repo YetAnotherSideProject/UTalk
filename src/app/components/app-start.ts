@@ -1,4 +1,11 @@
-import { LitElement, html, customElement, property, query } from "lit-element";
+import {
+  LitElement,
+  html,
+  customElement,
+  internalProperty,
+  property,
+  query,
+} from "lit-element";
 
 import "./app-toolbar/app-toolbar";
 import "./app-fab/app-fab";
@@ -12,8 +19,10 @@ import { Question } from "../models/Question";
 
 @customElement("app-start")
 class AppStart extends LitElement {
-  lastInterviews: Interview[] = [];
-  lastQuestions: Question[] = [];
+  @internalProperty()
+  protected lastInterviews: Interview[] = [];
+  @internalProperty()
+  protected lastQuestions: Question[] = [];
 
   constructor() {
     super();
@@ -26,15 +35,7 @@ class AppStart extends LitElement {
           UserDataService.getLastInterviews(),
           UserDataService.getLastQuestions(),
         ]);
-      } else {
-        "User logged out, no recent data for app-start component";
-        this.lastInterviews = [];
-        this.lastQuestions = [];
       }
-      console.log(`Last Interviews: ${this.lastInterviews.length}`);
-      console.log(`Last Questions: ${this.lastQuestions.length}`);
-      console.log(`Now rendering app-start`);
-      this.requestUpdate();
     });
   }
 
