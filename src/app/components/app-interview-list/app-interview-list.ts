@@ -1,56 +1,111 @@
-import { LitElement, html, customElement } from "lit-element";
+import {
+  LitElement,
+  html,
+  css,
+  customElement,
+  internalProperty,
+} from "lit-element";
 import { Interview } from "../../models/Interview";
 import { InterviewDao } from "../../dao/InterviewDao";
 
 @customElement("app-interview-list")
 class AppInterviewList extends LitElement {
+  @internalProperty()
   interviews: Interview[] = [];
 
   constructor() {
     super();
     InterviewDao.getAllInterviews().then((interviews) => {
       this.interviews = interviews;
-      this.requestUpdate();
     });
+  }
+
+  static get styles() {
+    return css`
+      #interview_searchbar {
+        background-color: var(--ion-color-light);
+      }
+      #ion-option-rename {
+        --ion-color-primary: var(--ion-color-warning);
+        --ion-color-primary-contrast: var(--ion-color-warning-contrast);
+      }
+      #ion-option-delete {
+        --ion-color-primary: var(--ion-color-danger);
+        --ion-color-primary-contrast: var(--ion-color-danger-contrast);
+      }
+    `;
   }
 
   render() {
     return html`
       <app-toolbar></app-toolbar>
+      <ion-searchbar
+        @ionChange=${this.onChangeSearchbar}
+        id="interview_searchbar"
+        animated
+        autocomplete="on"
+        clear-icon="trash-outline"
+        inputmode="text"
+      ></ion-searchbar>
       <ion-content class="padding">
-        <ion-list>
+        <ion-list id="interview_list">
           <ion-list-header>
             Interviews
           </ion-list-header>
-          ${this.interviews.map(
-            (i) => html`
+          ${this.interviews.map((interview) => {
+            return html` <ion-item-sliding>
               <ion-item
                 button
-                @click=${() => {
-                  this.onItemClick(i.firebaseId);
-                }}
+                @click=${() => this.onItemClick(interview.firebaseId)}
+                ><ion-label>${interview.title}</ion-label></ion-item
               >
-                <ion-card>
-                  <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-                  <img src="src/assets/img/interview.jpg" width="100%" />
-                  <ion-card-header>
-                    <ion-card-subtitle>Interview</ion-card-subtitle>
-                    <ion-card-title>${i.title}</ion-card-title>
-                  </ion-card-header>
-                </ion-card>
-              </ion-item>
-            `
-          )}
+              <ion-item-options side="start">
+                <ion-item-option
+                  id="ion-option-rename"
+                  @click=${() => this.onSlideRename(interview.firebaseId)}
+                  >Umbenennen</ion-item-option
+                >
+              </ion-item-options>
+              <ion-item-options side="end">
+                <ion-item-option
+                  id="ion-option-delete"
+                  @click=${() => this.onSlideDelete(interview.firebaseId)}
+                  >Löschen</ion-item-option
+                >
+              </ion-item-options>
+            </ion-item-sliding>`;
+          })}
         </ion-list>
       </ion-content>
       <app-fab icon="add-outline"></app-fab>
     `;
   }
 
+  onChangeSearchbar(event: any) {
+    console.log(`Searchbar test: ${event.target.value}`);
+    //TODO
+
+    // const query = event.target.value.toLowerCase();
+    // this.displayArray = this.categories.filter((item) => {
+    //   return item.name.toLowerCase().indexOf(query) > -1;
+    // });
+    // this.requestUpdate();
+  }
+
   onItemClick(interviewId: string | undefined) {
-    let nav: HTMLIonNavElement = document.querySelector(
-      "ion-nav"
-    ) as HTMLIonNavElement;
-    nav.push("app-interview-detail", { interviewId: interviewId });
+    // let nav: HTMLIonNavElement = document.querySelector(
+    //   "ion-nav"
+    // ) as HTMLIonNavElement;
+    // nav.push("app-interview-detail", { interviewId: interviewId });
+  }
+
+  onSlideRename(interviewId: string | undefined) {
+    //TODO
+    console.log(`Slide rename interview Item`);
+  }
+
+  onSlideDelete(interviewId: string | undefined) {
+    //TODO
+    console.log(`Slide delete interview Item`);
   }
 }
