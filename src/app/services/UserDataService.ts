@@ -4,7 +4,6 @@ import firebase from "firebase/app";
 import { UserDataDao } from "../dao/UserDataDao";
 import { InterviewDao } from "../dao/InterviewDao";
 import { QuestionDao } from "../dao/QuestionDao";
-import { Question } from "../models/Question";
 
 export class UserDataService {
   static async getLastInterviews() {
