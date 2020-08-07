@@ -14,11 +14,13 @@ import { InterviewService } from "../../services/InterviewService";
 @customElement("app-interview-list")
 class AppInterviewList extends LitElement {
   @internalProperty()
+  displayedInterviews: Interview[] = [];
+
   interviews: Interview[] = [];
 
   constructor() {
     super();
-    this.getInterviews();
+    this.updateInterviewObjects();
   }
 
   static get styles() {
@@ -53,7 +55,7 @@ class AppInterviewList extends LitElement {
           <ion-list-header>
             Interviews
           </ion-list-header>
-          ${this.interviews.map((interview) => {
+          ${this.displayedInterviews.map((interview) => {
             return html` <ion-item-sliding>
               <ion-item
                 detail
@@ -85,14 +87,10 @@ class AppInterviewList extends LitElement {
   }
 
   onChangeSearchbar(event: any) {
-    console.log(`Searchbar test: ${event.target.value}`);
-    //TODO
-
-    // const query = event.target.value.toLowerCase();
-    // this.displayArray = this.categories.filter((item) => {
-    //   return item.name.toLowerCase().indexOf(query) > -1;
-    // });
-    // this.requestUpdate();
+    const query = event.target.value.toLowerCase();
+    this.displayedInterviews = this.interviews.filter((item) => {
+      return item.title.toLowerCase().indexOf(query) > -1;
+    });
   }
 
   onItemClick(interview: Interview) {
@@ -113,7 +111,7 @@ class AppInterviewList extends LitElement {
 
   onSlideDelete(interview: Interview) {
     InterviewService.deleteInterview(interview).then(() => {
-      this.getInterviews();
+      this.updateInterviewObjects();
       this.showToast("Interview gelöscht!");
     });
     // Important to entry the shadow root to get the reference on ion-list
@@ -143,7 +141,7 @@ class AppInterviewList extends LitElement {
             text: "Ok",
             handler: (data) => {
               InterviewService.addInterview(data.interview_title).then(() =>
-                this.getInterviews()
+                this.updateInterviewObjects()
               );
             },
           },
@@ -174,7 +172,7 @@ class AppInterviewList extends LitElement {
               InterviewService.renameInterview(
                 interview,
                 data.interview_title
-              ).then(() => this.getInterviews());
+              ).then(() => this.updateInterviewObjects());
             },
           },
         ],
@@ -182,9 +180,10 @@ class AppInterviewList extends LitElement {
       .then((alert) => alert.present());
   }
 
-  async getInterviews() {
+  async updateInterviewObjects() {
     InterviewService.getAllInterviews().then((interviews) => {
       this.interviews = interviews;
+      this.displayedInterviews = interviews;
     });
   }
 
