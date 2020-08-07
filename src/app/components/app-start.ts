@@ -22,12 +22,10 @@ class AppStart extends LitElement {
         console.log(
           "User logged in, getting recent data for app-start component"
         );
-        await UserDataService.getLastquestions().then((questions) => {
-          this.lastQuestions = questions;
-        });
-        await UserDataService.getLastInterviews().then((interviews) => {
-          this.lastInterviews = interviews;
-        });
+        [this.lastInterviews, this.lastQuestions] = await Promise.all([
+          UserDataService.getLastInterviews(),
+          UserDataService.getLastQuestions(),
+        ]);
       } else {
         "User logged out, no recent data for app-start component";
         this.lastInterviews = [];

@@ -41,16 +41,19 @@ export class UserDataService {
     await UserDataDao.updateUserData(userData);
   }
 
-  static async getLastquestions() {
+  static async getLastQuestions() {
     let questions: Question[] = [];
     const questionIds = (await UserDataDao.getUserData()).lastQuestions;
-    questionIds.forEach(async (questionId) => {
-      let question = await QuestionDao.getQuestionByCategoryAndId(
-        questionId.categoryId,
-        questionId.questionId
-      );
-      questions.push(question);
-    });
+    await Promise.all(
+      questionIds.map(async (questionId) => {
+        questions.push(
+          await QuestionDao.getQuestionByCategoryAndId(
+            questionId.categoryId,
+            questionId.questionId
+          )
+        );
+      })
+    );
     return questions;
   }
 

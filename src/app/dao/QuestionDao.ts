@@ -58,7 +58,10 @@ export class QuestionDao {
       .doc(questionId)
       .get()
       .then((questionDoc) => {
-        return questionDoc.data() as Question;
+        let question: Question = questionDoc.data() as Question;
+        question.firebaseId = questionId;
+        question.categoryId = categoryId;
+        return question;
       });
   }
 
