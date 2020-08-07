@@ -23,7 +23,10 @@ export class UserDataService {
   static async updateLastInterview(interviewId: string) {
     let userData = await UserDataDao.getUserData();
     //Wenn es noch keine letzten gibt als einziges anlegen
-    if (userData.lastInterviews === undefined) {
+    if (
+      userData.lastInterviews === undefined ||
+      userData.lastInterviews.length === 0
+    ) {
       userData.lastInterviews = [interviewId];
     } else {
       let index = userData.lastInterviews.indexOf(interviewId);
@@ -33,7 +36,8 @@ export class UserDataService {
           return;
         }
         userData.lastInterviews.splice(index, 1);
-      } else if (userData.lastInterviews.length >= 5) {
+      }
+      if (userData.lastInterviews.length >= 5) {
         userData.lastInterviews.pop();
       }
       userData.lastInterviews.unshift(interviewId);
@@ -42,40 +46,55 @@ export class UserDataService {
   }
 
   static async getLastQuestions() {
-    let questions: Question[] = [];
     const questionIds = (await UserDataDao.getUserData()).lastQuestions;
-    await Promise.all(
-      questionIds.map(async (questionId) => {
-        questions.push(
-          await QuestionDao.getQuestionByCategoryAndId(
-            questionId.categoryId,
-            questionId.questionId
-          )
-        );
-      })
+    return Promise.all(
+      questionIds.map((questionId) =>
+        QuestionDao.getQuestionByCategoryAndId(
+          questionId.categoryId,
+          questionId.questionId
+        )
+      )
     );
-    return questions;
   }
 
   static async updateLastQuestion(categoryId: string, questionId: string) {
     let userData = await UserDataDao.getUserData();
     let last = { categoryId, questionId };
     //Wenn es noch keine letzten gibt als einziges anlegen
-    if (userData.lastQuestions === undefined) {
+    if (
+      userData.lastQuestions === undefined ||
+      userData.lastQuestions.length === 0
+    ) {
       userData.lastQuestions = [last];
     } else {
-      let index = userData.lastQuestions.indexOf(last);
-      //Wenn es bereits in der liste vorhanden ist und bereits auf platz 1 nichts tun, ansonsten an alter Stelle entfernen und an neuer hinzufügen
-      if (index > -1) {
-        if (index === 0) {
-          return;
+      let existing = false;
+      for (let i: number = 0; i < userData.lastQuestions.length; i++) {
+        if (
+          last.categoryId === userData.lastQuestions[i].categoryId &&
+          last.questionId === userData.lastQuestions[i].questionId
+        ) {
+          existing = true;
+          //Frage ist bereits in den letzten 5 vorhanden
+          if (i === 0) {
+            //Frage ist bereits an 1. Stelle nichts zutun
+            return;
+          } else {
+            //Frage an der Stelle entfernen
+            userData.lastQuestions.splice(i, 1);
+          }
         }
-        userData.lastQuestions.splice(index, 1);
-      } else if (userData.lastQuestions.length >= 5) {
-        userData.lastQuestions.pop();
       }
+      if (!existing) {
+        //Die Frage noch nicht drin
+        if (userData.lastQuestions.length >= 5) {
+          //Wenn bereits mind. 5 OBjekte darin sind das letzte entfernen, bevor neues vorne angehängt wird
+          userData.lastQuestions.pop();
+        }
+      }
+      //Vorne einfügen
       userData.lastQuestions.unshift(last);
     }
-    await UserDataDao.updateUserData(userData);
+
+    UserDataDao.updateUserData(userData);
   }
 }
