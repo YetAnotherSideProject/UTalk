@@ -12,13 +12,13 @@ import { InterviewService } from "../../services/InterviewService";
 @customElement("app-interview-list")
 class AppInterviewList extends LitElement {
   @internalProperty()
-  displayedInterviews: Interview[] = [];
-
   interviews: Interview[] = [];
+  @internalProperty()
+  searchQuery: string = "";
 
   constructor() {
     super();
-    this.updateInterviewObjects();
+    this.retrieveInterviewObjects();
   }
 
   static get styles() {
@@ -38,10 +38,14 @@ class AppInterviewList extends LitElement {
   }
 
   render() {
+    const filteredInterviews = this.interviews.filter((item) => {
+      return item.title.toLowerCase().indexOf(this.searchQuery) > -1;
+    });
     return html`
       <app-toolbar></app-toolbar>
       <ion-searchbar
-        @ionChange=${this.onChangeSearchbar}
+        @ionChange=${(event: any) =>
+          (this.searchQuery = event.target.value.toLowerCase())}
         id="interview_searchbar"
         animated
         autocomplete="on"
@@ -53,7 +57,7 @@ class AppInterviewList extends LitElement {
           <ion-list-header>
             Interviews
           </ion-list-header>
-          ${this.displayedInterviews.map((interview) => {
+          ${filteredInterviews.map((interview) => {
             return html` <ion-item-sliding>
               <ion-item
                 detail
@@ -84,13 +88,6 @@ class AppInterviewList extends LitElement {
     `;
   }
 
-  onChangeSearchbar(event: any) {
-    const query = event.target.value.toLowerCase();
-    this.displayedInterviews = this.interviews.filter((item) => {
-      return item.title.toLowerCase().indexOf(query) > -1;
-    });
-  }
-
   onItemClick(interview: Interview) {
     let nav: HTMLIonNavElement = document.querySelector(
       "ion-nav"
@@ -109,7 +106,7 @@ class AppInterviewList extends LitElement {
 
   onSlideDelete(interview: Interview) {
     InterviewService.deleteInterview(interview).then(() => {
-      this.updateInterviewObjects();
+      this.retrieveInterviewObjects();
       this.showToast("Interview gelöscht!");
     });
     // Important to entry the shadow root to get the reference on ion-list
@@ -139,7 +136,7 @@ class AppInterviewList extends LitElement {
             text: "Ok",
             handler: (data) => {
               InterviewService.addInterview(data.interview_title).then(() =>
-                this.updateInterviewObjects()
+                this.retrieveInterviewObjects()
               );
             },
           },
@@ -170,7 +167,7 @@ class AppInterviewList extends LitElement {
               InterviewService.renameInterview(
                 interview,
                 data.interview_title
-              ).then(() => this.updateInterviewObjects());
+              ).then(() => this.retrieveInterviewObjects());
             },
           },
         ],
@@ -178,10 +175,9 @@ class AppInterviewList extends LitElement {
       .then((alert) => alert.present());
   }
 
-  async updateInterviewObjects() {
+  async retrieveInterviewObjects() {
     InterviewService.getAllInterviews().then((interviews) => {
       this.interviews = interviews;
-      this.displayedInterviews = interviews;
     });
   }
 
