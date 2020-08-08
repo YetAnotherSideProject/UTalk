@@ -29,7 +29,14 @@ class AppInterviewDetail extends LitElement {
           </ion-card-content>
         </ion-card>
         <ion-list>
-          <ion-reorder-group disabled="false" id="reorder_group_ivs">
+          <ion-reorder-group
+            disabled="false"
+            @ionItemReorder=${({
+              detail,
+            }: {
+              detail: ItemReorderEventDetail;
+            }) => this.handleReorder(detail)}
+          >
             ${this.interview.interviewParts.map((interviewpart) => {
               return html`
                 <ion-list-header>${interviewpart.title}</ion-list-header>
@@ -51,22 +58,13 @@ class AppInterviewDetail extends LitElement {
     `;
   }
 
+  handleReorder(detail: ItemReorderEventDetail) {
+    //TODO
+    detail.complete();
+  }
+
   connectedCallback() {
     super.connectedCallback();
     UserDataService.updateLastInterview(this.interview.firebaseId);
-    const reorderGroup = document.querySelector("ion-reorder-group");
-    reorderGroup?.addEventListener(
-      "ionItemReorder",
-      ({ detail }: { ItemReorderEventDetail }) => {
-        // The `from` and `to` properties contain the index of the item
-        // when the drag started and ended, respectively
-        console.log("Dragged from index", detail.from, "to", detail.to);
-
-        // Finish the reorder and position the item in the DOM based on
-        // where the gesture ended. This method can also be called directly
-        // by the reorder group
-        detail.complete();
-      }
-    );
   }
 }
