@@ -37,6 +37,10 @@ export class InterviewService {
     }
   }
 
+  static async updateInterview(interview: Interview) {
+    await InterviewDao.updateInterview(interview);
+  }
+
   static async deleteInterview(interview: Interview) {
     await InterviewDao.deleteInterview(interview);
   }

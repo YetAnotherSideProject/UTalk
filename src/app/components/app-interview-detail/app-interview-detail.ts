@@ -1,7 +1,8 @@
 import { LitElement, html, customElement, property } from "lit-element";
-import { Interview } from "../../models/Interview";
-import { UserDataService } from "../../services/UserDataService";
 import { ItemReorderEventDetail } from "@ionic/core";
+import { Interview, InterviewPart } from "../../models/Interview";
+import { UserDataService } from "../../services/UserDataService";
+import { InterviewService } from "../../services/InterviewService";
 
 @customElement("app-interview-detail")
 class AppInterviewDetail extends LitElement {
@@ -29,18 +30,18 @@ class AppInterviewDetail extends LitElement {
           </ion-card-content>
         </ion-card>
         <ion-list>
-          <ion-reorder-group
-            disabled="false"
-            @ionItemReorder=${({
-              detail,
-            }: {
-              detail: ItemReorderEventDetail;
-            }) => this.handleReorder(detail)}
-          >
-            ${this.interview.interviewParts.map((interviewpart) => {
-              return html`
-                <ion-list-header>${interviewpart.title}</ion-list-header>
-                ${interviewpart.interviewQuestions?.map((interviewQuestion) => {
+          ${this.interview.interviewParts.map((interviewpart) => {
+            return html`
+              <ion-list-header>${interviewpart.title}</ion-list-header>
+              <ion-reorder-group
+                disabled="false"
+                @ionItemReorder=${({
+                  detail,
+                }: {
+                  detail: ItemReorderEventDetail;
+                }) => this.handleReorder(detail, interviewpart)}
+              >
+                ${interviewpart.interviewQuestions.map((interviewQuestion) => {
                   return html`
                     <ion-item>
                       <ion-label>
@@ -50,21 +51,38 @@ class AppInterviewDetail extends LitElement {
                     </ion-item>
                   `;
                 })}
-              `;
-            })}
-          </ion-reorder-group>
+              </ion-reorder-group>
+            `;
+          })}
         </ion-list>
       </ion-content>
     `;
   }
 
-  handleReorder(detail: ItemReorderEventDetail) {
-    //TODO
+  handleReorder(detail: ItemReorderEventDetail, interviewpart: InterviewPart) {
+    //Update interview object
+    let draggedItem = interviewpart.interviewQuestions.splice(
+      detail.from,
+      1
+    )[0];
+    interviewpart.interviewQuestions.splice(detail.to, 0, draggedItem);
     detail.complete();
   }
 
   connectedCallback() {
     super.connectedCallback();
     UserDataService.updateLastInterview(this.interview.firebaseId);
+    //Only update the interview object in perstence when view is closed, not at every change on screen
+    this.addEventListener("ionViewWillLeave", () =>
+      InterviewService.updateInterview(this.interview)
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    //Remove event Listeners connected on connectedCallback()
+    this.removeEventListener("ionViewWillLeave", () =>
+      InterviewService.updateInterview(this.interview)
+    );
   }
 }

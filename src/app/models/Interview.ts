@@ -4,9 +4,9 @@ export interface Interview {
   interviewParts: InterviewPart[];
 }
 
-interface InterviewPart {
+export interface InterviewPart {
   title: string;
-  interviewQuestions?: InterviewQuestion[];
+  interviewQuestions: InterviewQuestion[];
 }
 
 interface InterviewQuestion {
