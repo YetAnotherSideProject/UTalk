@@ -8,7 +8,25 @@ export class InterviewService {
 
   static async addInterview(interviewTitle: string) {
     if (interviewTitle !== undefined && interviewTitle !== "") {
-      await InterviewDao.addInterview(interviewTitle);
+      //Create basic interview template
+      const interview: Interview = {
+        firebaseId: "",
+        title: interviewTitle,
+        interviewParts: [
+          {
+            title: "Part I",
+            interviewQuestions: [
+              { question: "Frage 1" },
+              { question: "Frage 2" },
+            ],
+          },
+          {
+            title: "Part II",
+            interviewQuestions: [{ question: "Frage 3" }],
+          },
+        ],
+      };
+      await InterviewDao.addInterview(interview);
     }
   }
 
