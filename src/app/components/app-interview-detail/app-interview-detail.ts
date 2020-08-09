@@ -64,6 +64,20 @@ class AppInterviewDetail extends LitElement {
                   }
                 )}
               </ion-reorder-group>
+              <ion-item>
+                <ion-button
+                  slot="start"
+                  @click=${() => this.addQuestion(interviewpart)}
+                >
+                  Part hinzufügen
+                </ion-button>
+                <ion-button
+                  slot="end"
+                  @click=${() => this.addQuestion(interviewpart)}
+                >
+                  Frage hinzufügen
+                </ion-button>
+              </ion-item>
             `;
           })}
         </ion-list>
@@ -91,6 +105,11 @@ class AppInterviewDetail extends LitElement {
     items.closeSlidingItems();
     //Obwohl property interview korrekt angepasst wird muss hier manuell ein Update erzwungen werden...
     this.requestUpdate();
+  }
+
+  addQuestion(interviewpart: InterviewPart) {
+    //TODO
+    console.log(`Implementation missing`);
   }
 
   connectedCallback() {
