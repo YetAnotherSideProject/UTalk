@@ -41,16 +41,28 @@ class AppInterviewDetail extends LitElement {
                   detail: ItemReorderEventDetail;
                 }) => this.handleReorder(detail, interviewpart)}
               >
-                ${interviewpart.interviewQuestions.map((interviewQuestion) => {
-                  return html`
-                    <ion-item>
-                      <ion-label>
-                        ${interviewQuestion.question}
-                      </ion-label>
-                      <ion-reorder slot="end"></ion-reorder>
-                    </ion-item>
-                  `;
-                })}
+                ${interviewpart.interviewQuestions.map(
+                  (interviewQuestion, index) => {
+                    return html`
+                      <ion-item-sliding>
+                        <ion-item>
+                          <ion-label>
+                            ${interviewQuestion.question}
+                          </ion-label>
+                          <ion-reorder slot="end"></ion-reorder>
+                        </ion-item>
+                        <ion-item-options side="end">
+                          <ion-item-option
+                            id="ion-option-delete"
+                            @click=${() =>
+                              this.onSlideDelete(interviewpart, index)}
+                            >Löschen</ion-item-option
+                          >
+                        </ion-item-options>
+                      </ion-item-sliding>
+                    `;
+                  }
+                )}
               </ion-reorder-group>
             `;
           })}
@@ -67,6 +79,18 @@ class AppInterviewDetail extends LitElement {
     )[0];
     interviewpart.interviewQuestions.splice(detail.to, 0, draggedItem);
     detail.complete();
+  }
+
+  onSlideDelete(interviewpart: InterviewPart, index: number) {
+    //Update interview object
+    interviewpart.interviewQuestions.splice(index, 1);
+    // Important to entry the shadow root to get the reference on ion-list
+    let items: HTMLIonListElement = this.shadowRoot?.querySelector(
+      "ion-list"
+    ) as HTMLIonListElement;
+    items.closeSlidingItems();
+    //Obwohl property interview korrekt angepasst wird muss hier manuell ein Update erzwungen werden...
+    this.requestUpdate();
   }
 
   connectedCallback() {
