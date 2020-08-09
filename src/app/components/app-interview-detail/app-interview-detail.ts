@@ -1,5 +1,5 @@
 import { LitElement, html, css, customElement, property } from "lit-element";
-import { ItemReorderEventDetail } from "@ionic/core";
+import { ItemReorderEventDetail, alertController } from "@ionic/core";
 import { Interview, InterviewPart } from "../../models/Interview";
 import { UserDataService } from "../../services/UserDataService";
 import { InterviewService } from "../../services/InterviewService";
@@ -39,9 +39,20 @@ class AppInterviewDetail extends LitElement {
           </ion-card-content>
         </ion-card>
         <ion-list>
-          ${this.interview.interviewParts.map((interviewpart) => {
+          ${this.interview.interviewParts.map((interviewpart, index) => {
             return html`
-              <ion-list-header>${interviewpart.title}</ion-list-header>
+              <ion-item-sliding>
+                <ion-item>
+                  <ion-list-header>${interviewpart.title}</ion-list-header>
+                </ion-item>
+                <ion-item-options side="end">
+                  <ion-item-option
+                    id="ion-option-delete"
+                    @click=${() => this.onInterviewpartSlideDelete(index)}
+                    >Löschen</ion-item-option
+                  >
+                </ion-item-options>
+              </ion-item-sliding>
               <ion-reorder-group
                 disabled="false"
                 @ionItemReorder=${({
@@ -64,7 +75,7 @@ class AppInterviewDetail extends LitElement {
                           <ion-item-option
                             id="ion-option-delete"
                             @click=${() =>
-                              this.onSlideDelete(interviewpart, index)}
+                              this.onQuestionSlideDelete(interviewpart, index)}
                             >Löschen</ion-item-option
                           >
                         </ion-item-options>
@@ -104,7 +115,38 @@ class AppInterviewDetail extends LitElement {
     detail.complete();
   }
 
-  onSlideDelete(interviewpart: InterviewPart, index: number) {
+  async onInterviewpartSlideDelete(index: number) {
+    const alert = await alertController.create({
+      header: "Interview Part löschen?",
+      message: "Diesen Interviewpart inklusiver aller Fragen wirklich löschen?",
+      buttons: [
+        {
+          text: "Löschen",
+          handler: () => {
+            //Update interview object
+            this.interview.interviewParts.splice(index, 1);
+            //Obwohl property interview korrekt angepasst wird muss hier manuell ein Update erzwungen werden...
+            this.requestUpdate();
+          },
+        },
+        {
+          text: "Abrechen",
+          handler: () => {
+            console.log("Interview part löschen abgebrochen");
+          },
+        },
+      ],
+    });
+    await alert.present();
+
+    // Important to entry the shadow root to get the reference on ion-list
+    let items: HTMLIonListElement = this.shadowRoot?.querySelector(
+      "ion-list"
+    ) as HTMLIonListElement;
+    items.closeSlidingItems();
+  }
+
+  onQuestionSlideDelete(interviewpart: InterviewPart, index: number) {
     //Update interview object
     interviewpart.interviewQuestions.splice(index, 1);
     // Important to entry the shadow root to get the reference on ion-list
