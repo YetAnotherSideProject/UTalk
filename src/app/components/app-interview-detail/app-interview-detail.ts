@@ -1,4 +1,4 @@
-import { LitElement, html, customElement, property } from "lit-element";
+import { LitElement, html, css, customElement, property } from "lit-element";
 import { ItemReorderEventDetail } from "@ionic/core";
 import { Interview, InterviewPart } from "../../models/Interview";
 import { UserDataService } from "../../services/UserDataService";
@@ -11,6 +11,15 @@ class AppInterviewDetail extends LitElement {
 
   constructor() {
     super();
+  }
+
+  static get styles() {
+    return css`
+      #ion-option-delete {
+        --ion-color-primary: var(--ion-color-danger);
+        --ion-color-primary-contrast: var(--ion-color-danger-contrast);
+      }
+    `;
   }
 
   render() {
