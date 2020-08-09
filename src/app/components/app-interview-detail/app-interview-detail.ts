@@ -24,7 +24,7 @@ class AppInterviewDetail extends LitElement {
 
   render() {
     return html`
-      <app-toolbar></app-toolbar>
+      <app-toolbar backButton="true" defaultHref="/interviewlist"></app-toolbar>
       <ion-content class="padding">
         <h1>Interview Detail</h1>
         <ion-card>
