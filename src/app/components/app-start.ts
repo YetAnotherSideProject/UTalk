@@ -1,11 +1,4 @@
-import {
-  LitElement,
-  html,
-  customElement,
-  internalProperty,
-  property,
-  query,
-} from "lit-element";
+import { LitElement, html, customElement, internalProperty } from "lit-element";
 
 import "./app-toolbar/app-toolbar";
 import "./app-fab/app-fab";
@@ -44,56 +37,105 @@ class AppStart extends LitElement {
       <app-toolbar></app-toolbar>
       <ion-content class="ion-padding">
         <h1>Letzte Interviews</h1>
-        <ion-slides pager="true">
-          ${this.lastInterviews.map(
-            (interview) => html`
-              <ion-slide
-                button
-                @click=${() => {
-                  //TODO
-                  this.onInterviewClick(interview);
-                }}
-              >
+        ${
+          this.lastInterviews.length > 0
+            ? html` <ion-slides pager="true">
+                ${this.lastInterviews.map(
+                  (interview) => html`
+                    <ion-slide
+                      button
+                      @click=${() => {
+                        //TODO
+                        this.onInterviewClick(interview);
+                      }}
+                    >
+                      <ion-card>
+                        <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
+                        <img src="src/assets/img/interview.jpg" width="100%" />
+                        <ion-card-header>
+                          <ion-card-subtitle>Interview</ion-card-subtitle>
+                          <ion-card-title>${interview.title}</ion-card-title>
+                        </ion-card-header>
+                      </ion-card>
+                    </ion-slide>
+                  `
+                )}
+              </ion-slides>`
+            : html`
                 <ion-card>
                   <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
                   <img src="src/assets/img/interview.jpg" width="100%" />
                   <ion-card-header>
                     <ion-card-subtitle>Interview</ion-card-subtitle>
-                    <ion-card-title>${interview.title}</ion-card-title>
+                    <ion-item lines="none">
+                      <ion-button>
+                        <ion-icon
+                          slot="start"
+                          name="add-circle-outline"
+                        ></ion-icon>
+                        <ion-label slot="end">
+                          Neues Interview anlegen
+                        </ion-label>
+                      </ion-button>
+                    </ion-item>
                   </ion-card-header>
                 </ion-card>
-              </ion-slide>
-            `
-          )}
-        </ion-slides>
+              `
+        }
         <h1>Letzte Fragen</h1>
-        <ion-slides pager="true">
-          ${this.lastQuestions.map(
-            (question) => html`
-              <ion-slide
-                button
-                @click=${() => {
-                  //TODO
-                  this.onQuestionClick(
-                    question.categoryId,
-                    question.firebaseId
-                  );
-                }}
-              >
+        ${
+          this.lastQuestions.length > 0
+            ? html` <ion-slides pager="true">
+                ${this.lastQuestions.map(
+                  (question) => html`
+                    <ion-slide
+                      button
+                      @click=${() => {
+                        //TODO
+                        this.onQuestionClick(
+                          question.categoryId,
+                          question.firebaseId
+                        );
+                      }}
+                    >
+                      <ion-card>
+                        <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
+                        <img src="src/assets/img/question.jpg" width="100%" />
+                        <ion-card-header>
+                          <ion-card-subtitle>Question</ion-card-subtitle>
+                          <ion-card-title
+                            >Kategorie: ${question.categoryId}</ion-card-title
+                          >
+                          <ion-card-title
+                            >Frage: ${question.text}</ion-card-title
+                          >
+                        </ion-card-header>
+                      </ion-card>
+                    </ion-slide>
+                  `
+                )}</ion-slides
+              >`
+            : html`
                 <ion-card>
                   <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
                   <img src="src/assets/img/question.jpg" width="100%" />
                   <ion-card-header>
-                    <ion-card-subtitle>Question</ion-card-subtitle>
-                    <ion-card-title
-                      >Kategorie: ${question.categoryId}</ion-card-title
-                    >
-                    <ion-card-title>Frage: ${question.text}</ion-card-title>
+                    <ion-card-subtitle>Noch recht leer hier</ion-card-subtitle>
+                    <ion-item lines="none">
+                      <ion-button>
+                        <ion-icon
+                          slot="start"
+                          name="add-circle-outline"
+                        ></ion-icon>
+                        <ion-label slot="end">
+                          Neue Frage anlegen
+                        </ion-label>
+                      </ion-button>
+                    </ion-item>
                   </ion-card-header>
                 </ion-card>
-              </ion-slide>
-            `
-          )}
+              `
+        }
         </ion-slides>
       </ion-content>
       <app-fab icon="play-outline"></app-fab>
