@@ -104,6 +104,7 @@ class AppInterviewDetail extends LitElement {
           })}
         </ion-list>
       </ion-content>
+      <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
     `;
   }
 
@@ -133,9 +134,7 @@ class AppInterviewDetail extends LitElement {
         },
         {
           text: "Abrechen",
-          handler: () => {
-            console.log("Interview part löschen abgebrochen");
-          },
+          role: "cancel",
         },
       ],
     });
@@ -169,6 +168,39 @@ class AppInterviewDetail extends LitElement {
       target.value = ``;
       this.requestUpdate();
     }
+  }
+
+  async onFabClick() {
+    const alert = await alertController.create({
+      header: "Interviewpart hinzufügen",
+      message: "Bitte Titel eingeben",
+      inputs: [
+        {
+          name: "parttitle",
+          placeholder: "Part X",
+        },
+      ],
+      buttons: [
+        {
+          text: "Abbrechen",
+          role: "cancel",
+        },
+        {
+          text: "Ok",
+          handler: (data: any) => {
+            if (data.parttitle !== ``) {
+              this.interview.interviewParts.push({
+                title: data.parttitle,
+                interviewQuestions: [],
+              });
+              //Da array in dem property nicht neu zugewiesen, sondern nur angepasst wird muss manuell ein Update erzeugt werden
+              this.requestUpdate();
+            }
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 
   connectedCallback() {
