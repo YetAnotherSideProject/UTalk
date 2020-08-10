@@ -43,7 +43,13 @@ class AppInterviewDetail extends LitElement {
             return html`
               <ion-item-sliding>
                 <ion-item>
-                  <ion-list-header>${interviewpart.title}</ion-list-header>
+                  <ion-list-header
+                    ><ion-input
+                      value=${interviewpart.title}
+                      @ionBlur=${(event: any) =>
+                        (interviewpart.title = event.target.value)}
+                    ></ion-input
+                  ></ion-list-header>
                 </ion-item>
                 <ion-item-options side="end">
                   <ion-item-option
@@ -66,9 +72,12 @@ class AppInterviewDetail extends LitElement {
                     return html`
                       <ion-item-sliding>
                         <ion-item>
-                          <ion-label>
-                            ${interviewQuestion.question}
-                          </ion-label>
+                          <ion-input
+                            value=${interviewQuestion.question}
+                            @ionBlur=${(event: any) =>
+                              (interviewQuestion.question = event.target.value)}
+                          >
+                          </ion-input>
                           <ion-reorder slot="end"></ion-reorder>
                         </ion-item>
                         <ion-item-options side="end">
@@ -85,18 +94,11 @@ class AppInterviewDetail extends LitElement {
                 )}
               </ion-reorder-group>
               <ion-item>
-                <ion-button
-                  slot="start"
-                  @click=${() => this.addQuestion(interviewpart)}
-                >
-                  Part hinzufügen
-                </ion-button>
-                <ion-button
-                  slot="end"
-                  @click=${() => this.addQuestion(interviewpart)}
-                >
-                  Frage hinzufügen
-                </ion-button>
+                <ion-input
+                  placeholder="Weitere Frage ..."
+                  @ionBlur=${(event: any) =>
+                    this.onNewQuestion(interviewpart, event)}
+                ></ion-input>
               </ion-item>
             `;
           })}
@@ -158,9 +160,18 @@ class AppInterviewDetail extends LitElement {
     this.requestUpdate();
   }
 
-  addQuestion(interviewpart: InterviewPart) {
-    //TODO
-    console.log(`Implementation missing`);
+  onNewQuestion(interviewpart: InterviewPart, event: any) {
+    if (
+      event !== undefined &&
+      event.target !== undefined &&
+      event.target.value !== undefined &&
+      event.target.value !== ``
+    ) {
+      interviewpart.interviewQuestions.push({ question: event.target.value });
+      //Obwohl property interview korrekt angepasst wird muss hier manuell ein Update erzwungen werden...
+      event.target.value = ``;
+      this.requestUpdate();
+    }
   }
 
   connectedCallback() {
