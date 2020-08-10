@@ -61,8 +61,15 @@ class AppInterviewDetail extends LitElement {
                   <ion-list-header
                     ><ion-input
                       value=${interviewpart.title}
-                      @ionBlur=${(event: any) =>
-                        (interviewpart.title = event.target.value)}
+                      @ionBlur=${({
+                        target,
+                      }: {
+                        target: HTMLIonInputElement;
+                      }) => {
+                        if (target.value !== ``) {
+                          interviewpart.title = target.value as string;
+                        }
+                      }}
                     ></ion-input
                   ></ion-list-header>
                 </ion-item>
@@ -89,8 +96,15 @@ class AppInterviewDetail extends LitElement {
                         <ion-item>
                           <ion-input
                             value=${interviewQuestion.question}
-                            @ionBlur=${(event: any) =>
-                              (interviewQuestion.question = event.target.value)}
+                            @ionBlur=${({
+                              target,
+                            }: {
+                              target: HTMLIonInputElement;
+                            }) => {
+                              if (target.value !== ``) {
+                                interviewQuestion.question = target.value as string;
+                              }
+                            }}
                           >
                           </ion-input>
                           <ion-reorder slot="end"></ion-reorder>
