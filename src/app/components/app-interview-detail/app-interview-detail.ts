@@ -96,8 +96,8 @@ class AppInterviewDetail extends LitElement {
               <ion-item>
                 <ion-input
                   placeholder="Weitere Frage ..."
-                  @ionBlur=${(event: any) =>
-                    this.onNewQuestion(interviewpart, event)}
+                  @ionBlur=${({ target }: { target: HTMLIonInputElement }) =>
+                    this.onNewQuestion(interviewpart, target)}
                 ></ion-input>
               </ion-item>
             `;
@@ -127,7 +127,7 @@ class AppInterviewDetail extends LitElement {
           handler: () => {
             //Update interview object
             this.interview.interviewParts.splice(index, 1);
-            //Obwohl property interview korrekt angepasst wird muss hier manuell ein Update erzwungen werden...
+            //Da array in dem property nicht neu zugewiesen, sondern nur angepasst wird muss manuell ein Update erzeugt werden
             this.requestUpdate();
           },
         },
@@ -156,20 +156,17 @@ class AppInterviewDetail extends LitElement {
       "ion-list"
     ) as HTMLIonListElement;
     items.closeSlidingItems();
-    //Obwohl property interview korrekt angepasst wird muss hier manuell ein Update erzwungen werden...
+    //Da array in dem property nicht neu zugewiesen, sondern nur angepasst wird muss manuell ein Update erzeugt werden
     this.requestUpdate();
   }
 
-  onNewQuestion(interviewpart: InterviewPart, event: any) {
-    if (
-      event !== undefined &&
-      event.target !== undefined &&
-      event.target.value !== undefined &&
-      event.target.value !== ``
-    ) {
-      interviewpart.interviewQuestions.push({ question: event.target.value });
-      //Obwohl property interview korrekt angepasst wird muss hier manuell ein Update erzwungen werden...
-      event.target.value = ``;
+  onNewQuestion(interviewpart: InterviewPart, target: HTMLIonInputElement) {
+    if (target.value !== null && target.value !== ``) {
+      interviewpart.interviewQuestions.push({
+        question: target.value as string,
+      });
+      //Da array in dem property nicht neu zugewiesen, sondern nur angepasst wird muss manuell ein Update erzeugt werden
+      target.value = ``;
       this.requestUpdate();
     }
   }
