@@ -1,6 +1,7 @@
 export interface Interview {
   firebaseId: string;
   title: string;
+  description: string;
   interviewParts: InterviewPart[];
 }
 

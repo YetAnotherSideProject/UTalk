@@ -12,6 +12,7 @@ export class InterviewService {
       const interview: Interview = {
         firebaseId: "",
         title: interviewTitle,
+        description: "Beschreibung ist hier ...",
         interviewParts: [
           {
             title: "Part I",
