@@ -19,6 +19,10 @@ class AppInterviewDetail extends LitElement {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
+      #ion-button-iv_run {
+        --ion-color-primary: var(--ion-color-success);
+        --ion-color-primary-contrast: var(--ion-color-success-contrast);
+      }
     `;
   }
 
@@ -32,7 +36,18 @@ class AppInterviewDetail extends LitElement {
           <img src="src/assets/img/interview.jpg" width="100%" />
           <ion-card-header>
             <ion-card-subtitle>Interview</ion-card-subtitle>
-            <ion-card-title>${this.interview.title}</ion-card-title>
+            <ion-item lines="none">
+              <ion-card-title slot="start"
+                >${this.interview.title}</ion-card-title
+              >
+              <ion-button
+                slot="end"
+                size="large"
+                id="ion-button-iv_run"
+                @click=${() => this.onRunInterview()}
+                ><ion-icon name="play-outline"></ion-icon
+              ></ion-button>
+            </ion-item>
           </ion-card-header>
           <ion-card-content>
             Interview description
@@ -106,6 +121,10 @@ class AppInterviewDetail extends LitElement {
       </ion-content>
       <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
     `;
+  }
+
+  onRunInterview() {
+    console.log(`Run interview implementation missing!`);
   }
 
   handleReorder(detail: ItemReorderEventDetail, interviewpart: InterviewPart) {
