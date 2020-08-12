@@ -48,14 +48,12 @@ class AppInterviewList extends LitElement {
   render() {
     const filteredInterviews = this.interviews
       .filter((interview) => {
-        if (this.statusFilter === "") {
-          return true;
-        } else {
-          return interview.status === this.statusFilter;
-        }
+        return (
+          this.statusFilter === "" || interview.status === this.statusFilter
+        );
       })
       .filter((interview) => {
-        return interview.title.toLowerCase().indexOf(this.searchQuery) > -1;
+        return interview.title.toLocaleLowerCase().includes(this.searchQuery);
       });
 
     return html`
