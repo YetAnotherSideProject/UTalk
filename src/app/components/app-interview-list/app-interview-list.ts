@@ -16,7 +16,7 @@ class AppInterviewList extends LitElement {
   @internalProperty()
   searchQuery: string = "";
   @internalProperty()
-  statusFilter: string = "";
+  statusFilter: string = "All";
 
   constructor() {
     super();
@@ -47,14 +47,13 @@ class AppInterviewList extends LitElement {
 
   render() {
     const filteredInterviews = this.interviews
-      .filter((interview) => {
-        return (
-          this.statusFilter === "" || interview.status === this.statusFilter
-        );
-      })
-      .filter((interview) => {
-        return interview.title.toLocaleLowerCase().includes(this.searchQuery);
-      });
+      .filter(
+        (interview) =>
+          this.statusFilter === "All" || interview.status === this.statusFilter
+      )
+      .filter((interview) =>
+        interview.title.toLowerCase().includes(this.searchQuery)
+      );
 
     return html`
       <app-toolbar></app-toolbar>
@@ -71,9 +70,13 @@ class AppInterviewList extends LitElement {
 
       <ion-segment
         id="interview_filterbar_status"
+        value="All"
         @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) =>
           this.onFilterStatusChange(detail)}
       >
+        <ion-segment-button value="All">
+          <ion-label>All</ion-label>
+        </ion-segment-button>
         <ion-segment-button value="Draft">
           <ion-label>Draft</ion-label>
         </ion-segment-button>
