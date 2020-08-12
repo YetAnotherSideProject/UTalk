@@ -17,6 +17,8 @@ class AppInterviewList extends LitElement {
   searchQuery: string = "";
   @internalProperty()
   statusFilter: string = "All";
+  @internalProperty()
+  dateSortFilter: string = "Change";
 
   constructor() {
     super();
@@ -53,7 +55,20 @@ class AppInterviewList extends LitElement {
       )
       .filter((interview) =>
         interview.title.toLowerCase().includes(this.searchQuery)
-      );
+      )
+      .sort((i1, i2) => {
+        if (this.dateSortFilter === "Change") {
+          return this.sortByDate(
+            i1.lastChangeDate.seconds,
+            i2.lastChangeDate.seconds
+          );
+        } else {
+          return this.sortByDate(
+            i1.creationDate.seconds,
+            i2.creationDate.seconds
+          );
+        }
+      });
 
     return html`
       <app-toolbar></app-toolbar>
@@ -146,8 +161,21 @@ class AppInterviewList extends LitElement {
   }
 
   onSortDateChange(detail: SegmentChangeEventDetail) {
-    //TODO
-    console.log(`Implementation missing`);
+    if (detail.value === undefined) {
+      this.dateSortFilter = "Change";
+    } else {
+      this.dateSortFilter = detail.value;
+    }
+  }
+
+  sortByDate(s1: number, s2: number): number {
+    if (s1 < s2) {
+      return -1;
+    }
+    if (s1 > s2) {
+      return 1;
+    }
+    return 0;
   }
 
   onItemClick(interview: Interview) {
