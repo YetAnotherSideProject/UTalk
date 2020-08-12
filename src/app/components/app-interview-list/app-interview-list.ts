@@ -113,33 +113,39 @@ class AppInterviewList extends LitElement {
           this.onSortDateChange(detail)}
       >
         <ion-segment-button
+          layout="icon-start"
           value="Change"
           @click=${() => {
-            if (
-              this.dateSortFilter === "Change" &&
-              this.sortReverse === false
-            ) {
-              this.sortReverse = true;
-            } else {
-              this.sortReverse = false;
+            if (this.dateSortFilter === "Change") {
+              if (this.sortReverse === false) {
+                this.sortReverse = true;
+              } else {
+                this.sortReverse = false;
+              }
             }
           }}
         >
+          <ion-icon
+            name=${this.sortReverse ? "arrow-up-outline" : "arrow-down-outline"}
+          ></ion-icon>
           <ion-label>Change</ion-label>
         </ion-segment-button>
         <ion-segment-button
+          layout="icon-start"
           value="Creation"
           @click=${() => {
-            if (
-              this.dateSortFilter === "Creation" &&
-              this.sortReverse === false
-            ) {
-              this.sortReverse = true;
-            } else {
-              this.sortReverse = false;
+            if (this.dateSortFilter === "Creation") {
+              if (this.sortReverse === false) {
+                this.sortReverse = true;
+              } else {
+                this.sortReverse = false;
+              }
             }
           }}
         >
+          <ion-icon
+            name=${this.sortReverse ? "arrow-up-outline" : "arrow-down-outline"}
+          ></ion-icon>
           <ion-label>Creation</ion-label>
         </ion-segment-button>
       </ion-segment>
