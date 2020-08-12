@@ -5,7 +5,7 @@ import {
   customElement,
   internalProperty,
 } from "lit-element";
-import { alertController } from "@ionic/core";
+import { alertController, SegmentChangeEventDetail } from "@ionic/core";
 import { Interview } from "../../models/Interview";
 import { InterviewService } from "../../services/InterviewService";
 
@@ -15,6 +15,8 @@ class AppInterviewList extends LitElement {
   interviews: Interview[] = [];
   @internalProperty()
   searchQuery: string = "";
+  @internalProperty()
+  statusFilter: string = "";
 
   constructor() {
     super();
@@ -24,6 +26,9 @@ class AppInterviewList extends LitElement {
   static get styles() {
     return css`
       #interview_searchbar {
+        background-color: var(--ion-color-light);
+      }
+      #interview_filterbar_status {
         background-color: var(--ion-color-light);
       }
       #ion-option-rename {
@@ -38,11 +43,21 @@ class AppInterviewList extends LitElement {
   }
 
   render() {
-    const filteredInterviews = this.interviews.filter((item) => {
-      return item.title.toLowerCase().indexOf(this.searchQuery) > -1;
-    });
+    const filteredInterviews = this.interviews
+      .filter((interview) => {
+        if (this.statusFilter === "") {
+          return true;
+        } else {
+          return interview.status === this.statusFilter;
+        }
+      })
+      .filter((interview) => {
+        return interview.title.toLowerCase().indexOf(this.searchQuery) > -1;
+      });
+
     return html`
       <app-toolbar></app-toolbar>
+
       <ion-searchbar
         @ionChange=${(event: any) =>
           (this.searchQuery = event.target.value.toLowerCase())}
@@ -52,6 +67,23 @@ class AppInterviewList extends LitElement {
         clear-icon="trash-outline"
         inputmode="text"
       ></ion-searchbar>
+
+      <ion-segment
+        id="interview_filterbar_status"
+        @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) =>
+          this.onFilterStatusChange(detail)}
+      >
+        <ion-segment-button value="Draft">
+          <ion-label>Draft</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Active">
+          <ion-label>Active</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Archived">
+          <ion-label>Archived</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
       <ion-content class="padding">
         <ion-list id="interview_list">
           <ion-list-header>
@@ -86,6 +118,14 @@ class AppInterviewList extends LitElement {
       </ion-content>
       <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
     `;
+  }
+
+  onFilterStatusChange(detail: SegmentChangeEventDetail) {
+    if (detail.value === undefined) {
+      this.statusFilter = "";
+    } else {
+      this.statusFilter = detail.value;
+    }
   }
 
   onItemClick(interview: Interview) {
