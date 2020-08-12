@@ -31,6 +31,9 @@ class AppInterviewList extends LitElement {
       #interview_filterbar_status {
         background-color: var(--ion-color-light);
       }
+      #interview_filterbar_date {
+        background-color: var(--ion-color-light);
+      }
       #ion-option-rename {
         --ion-color-primary: var(--ion-color-warning);
         --ion-color-primary-contrast: var(--ion-color-warning-contrast);
@@ -83,6 +86,19 @@ class AppInterviewList extends LitElement {
           <ion-label>Archived</ion-label>
         </ion-segment-button>
       </ion-segment>
+      <ion-segment
+        id="interview_filterbar_date"
+        value="Change"
+        @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) =>
+          this.onSortDateChange(detail)}
+      >
+        <ion-segment-button value="Change">
+          <ion-label>Change</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Creation">
+          <ion-label>Creation</ion-label>
+        </ion-segment-button>
+      </ion-segment>
 
       <ion-content class="padding">
         <ion-list id="interview_list">
@@ -126,6 +142,11 @@ class AppInterviewList extends LitElement {
     } else {
       this.statusFilter = detail.value;
     }
+  }
+
+  onSortDateChange(detail: SegmentChangeEventDetail) {
+    //TODO
+    console.log(`Implementation missing`);
   }
 
   onItemClick(interview: Interview) {
