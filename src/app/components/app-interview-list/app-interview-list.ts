@@ -46,6 +46,18 @@ class AppInterviewList extends LitElement {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
+      #statusBadge_Draft {
+        --ion-color-primary: var(--ion-color-warning);
+        --ion-color-primary-contrast: var(--ion-color-warning-contrast);
+      }
+      #statusBadge_Active {
+        --ion-color-primary: var(--ion-color-success);
+        --ion-color-primary-contrast: var(--ion-color-success-contrast);
+      }
+      #statusBadge_Archived {
+        --ion-color-primary: var(--ion-color-medium);
+        --ion-color-primary-contrast: var(--ion-color-medium-contrast);
+      }
     `;
   }
 
@@ -163,6 +175,9 @@ class AppInterviewList extends LitElement {
                 @click=${() => this.onItemClick(interview)}
               >
                 <ion-label>${interview.title}</ion-label>
+                <ion-badge slot="end" id="statusBadge_${interview.status}" }
+                  >${interview.status}</ion-badge
+                >
               </ion-item>
               <ion-item-options side="start">
                 <ion-item-option
