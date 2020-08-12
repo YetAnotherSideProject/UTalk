@@ -103,7 +103,7 @@ class AppInterviewList extends LitElement {
         id="interview_filterbar_status"
         value="All"
         @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) =>
-          this.onFilterStatusChange(detail)}
+          (this.statusFilter = detail.value || "All")}
       >
         <ion-segment-button value="All">
           <ion-label>All</ion-label>
@@ -122,7 +122,7 @@ class AppInterviewList extends LitElement {
         id="interview_filterbar_date"
         value="Change"
         @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) =>
-          this.onSortDateChange(detail)}
+          (this.dateSortFilter = detail.value || "Change")}
       >
         <ion-segment-button
           layout="icon-start"
@@ -199,22 +199,6 @@ class AppInterviewList extends LitElement {
       </ion-content>
       <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
     `;
-  }
-
-  onFilterStatusChange(detail: SegmentChangeEventDetail) {
-    if (detail.value === undefined) {
-      this.statusFilter = "";
-    } else {
-      this.statusFilter = detail.value;
-    }
-  }
-
-  onSortDateChange(detail: SegmentChangeEventDetail) {
-    if (detail.value === undefined) {
-      this.dateSortFilter = "Change";
-    } else {
-      this.dateSortFilter = detail.value;
-    }
   }
 
   sortByDate(s1: number, s2: number, reverse: boolean): number {
