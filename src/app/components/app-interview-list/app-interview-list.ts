@@ -19,6 +19,8 @@ class AppInterviewList extends LitElement {
   statusFilter: string = "All";
   @internalProperty()
   dateSortFilter: string = "Change";
+  @internalProperty()
+  sortReverse: boolean = false;
 
   constructor() {
     super();
@@ -60,12 +62,14 @@ class AppInterviewList extends LitElement {
         if (this.dateSortFilter === "Change") {
           return this.sortByDate(
             i1.lastChangeDate.seconds,
-            i2.lastChangeDate.seconds
+            i2.lastChangeDate.seconds,
+            this.sortReverse
           );
         } else {
           return this.sortByDate(
             i1.creationDate.seconds,
-            i2.creationDate.seconds
+            i2.creationDate.seconds,
+            this.sortReverse
           );
         }
       });
@@ -108,10 +112,34 @@ class AppInterviewList extends LitElement {
         @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) =>
           this.onSortDateChange(detail)}
       >
-        <ion-segment-button value="Change">
+        <ion-segment-button
+          value="Change"
+          @click=${() => {
+            if (
+              this.dateSortFilter === "Change" &&
+              this.sortReverse === false
+            ) {
+              this.sortReverse = true;
+            } else {
+              this.sortReverse = false;
+            }
+          }}
+        >
           <ion-label>Change</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="Creation">
+        <ion-segment-button
+          value="Creation"
+          @click=${() => {
+            if (
+              this.dateSortFilter === "Creation" &&
+              this.sortReverse === false
+            ) {
+              this.sortReverse = true;
+            } else {
+              this.sortReverse = false;
+            }
+          }}
+        >
           <ion-label>Creation</ion-label>
         </ion-segment-button>
       </ion-segment>
@@ -168,12 +196,21 @@ class AppInterviewList extends LitElement {
     }
   }
 
-  sortByDate(s1: number, s2: number): number {
-    if (s1 < s2) {
-      return -1;
-    }
-    if (s1 > s2) {
-      return 1;
+  sortByDate(s1: number, s2: number, reverse: boolean): number {
+    if (reverse) {
+      if (s1 > s2) {
+        return -1;
+      }
+      if (s1 < s2) {
+        return 1;
+      }
+    } else {
+      if (s1 < s2) {
+        return -1;
+      }
+      if (s1 > s2) {
+        return 1;
+      }
     }
     return 0;
   }
