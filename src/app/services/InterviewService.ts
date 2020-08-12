@@ -1,3 +1,6 @@
+// Firebase App (the core Firebase SDK) is always required
+import firebase from "firebase/app";
+
 import { Interview } from "../models/Interview";
 import { InterviewDao } from "../dao/InterviewDao";
 
@@ -13,6 +16,9 @@ export class InterviewService {
         firebaseId: "",
         title: interviewTitle,
         description: "Beschreibung ist hier ...",
+        status: "Draft",
+        creationDate: firebase.firestore.Timestamp.fromDate(new Date()),
+        lastChangeDate: firebase.firestore.Timestamp.fromDate(new Date()),
         interviewParts: [
           {
             title: "Part I",
