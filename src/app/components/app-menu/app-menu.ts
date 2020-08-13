@@ -1,5 +1,5 @@
-import { LitElement, html, customElement, property, query } from "lit-element";
-import HTMLIonNavElement from "@ionic/core";
+import { LitElement, html, customElement } from "lit-element";
+import { AuthService } from "../../services/AuthService";
 
 @customElement("app-menu")
 class AppMenu extends LitElement {
@@ -38,15 +38,15 @@ class AppMenu extends LitElement {
               </ion-item>
             </ion-menu-toggle>
             <ion-menu-toggle>
-              <ion-item button @click=${this.openBackup}>
-                <ion-icon name="cloud" slot="start" color="tertiary"></ion-icon>
-                <ion-label>Sicherung</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-            <ion-menu-toggle>
               <ion-item button @click=${this.openSettings}>
                 <ion-icon name="settings" slot="start" color="tertiary"></ion-icon>
                 <ion-label>Einstellungen</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+            <ion-menu-toggle>
+            <ion-item button @click=${this.logout}>
+                <ion-icon name="log-out-outline" slot="start" color="tertiary"></ion-icon>
+                <ion-label>Logout</ion-label>
               </ion-item>
             </ion-menu-toggle>
             <ion-menu-toggle>
@@ -82,13 +82,6 @@ class AppMenu extends LitElement {
     nav.push("app-interview-list");
   }
 
-  openBackup() {
-    let nav: HTMLIonNavElement = document.querySelector(
-      "ion-nav"
-    ) as HTMLIonNavElement;
-    nav.push("app-backup");
-  }
-
   openSettings() {
     let nav: HTMLIonNavElement = document.querySelector(
       "ion-nav"
@@ -101,5 +94,13 @@ class AppMenu extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.push("app-about-us");
+  }
+
+  async logout() {
+    await AuthService.logout();
+    let nav: HTMLIonNavElement = document.querySelector(
+      "ion-nav"
+    ) as HTMLIonNavElement;
+    nav.push("app-start");
   }
 }
