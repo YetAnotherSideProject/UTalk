@@ -1,7 +1,5 @@
 import { LitElement, html, customElement, internalProperty } from "lit-element";
 
-import "./app-toolbar/app-toolbar";
-import "./app-fab/app-fab";
 // Firebase App (the core Firebase SDK) is always required
 import firebase from "firebase/app";
 // Used firebase products
@@ -9,6 +7,10 @@ import "firebase/auth";
 import { UserDataService } from "../services/UserDataService";
 import { Interview } from "../models/Interview";
 import { Question } from "../models/Question";
+
+import "./app-login/app-login";
+import "./app-toolbar/app-toolbar";
+import "./app-fab/app-fab";
 
 @customElement("app-start")
 class AppStart extends LitElement {
@@ -33,6 +35,12 @@ class AppStart extends LitElement {
   }
 
   render() {
+    if (firebase.auth().currentUser === null) {
+      return html` <ion-content class="ion-padding"
+        ><app-login></app-login>
+      </ion-content>`;
+    }
+
     return html`
       <app-toolbar></app-toolbar>
       <ion-content class="ion-padding">
