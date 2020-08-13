@@ -27,7 +27,7 @@ class AppLogin extends LitElement {
         </ion-item-group>
         <ion-button-row>
           <ion-button @click=${() => this.login()}>Login</ion-button>
-          <ion-button>Register</ion-button>
+          <ion-button @click=${() => this.register()}>Register</ion-button>
         </ion-button-row>
       </ion-content>
     `;
@@ -40,6 +40,8 @@ class AppLogin extends LitElement {
   }
 
   async register() {
-    console.log(`register todo.. `);
+    await AuthService.register(this.emailInput.value, this.passwordInput.value)
+      .then(() => console.log(`User registered`))
+      .catch(() => console.log(`Register failed`));
   }
 }
