@@ -45,6 +45,9 @@ export class InterviewService {
   }
 
   static async updateInterview(interview: Interview) {
+    interview.lastChangeDate = firebase.firestore.Timestamp.fromDate(
+      new Date()
+    );
     await InterviewDao.updateInterview(interview);
   }
 
