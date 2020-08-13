@@ -207,7 +207,7 @@ class AppInterviewDetail extends LitElement {
           },
         },
         {
-          text: "Abrechen",
+          text: "Abbrechen",
           role: "cancel",
         },
       ],

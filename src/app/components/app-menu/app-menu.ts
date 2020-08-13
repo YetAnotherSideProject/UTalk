@@ -1,4 +1,5 @@
 import { LitElement, html, customElement } from "lit-element";
+import { alertController } from "@ionic/core";
 import { AuthService } from "../../services/AuthService";
 
 @customElement("app-menu")
@@ -97,10 +98,26 @@ class AppMenu extends LitElement {
   }
 
   async logout() {
-    await AuthService.logout();
-    let nav: HTMLIonNavElement = document.querySelector(
-      "ion-nav"
-    ) as HTMLIonNavElement;
-    nav.push("app-start");
+    const alert = await alertController.create({
+      header: "Logout?",
+      message: "Wirklich ausloggen?",
+      buttons: [
+        {
+          text: "Logout",
+          handler: async () => {
+            await AuthService.logout();
+            let nav: HTMLIonNavElement = document.querySelector(
+              "ion-nav"
+            ) as HTMLIonNavElement;
+            nav.push("app-start");
+          },
+        },
+        {
+          text: "Abbrechen",
+          role: "cancel",
+        },
+      ],
+    });
+    await alert.present();
   }
 }
