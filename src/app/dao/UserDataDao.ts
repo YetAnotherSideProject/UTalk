@@ -7,6 +7,12 @@ import { UserData } from "../models/UserData";
 export class UserDataDao {
   private static dbUsers = firebase.firestore().collection("users");
 
+  static async createUserData(email: string) {
+    return UserDataDao.dbUsers
+      .doc(firebase.auth().currentUser?.uid)
+      .set({ user: email });
+  }
+
   static async getUserData() {
     return UserDataDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)

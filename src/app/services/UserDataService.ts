@@ -7,15 +7,18 @@ import { QuestionDao } from "../dao/QuestionDao";
 
 export class UserDataService {
   static async getLastInterviews() {
-    let interviewIds = (await UserDataDao.getUserData()).lastInterviews;
-    if (interviewIds.length <= 0) {
+    let userData = await UserDataDao.getUserData();
+    if (
+      userData.lastInterviews === undefined ||
+      userData.lastInterviews.length <= 0
+    ) {
       return [];
     }
 
     return await InterviewDao.getInterviewsWhere(
       firebase.firestore.FieldPath.documentId(),
       "in",
-      interviewIds
+      userData.lastInterviews
     );
   }
 
@@ -45,9 +48,15 @@ export class UserDataService {
   }
 
   static async getLastQuestions() {
-    const questionIds = (await UserDataDao.getUserData()).lastQuestions;
+    let userData = await UserDataDao.getUserData();
+    if (
+      userData.lastQuestions === undefined ||
+      userData.lastQuestions.length <= 0
+    ) {
+      return [];
+    }
     return Promise.all(
-      questionIds.map((questionId) =>
+      userData.lastQuestions.map((questionId) =>
         QuestionDao.getQuestionByCategoryAndId(
           questionId.categoryId,
           questionId.questionId
