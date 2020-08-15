@@ -21,8 +21,6 @@ class AppStart extends LitElement {
 
   constructor() {
     super();
-    //TODO abhängig vom Login/Get user Prozess machen
-    this.presentLoading();
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         console.log(
@@ -150,19 +148,6 @@ class AppStart extends LitElement {
       </ion-content>
       <app-fab icon="play-outline"></app-fab>
     `;
-  }
-
-  async presentLoading() {
-    const loading = document.createElement("ion-loading");
-
-    loading.cssClass = "loading_popover";
-    loading.message = "Please wait...";
-    loading.duration = 2000;
-
-    document.body.appendChild(loading);
-    await loading.present();
-
-    const { role, data } = await loading.onDidDismiss();
   }
 
   onInterviewClick(interview: Interview) {
