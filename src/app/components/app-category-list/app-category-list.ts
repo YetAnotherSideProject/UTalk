@@ -27,6 +27,9 @@ class AppCategoryList extends LitElement {
       #searchbar {
         background-color: var(--ion-color-light);
       }
+      ion-segment {
+        background: var(--ion-color-light);
+      }
       #ion-option-start {
         --ion-color-primary: var(--ion-color-medium);
         --ion-color-primary-contrast: var(--ion-color-medium-contrast);
@@ -49,11 +52,16 @@ class AppCategoryList extends LitElement {
         clear-icon="undefined"
         inputmode="text"
       ></ion-searchbar>
+      <ion-segment value="All">
+        <ion-segment-button value="All">
+          <ion-label>All</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Draft">
+          <ion-label>Favoriten</ion-label>
+        </ion-segment-button>
+      </ion-segment>
       <ion-content class="padding">
         <ion-list id="test">
-          <ion-list-header>
-            Fragen-Kategorien
-          </ion-list-header>
           ${this.displayArray.sort(this.sortAlphabetically).map((category) => {
             return html` <ion-item-sliding>
               <ion-item-options side="start">
