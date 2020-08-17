@@ -6,7 +6,6 @@ import Hammer from "hammerjs";
 import { Category } from "../../models/Category";
 import { CategoryDao } from "../../dao/CategoryDao";
 import { QuestionDao } from "../../dao/QuestionDao";
-import { Question } from "../../models/Question";
 
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
@@ -35,7 +34,7 @@ class AppCategoryList extends LitElement {
         --background-activated: white;
       }
       #statusIcon_Favorite {
-        fill: yellow;
+        fill: gold;
       }
       #statusIcon_Neutral {
         fill: var(--ion-color-light);
