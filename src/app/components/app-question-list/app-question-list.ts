@@ -32,6 +32,9 @@ class AppQuestionList extends LitElement {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
+      /* ion-card {
+        height: 200px;
+      } */
     `;
   }
 
@@ -46,12 +49,12 @@ class AppQuestionList extends LitElement {
               ><ion-item @click=${() => this.onItemClick(question)}>
                 <ion-card>
                   <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-                  <img src="src/assets/img/question.jpg" width="100%" />
+                  <!-- <img src="src/assets/img/question.jpg" width="100%" /> -->
                   <ion-card-header>
                     <ion-card-subtitle>Question ${id + 1}</ion-card-subtitle>
-                    <ion-card-title
+                    <!-- <ion-card-title
                       >Kategorie: ${this.category.name}</ion-card-title
-                    >
+                    > -->
                   </ion-card-header>
                   <ion-card-content>
                     ${question.text}
