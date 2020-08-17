@@ -2,15 +2,20 @@ import {
   LitElement,
   customElement,
   html,
+  css,
   internalProperty,
   query,
 } from "lit-element";
+import { Plugins } from "@capacitor/core";
+const { Network } = Plugins;
 import { AuthService } from "../../services/AuthService";
 
 @customElement("app-login")
 class AppLogin extends LitElement {
   @internalProperty()
   doRegister: boolean = false;
+  @internalProperty()
+  online: boolean = false;
   @query("#email")
   emailInput!: HTMLInputElement;
   @query("#password")
@@ -20,6 +25,18 @@ class AppLogin extends LitElement {
 
   constructor() {
     super();
+    //Set initial network state
+    Network.getStatus().then((status) => {
+      this.online = status.connected;
+    });
+    //Listen for network changes
+    Network.addListener("networkStatusChange", (status) => {
+      this.online = status.connected;
+    });
+  }
+
+  static get styles() {
+    return css``;
   }
 
   render() {
@@ -55,7 +72,7 @@ class AppLogin extends LitElement {
 
           <ion-row>
             <ion-col>
-              <ion-button type="submit" expand="block"
+              <ion-button type="submit" expand="block" disabled=${!this.online}
                 >${this.doRegister ? "Register" : "Signin"}</ion-button
               >
             </ion-col>
@@ -80,6 +97,14 @@ class AppLogin extends LitElement {
                 >
               </ion-col>
             </ion-row>`}
+        ${!this.online
+          ? html` <ion-footer>
+              <ion-toolbar>
+                <ion-title>No connection detected!</ion-title>
+                <div>Checking for reconnection...</div>
+              </ion-toolbar>
+            </ion-footer>`
+          : html``}
       </ion-content>
     `;
   }
