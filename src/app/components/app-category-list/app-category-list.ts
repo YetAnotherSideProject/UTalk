@@ -27,7 +27,11 @@ class AppCategoryList extends LitElement {
       #searchbar {
         background-color: var(--ion-color-light);
       }
-      #ion-option {
+      #ion-option-start {
+        --ion-color-primary: var(--ion-color-medium);
+        --ion-color-primary-contrast: var(--ion-color-medium-contrast);
+      }
+      #ion-option-end {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
@@ -52,6 +56,15 @@ class AppCategoryList extends LitElement {
           </ion-list-header>
           ${this.displayArray.sort(this.sortAlphabetically).map((category) => {
             return html` <ion-item-sliding>
+              <ion-item-options side="start">
+                <ion-item-option
+                  id="ion-option-start"
+                  @click=${() => {
+                    this.onRenameClick(category.firebaseId);
+                  }}
+                  >Umbenennen</ion-item-option
+                >
+              </ion-item-options>
               <ion-item
                 button
                 detail
@@ -72,7 +85,7 @@ class AppCategoryList extends LitElement {
               </ion-item>
               <ion-item-options side="end">
                 <ion-item-option
-                  id="ion-option"
+                  id="ion-option-end"
                   @click=${() =>
                     this.onClickDelete(
                       category.firebaseId ? category.firebaseId : ""
@@ -110,12 +123,16 @@ class AppCategoryList extends LitElement {
   }
 
   onClickDelete(categoryId: string) {
+    this.closeSlider();
+    this.deleteCategory(categoryId);
+  }
+
+  closeSlider() {
     // Important to entry the shadow root to get the reference on ion-list
     let array: HTMLIonListElement = this.shadowRoot?.querySelector(
       "ion-list"
     ) as HTMLIonListElement;
     array.closeSlidingItems();
-    this.deleteCategory(categoryId);
   }
 
   async onItemPress(categoryText: string) {
@@ -231,6 +248,7 @@ class AppCategoryList extends LitElement {
         {
           text: "Speichern",
           handler: (data) => {
+            this.closeSlider();
             this.renameCategory(categoryId, data.categoryname);
           },
         },
