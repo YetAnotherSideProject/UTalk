@@ -30,6 +30,16 @@ class AppCategoryList extends LitElement {
       ion-segment {
         background: var(--ion-color-light);
       }
+      ion-item > ion-button {
+        --background: white;
+        --background-activated: white;
+      }
+      #statusIcon_Favorite {
+        fill: yellow;
+      }
+      #statusIcon_Neutral {
+        fill: var(--ion-color-light);
+      }
       #ion-option-start {
         --ion-color-primary: var(--ion-color-medium);
         --ion-color-primary-contrast: var(--ion-color-medium-contrast);
@@ -68,7 +78,7 @@ class AppCategoryList extends LitElement {
                 <ion-item-option
                   id="ion-option-start"
                   @click=${() => {
-                    this.onRenameClick(category.firebaseId);
+                    this.onRenameClick(category);
                   }}
                   >Umbenennen</ion-item-option
                 >
@@ -81,6 +91,18 @@ class AppCategoryList extends LitElement {
                     category.firebaseId ? category.firebaseId : ""
                   )}
               >
+                <ion-button
+                  slot="start"
+                  @click=${(event: any) => {
+                    event.stopPropagation();
+                    this.toggleCategoryStatus(category);
+                  }}
+                >
+                  <ion-icon
+                    id="statusIcon_${category.status}"
+                    name="star"
+                  ></ion-icon>
+                </ion-button>
                 <ion-label>${category.name}</ion-label>
                 <ion-badge slot="end"
                   >${until(
@@ -156,7 +178,7 @@ class AppCategoryList extends LitElement {
         },
         {
           text: "Umbenennen",
-          handler: () => this.onRenameClick(categoryId),
+          handler: () => this.onRenameClick(category),
         },
         { text: "Abbrechen", role: "cancel" },
       ],
@@ -193,7 +215,7 @@ class AppCategoryList extends LitElement {
   }
 
   addCategory(categoryname: string) {
-    let category: Category = { name: categoryname };
+    let category: Category = { name: categoryname, status: "Neutral" };
     CategoryDao.addCategory(category);
     this.clearSearchbar();
     this.updateCategories();
@@ -214,15 +236,38 @@ class AppCategoryList extends LitElement {
       });
   }
 
-  renameCategory(categoryId: string | undefined, newName: string) {
-    const category: Category = {
+  renameCategory(category: Category | undefined, newName: string) {
+    const newCategory: Category = {
       name: newName,
+      status: category?.status || "Neutral",
     };
-    CategoryDao.updateCategory(categoryId, category)
+    CategoryDao.updateCategory(category?.firebaseId, newCategory)
       .then(() => {
         this.updateCategories();
         this.clearSearchbar();
         this.showToast("Kategorie umbenannt!");
+      })
+      .catch((error) => {
+        this.showToast(
+          "Es ist ein Fehler aufgetreten. Bitte versuche es erneut!"
+        );
+        console.log("Error: ", error.message);
+      });
+  }
+
+  toggleCategoryStatus(category: Category | undefined) {
+    const newStatus = category?.status === "Neutral" ? "Favorite" : "Neutral";
+    const newCategory: Category = {
+      ...category,
+      status: newStatus,
+    } as Category;
+    CategoryDao.updateCategory(category?.firebaseId, newCategory)
+      .then(() => {
+        this.updateCategories();
+        this.clearSearchbar();
+        newStatus === "Neutral"
+          ? this.showToast("Aus Favoriten entfernt")
+          : this.showToast("Zu Favoriten hinzugefügt");
       })
       .catch((error) => {
         this.showToast(
@@ -238,7 +283,7 @@ class AppCategoryList extends LitElement {
     })[0];
   }
 
-  async onRenameClick(categoryId: string | undefined) {
+  async onRenameClick(category: Category | undefined) {
     const alert = await alertController.create({
       header: "Kategorie umbenennen",
       message: "Bitte Text eingeben",
@@ -257,7 +302,7 @@ class AppCategoryList extends LitElement {
           text: "Speichern",
           handler: (data) => {
             this.closeSlider();
-            this.renameCategory(categoryId, data.categoryname);
+            this.renameCategory(category, data.categoryname);
           },
         },
       ],
