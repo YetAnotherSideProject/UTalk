@@ -27,8 +27,8 @@ class AppMenu extends LitElement {
             </ion-menu-toggle>
             <ion-menu-toggle>
               <ion-item button @click=${this.openCategories}>
-                <ion-icon name="albums" slot="start" color="tertiary"></ion-icon>
-                <ion-label>Kategorien</ion-label>
+                <ion-icon name="help-outline" slot="start" color="tertiary"></ion-icon>
+                <ion-label>Fragen</ion-label>
               </ion-item>
             </ion-menu-toggle>
             </ion-menu-toggle>
