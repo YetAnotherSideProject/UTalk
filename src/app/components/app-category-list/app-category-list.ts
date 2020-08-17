@@ -54,6 +54,7 @@ class AppCategoryList extends LitElement {
             return html` <ion-item-sliding>
               <ion-item
                 button
+                detail
                 @click=${() =>
                   this.onItemClick(
                     category.firebaseId ? category.firebaseId : ""
