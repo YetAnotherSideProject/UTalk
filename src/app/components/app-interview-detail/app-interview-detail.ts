@@ -37,17 +37,18 @@ class AppInterviewDetail extends LitElement {
           <ion-card-header>
             <ion-card-subtitle>Interview</ion-card-subtitle>
             <ion-item lines="none">
-              <ion-card-title slot="start">
-                <ion-input
-                  readonly=${this.interview.status !== "Draft"}
-                  value=${this.interview.title}
-                  @ionBlur=${({ target }: { target: HTMLIonInputElement }) => {
-                    if (target.value !== ``) {
-                      this.interview.title = target.value as string;
-                    }
-                  }}
-                ></ion-input>
-              </ion-card-title>
+              <ion-input
+                style="font-weight: bold; font-size: 2em"
+                slot="start"
+                type="text"
+                readonly=${this.interview.status !== "Draft"}
+                value=${this.interview.title}
+                @ionBlur=${({ target }: { target: HTMLIonInputElement }) => {
+                  if (target.value !== ``) {
+                    this.interview.title = target.value as string;
+                  }
+                }}
+              ></ion-input>
               ${this.interview.status !== "Archived"
                 ? html`
                     <ion-button
