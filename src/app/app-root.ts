@@ -8,7 +8,7 @@ import "./components/app-question-detail/app-question-detail";
 import "./components/app-interview-list/app-interview-list";
 import "./components/app-interview-detail/app-interview-detail";
 import "./components/app-about-us/app-about-us";
-import "./components/app-run-interview/app-run-interview";
+import "./components/app-interview-run/app-interview-run";
 import "./components/app-settings/app-settings";
 
 @customElement("app-root")
@@ -52,8 +52,8 @@ export class AppRoot extends LitElement {
           ></ion-route>
           <ion-route url="/aboutus" component="app-about-us"></ion-route>
           <ion-route
-            url="/runinterview"
-            component="app-run-interview"
+            url="/interviewrun"
+            component="app-interview-run"
           ></ion-route>
           <ion-route url="/settings" component="app-settings"></ion-route>
         </ion-router>

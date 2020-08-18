@@ -180,7 +180,11 @@ class AppInterviewDetail extends LitElement {
   }
 
   onRunInterview() {
-    console.log(`Run interview implementation missing!`);
+    let nav: HTMLIonNavElement = document.querySelector(
+      "ion-nav"
+    ) as HTMLIonNavElement;
+
+    nav.push("app-interview-run");
   }
 
   handleReorder(detail: ItemReorderEventDetail, interviewpart: InterviewPart) {
