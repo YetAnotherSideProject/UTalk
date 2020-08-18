@@ -80,7 +80,7 @@ class AppCategoryList extends LitElement {
         id="searchbar"
         animated
         autocomplete="on"
-        clear-icon="undefined"
+        clear-icon="trash-outline"
         inputmode="text"
       ></ion-searchbar>
       <ion-segment
