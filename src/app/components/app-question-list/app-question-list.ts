@@ -47,7 +47,7 @@ class AppQuestionList extends LitElement {
           ${this.questions.map((question, id) => {
             return html`<ion-item-sliding
               ><ion-item @click=${() => this.onItemClick(question)}>
-                <ion-card>
+                <ion-card style="width: 100%">
                   <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
                   <!-- <img src="src/assets/img/question.jpg" width="100%" /> -->
                   <ion-card-header>
@@ -81,14 +81,17 @@ class AppQuestionList extends LitElement {
     `;
   }
 
+  // TODO
+  // Bug --> Bei Zurücknavigation von questiondetail wird nach Hinzufügen einer neuen Frage die questionlist übersprungen und weiter zur categorylist navigiert
   addQuestion() {
     let nav: HTMLIonNavElement = document.querySelector(
       "ion-nav"
     ) as HTMLIonNavElement;
 
     nav.push("app-question-detail", {
-      updatable: true,
+      updatable: false,
       category: this.category,
+      question: {},
     });
   }
 
@@ -105,6 +108,7 @@ class AppQuestionList extends LitElement {
     ) as HTMLIonNavElement;
 
     nav.push("app-question-detail", {
+      updatable: true,
       category: this.category,
       question: question,
     });
@@ -198,11 +202,15 @@ class AppQuestionList extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+
+    // Add Ionic Lifeccycle methods
     this.addEventListener("ionViewWillEnter", this.updateQuestions);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+
+    // Remove Ionic Lifeccycle methods
     this.removeEventListener("ionViewWillEnter", this.updateQuestions);
   }
 }

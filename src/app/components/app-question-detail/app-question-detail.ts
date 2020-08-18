@@ -46,17 +46,6 @@ class AppQuestionDetail extends LitElement {
             ></ion-textarea>
           </ion-card-content>
         </ion-card>
-        <!-- TODO Position absolute funktioniert nur solange wie der Text in Frage nicht über eine Seite hinausgeht. Lösung finden! -->
-        <div
-          style="position: absolute; bottom: 5px;width: 100%; text-align: center"
-        >
-          <ion-button
-            style="color: white"
-            expand="block"
-            @click=${this.saveQuestion}
-            >Speichern</ion-button
-          >
-        </div>
       </ion-content>
     `;
   }
@@ -114,10 +103,20 @@ class AppQuestionDetail extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
+    // Add Ionic Lifeccycle methods
+    this.addEventListener("ionViewWillLeave", this.saveQuestion);
+
     //TODO ändern
     UserDataService.updateLastQuestion(
       this.category.firebaseId || "",
       this.question.firebaseId || ""
     );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    // Remove Ionic Lifeccycle methods
+    this.removeEventListener("ionViewWillLeave", this.saveQuestion);
   }
 }
