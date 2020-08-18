@@ -23,6 +23,9 @@ export class AppRoot extends LitElement {
   }
 
   render() {
+    // TODO
+    // questionlist: Route korrigieren, sodass auch category id oder name angezeigt wird
+    // questiondetail: Route korrigieren, sodass auch category id angezeigt wird
     return html`
       <ion-app>
         <ion-router use-hash="false">
@@ -36,7 +39,7 @@ export class AppRoot extends LitElement {
             component="app-question-list"
           ></ion-route>
           <ion-route
-            url="/questiondetail/:editable"
+            url="/questiondetail"
             component="app-question-detail"
           ></ion-route>
           <ion-route
