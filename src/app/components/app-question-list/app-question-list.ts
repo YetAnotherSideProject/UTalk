@@ -87,7 +87,7 @@ class AppQuestionList extends LitElement {
     ) as HTMLIonNavElement;
 
     nav.push("app-question-detail", {
-      editable: true,
+      updatable: true,
       category: this.category,
     });
   }
