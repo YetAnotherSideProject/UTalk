@@ -1,6 +1,16 @@
-import { LitElement, html, css, customElement } from "lit-element";
+import {
+  LitElement,
+  html,
+  css,
+  customElement,
+  internalProperty,
+} from "lit-element";
 import { until } from "lit-html/directives/until.js";
-import { alertController, actionSheetController } from "@ionic/core";
+import {
+  alertController,
+  actionSheetController,
+  SegmentChangeEventDetail,
+} from "@ionic/core";
 import Hammer from "hammerjs";
 
 import { Category } from "../../models/Category";
@@ -9,8 +19,9 @@ import { QuestionDao } from "../../dao/QuestionDao";
 
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
-  categories: Category[] = [];
-  displayArray: Category[] = [];
+  @internalProperty() categories: Category[] = [];
+  @internalProperty() statusFilter: string = "All";
+  @internalProperty() searchQuery: string = "";
   mcArray: Array<HammerManager>;
 
   constructor() {
@@ -51,27 +62,44 @@ class AppCategoryList extends LitElement {
   }
 
   render() {
+    const filteredInterviews = this.categories
+      .filter(
+        (category) =>
+          this.statusFilter === "All" || category.status === this.statusFilter
+      )
+      .filter((category) =>
+        category.name.toLowerCase().includes(this.searchQuery)
+      )
+      .sort(this.sortAlphabetically);
+
     return html`
       <app-toolbar></app-toolbar>
       <ion-searchbar
-        @ionChange=${this.onChangeSearchbar}
+        @ionChange=${(event: any) =>
+          (this.searchQuery = event.target.value.toLowerCase())}
         id="searchbar"
         animated
         autocomplete="on"
         clear-icon="undefined"
         inputmode="text"
       ></ion-searchbar>
-      <ion-segment value="All">
+      <ion-segment
+        value="All"
+        @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) => {
+          console.log("Detail Ion Segment: ", detail.value);
+          this.statusFilter = detail.value || "All";
+        }}
+      >
         <ion-segment-button value="All">
           <ion-label>All</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="Draft">
+        <ion-segment-button value="Favorite">
           <ion-label>Favoriten</ion-label>
         </ion-segment-button>
       </ion-segment>
       <ion-content class="padding">
         <ion-list id="test">
-          ${this.displayArray.sort(this.sortAlphabetically).map((category) => {
+          ${filteredInterviews.map((category) => {
             return html` <ion-item-sliding>
               <ion-item-options side="start">
                 <ion-item-option
@@ -128,16 +156,6 @@ class AppCategoryList extends LitElement {
       </ion-content>
       <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
     `;
-  }
-
-  onChangeSearchbar(event: any) {
-    console.log(`Searchbar test: ${event.target.value}`);
-
-    const query = event.target.value.toLowerCase();
-    this.displayArray = this.categories.filter((item) => {
-      return item.name.toLowerCase().indexOf(query) > -1;
-    });
-    this.requestUpdate();
   }
 
   onItemClick(categoryId: string) {
@@ -320,7 +338,6 @@ class AppCategoryList extends LitElement {
   updateCategories() {
     CategoryDao.getAllCategories().then((categories) => {
       this.categories = categories;
-      this.displayArray = categories;
       this.requestUpdate();
     });
   }
