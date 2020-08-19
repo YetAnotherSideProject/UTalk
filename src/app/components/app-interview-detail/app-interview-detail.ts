@@ -184,7 +184,7 @@ class AppInterviewDetail extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
 
-    nav.push("app-interview-run");
+    nav.push("app-interview-run", { interview: this.interview });
   }
 
   handleReorder(detail: ItemReorderEventDetail, interviewpart: InterviewPart) {
