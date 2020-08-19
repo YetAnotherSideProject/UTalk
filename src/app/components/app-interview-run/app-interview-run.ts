@@ -8,6 +8,7 @@ import {
 } from "lit-element";
 
 import { Interview } from "../../models/Interview";
+import { InterviewDao } from "../../dao/InterviewDao";
 
 @customElement("app-interview-run")
 class AppRunInterview extends LitElement {
@@ -75,7 +76,6 @@ class AppRunInterview extends LitElement {
             </ion-card>
           </ion-slide>`
         )}
-          
         </ion-slides>
         <ion-card style="height: 185px">
           <ion-card-header>
@@ -84,6 +84,10 @@ class AppRunInterview extends LitElement {
           <ion-card-content>
             <ion-textarea
               placeholder="Gibt deine Antwort ein ..."
+              value=${
+                this.interview.interviewParts[this.currentPart]
+                  .interviewQuestions[this.currentQuestionInPart].answer || ""
+              }
             ></ion-textarea>
           </ion-card-content>
         </ion-card>
@@ -133,6 +137,19 @@ class AppRunInterview extends LitElement {
   }
 
   increaseQuestionCounter() {
+    // Save answer
+    const textarea = this.shadowRoot?.querySelector(
+      "ion-textarea"
+    ) as HTMLIonTextareaElement;
+    const answerText = textarea.value;
+    console.log("Answer text: ", answerText);
+    this.interview.interviewParts[this.currentPart].interviewQuestions[
+      this.currentQuestionInPart
+    ].answer = answerText || undefined;
+
+    // Clear ion-textarea
+    textarea.value = "";
+
     if (this.currentQuestionInPart < this.maxQuestionsInPart - 1) {
       this.currentQuestionInPart++;
       this.currentQuestionTotal++;
@@ -149,6 +166,19 @@ class AppRunInterview extends LitElement {
   }
 
   decreaseQuestionCounter() {
+    // Save answer
+    const textarea = this.shadowRoot?.querySelector(
+      "ion-textarea"
+    ) as HTMLIonTextareaElement;
+    const answerText = textarea.value;
+    console.log("Answer text: ", answerText);
+    this.interview.interviewParts[this.currentPart].interviewQuestions[
+      this.currentQuestionInPart
+    ].answer = answerText || undefined;
+
+    // Clear ion-textarea
+    textarea.value = "";
+
     if (this.currentQuestionInPart > 0) {
       this.currentQuestionInPart--;
       this.currentQuestionTotal--;
@@ -180,13 +210,30 @@ class AppRunInterview extends LitElement {
       .reduce((prev, current) => prev.concat(current));
   }
 
+  saveInterview() {
+    // Save answer
+    const textarea = this.shadowRoot?.querySelector(
+      "ion-textarea"
+    ) as HTMLIonTextareaElement;
+    const answerText = textarea.value;
+    console.log("Answer text: ", answerText);
+    this.interview.interviewParts[this.currentPart].interviewQuestions[
+      this.currentQuestionInPart
+    ].answer = answerText || undefined;
+
+    // Save interview in firebase
+    InterviewDao.updateInterview(this.interview);
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("ionViewWillEnter", this.loadInitialData);
+    this.addEventListener("ionViewWillLeave", this.saveInterview);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener("ionViewWillEnter", this.loadInitialData);
+    this.removeEventListener("ionViewWillLeave", this.saveInterview);
   }
 }
