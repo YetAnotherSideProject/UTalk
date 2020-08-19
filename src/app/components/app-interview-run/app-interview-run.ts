@@ -89,7 +89,7 @@ class AppRunInterview extends LitElement {
         </ion-card>
         <div style="display: flex; justify-content: space-between; margin-top: 50px">
           <div style="display: flex; align-items: center">
-          <ion-button @click=${this.decreaseQuestionCounter}>
+          <ion-button @click=${this.onClickPrevious}>
             <ion-icon
               style="font-size: 4em; color: var(--ion-color-primary);"
               name="arrow-back-outline"
@@ -99,7 +99,7 @@ class AppRunInterview extends LitElement {
           </div>
           <div style="display: flex; align-items: center">
           <p>Next</p>
-          <ion-button @click=${this.increaseQuestionCounter}>
+          <ion-button @click=${this.onClickNext}>
           <ion-icon
             style="font-size: 4em; color: var(--ion-color-primary);"
             name="arrow-forward-outline"
@@ -116,6 +116,20 @@ class AppRunInterview extends LitElement {
     ) as HTMLIonNavElement;
 
     nav.pop();
+  }
+
+  onClickNext() {
+    const swiper = this.shadowRoot?.querySelector(
+      "ion-slides"
+    ) as HTMLIonSlidesElement;
+    swiper.slideNext();
+  }
+
+  onClickPrevious() {
+    const swiper = this.shadowRoot?.querySelector(
+      "ion-slides"
+    ) as HTMLIonSlidesElement;
+    swiper.slidePrev();
   }
 
   increaseQuestionCounter() {
