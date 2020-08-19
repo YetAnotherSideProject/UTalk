@@ -60,7 +60,9 @@ class AppRunInterview extends LitElement {
           >
           <ion-progress-bar value=${progress}></ion-progress-bar>
         </ion-card>
-        <ion-slides>
+        <ion-slides @ionSlideNextEnd=${
+          this.increaseQuestionCounter
+        } @ionSlidePrevEnd=${this.decreaseQuestionCounter}>
         ${this.questions.map(
           (question) => html`<ion-slide>
             <ion-card
@@ -130,12 +132,6 @@ class AppRunInterview extends LitElement {
         ].interviewQuestions.length;
       }
     }
-
-    console.log("Current part: ", this.currentPart);
-    console.log("Current question in part: ", this.currentQuestionInPart);
-    console.log("Max questions in part: ", this.maxQuestionsInPart);
-    console.log("Current question total: ", this.currentQuestionTotal);
-    console.log("Max parts: ", this.maxParts);
   }
 
   decreaseQuestionCounter() {
@@ -152,11 +148,6 @@ class AppRunInterview extends LitElement {
         this.currentQuestionTotal--;
       }
     }
-    console.log("Current part: ", this.currentPart);
-    console.log("Current question in part: ", this.currentQuestionInPart);
-    console.log("Max questions in part: ", this.maxQuestionsInPart);
-    console.log("Current question total: ", this.currentQuestionTotal);
-    console.log("Max parts: ", this.maxParts);
   }
 
   loadInitialData() {
