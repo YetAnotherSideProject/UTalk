@@ -44,7 +44,7 @@ class AppStart extends LitElement {
     return html`
       <app-toolbar></app-toolbar>
       <ion-content class="ion-padding">
-        <h1>Letzte Interviews</h1>
+        <h1 style="text-align: center; font-size: 1.3em; background-color: var(--ion-color-light);">Letzte Interviews</h1>
         ${
           this.lastInterviews.length > 0
             ? html` <ion-slides pager="true">
@@ -90,7 +90,7 @@ class AppStart extends LitElement {
                 </ion-card>
               `
         }
-        <h1>Letzte Fragen</h1>
+        <h1 style="text-align: center; font-size: 1.3em; background-color: var(--ion-color-light);">Letzte Fragen</h1>
         ${
           this.lastQuestions.length > 0
             ? html` <ion-slides pager="true">
