@@ -51,7 +51,7 @@ class AppAboutUs extends LitElement {
         </div>
         <div id="version">
           <p>Version 1.0</p>
-          <p>Last update: 20.07.2020</p>
+          <p>Last update: 21.08.2020</p>
           <hr />
         </div>
         <div id="about-content">

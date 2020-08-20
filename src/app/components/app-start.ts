@@ -1,4 +1,10 @@
-import { LitElement, html, customElement, internalProperty } from "lit-element";
+import {
+  LitElement,
+  html,
+  css,
+  customElement,
+  internalProperty,
+} from "lit-element";
 
 // Firebase App (the core Firebase SDK) is always required
 import firebase from "firebase/app";
@@ -34,6 +40,20 @@ class AppStart extends LitElement {
     });
   }
 
+  static get styles() {
+    return css`
+      h1 {
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 1.3em;
+        background-color: var(--ion-color-light);
+      }
+      ion-card {
+        margin-top: 0px;
+      }
+    `;
+  }
+
   render() {
     if (firebase.auth().currentUser === null) {
       return html` <ion-content class="ion-padding"
@@ -44,7 +64,7 @@ class AppStart extends LitElement {
     return html`
       <app-toolbar></app-toolbar>
       <ion-content class="ion-padding">
-        <h1 style="text-align: center; font-size: 1.3em; background-color: var(--ion-color-light);">Letzte Interviews</h1>
+        <h1>Letzte Interviews</h1>
         ${
           this.lastInterviews.length > 0
             ? html` <ion-slides pager="true">
@@ -90,7 +110,7 @@ class AppStart extends LitElement {
                 </ion-card>
               `
         }
-        <h1 style="text-align: center; font-size: 1.3em; background-color: var(--ion-color-light);">Letzte Fragen</h1>
+        <h1>Letzte Fragen</h1>
         ${
           this.lastQuestions.length > 0
             ? html` <ion-slides pager="true">
