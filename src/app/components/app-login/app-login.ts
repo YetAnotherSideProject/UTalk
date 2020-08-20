@@ -36,7 +36,11 @@ class AppLogin extends LitElement {
   }
 
   static get styles() {
-    return css``;
+    return css`
+      #footer-toolbar {
+        --background: var(--ion-color-warning);
+      }
+    `;
   }
 
   render() {
@@ -98,10 +102,13 @@ class AppLogin extends LitElement {
               </ion-col>
             </ion-row>`}
         ${!this.online
-          ? html` <ion-footer>
-              <ion-toolbar>
-                <ion-title>No connection detected!</ion-title>
-                <div>Checking for reconnection...</div>
+          ? // TODO Nicht responsives Verhalten von bottom: 43px ändern. 0px funktioniert bisher nicht --> Ursachenforschung
+            html` <ion-footer style="position: absolute; bottom: 43px;">
+              <ion-toolbar id="footer-toolbar">
+                <h1 style="font-size: 1.5em;">
+                  No connection detected!
+                </h1>
+                <p>Checking for reconnection...</p>
               </ion-toolbar>
             </ion-footer>`
           : html``}
