@@ -43,7 +43,7 @@ class AppAboutUs extends LitElement {
       <ion-content class="padding">
         <div id="about-header">
           <img
-            src="src/assets/img/utalk_logo_v2.png"
+            src="src/assets/img/utalk_logo_v3.png"
             alt="uTalk logo"
             width="100%"
           />
