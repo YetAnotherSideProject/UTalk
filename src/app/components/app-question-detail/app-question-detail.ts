@@ -1,5 +1,5 @@
 import { LitElement, html, customElement, property } from "lit-element";
-import { NavOptions } from "@ionic/core";
+import { alertController } from "@ionic/core";
 
 import { Category } from "../../models/Category";
 import { QuestionDao } from "../../dao/QuestionDao";
@@ -21,7 +21,7 @@ class AppQuestionDetail extends LitElement {
       <!-- TODO edit defaultHref to navigate back to suitable category id -->
       <app-toolbar
         customBackButton="true"
-        .customClick=${() => this.navigateBack()}
+        .customClick=${() => this.onClickBackButton()}
       ></app-toolbar>
       <ion-content class="padding">
         <ion-card>
@@ -51,17 +51,28 @@ class AppQuestionDetail extends LitElement {
   }
 
   // Aus irgendeinem Grund funktioniert der BackButton nicht. Scheinbar wird die pop()-Methode nicht aufgerufen, sondern auf die angegebene defaultHref geleitet. Deshalb dieser kleine Workaround (s. app-toolbar customBackButton)
+  onClickBackButton() {
+    const text = this.shadowRoot?.querySelector("ion-textarea")?.value || "";
+
+    // Prove if text is not empty before saving
+    if (text.length > 0) {
+      this.navigateBack();
+    } else {
+      this.showEmptyQuestionAlert();
+    }
+  }
+
   navigateBack() {
     let nav: HTMLIonNavElement = document.querySelector(
       "ion-nav"
     ) as HTMLIonNavElement;
-
     nav.pop();
   }
 
   saveQuestion() {
     const text = this.shadowRoot?.querySelector("ion-textarea")?.value || "";
     const question: Question = { text: text };
+
     if (this.updatable) {
       QuestionDao.updateQuestion(
         this.category.firebaseId ? this.category.firebaseId : "",
@@ -80,7 +91,6 @@ class AppQuestionDetail extends LitElement {
       QuestionDao.addQuestion(this.category.firebaseId, question)
         .then(() => {
           this.showToast("Frage wurde gespeichert");
-          this.navigateBack();
         })
         .catch((error) => {
           this.showToast(
@@ -98,6 +108,24 @@ class AppQuestionDetail extends LitElement {
 
     document.body.appendChild(toast);
     return toast.present();
+  }
+
+  async showEmptyQuestionAlert() {
+    const alert = await alertController.create({
+      header: "Möchtest du keine Frage eingeben?",
+      buttons: [
+        {
+          text: "Abbrechen ohne Frage einzugeben",
+          handler: () => this.navigateBack(),
+        },
+        {
+          text: "Doch!",
+          role: "cancel",
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
   connectedCallback() {
