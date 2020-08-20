@@ -222,13 +222,21 @@ class AppCategoryList extends LitElement {
         {
           text: "Speichern",
           handler: (data) => {
-            this.addCategory(data.categoryname);
+            this.onClickAddCategory(data.categoryname);
           },
         },
       ],
     });
 
     await alert.present();
+  }
+
+  onClickAddCategory(categoryname: string) {
+    if (categoryname.length > 0) {
+      this.addCategory(categoryname);
+    } else {
+      this.showToast("Bitte gib eine Kategorie ein!");
+    }
   }
 
   addCategory(categoryname: string) {
@@ -318,14 +326,24 @@ class AppCategoryList extends LitElement {
         {
           text: "Speichern",
           handler: (data) => {
-            this.closeSlider();
-            this.renameCategory(category, data.categoryname);
+            return this.onClickRenameCategory(category, data.categoryname);
           },
         },
       ],
     });
 
     await alert.present();
+  }
+
+  onClickRenameCategory(category: Category | undefined, categoryname: string) {
+    if (categoryname.length > 0) {
+      this.renameCategory(category, categoryname);
+      this.closeSlider();
+      return true;
+    } else {
+      this.showToast("Bitte gib eine Kategorie ein!");
+      return false;
+    }
   }
 
   clearSearchbar() {
