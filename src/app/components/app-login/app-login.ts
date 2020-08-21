@@ -37,6 +37,27 @@ class AppLogin extends LitElement {
 
   static get styles() {
     return css`
+      #login {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+      }
+      #background-image {
+        object-fit: cover;
+        position: absolute;
+      }
+      #logo {
+        z-index: 100;
+      }
+      #form {
+        opacity: 0.7;
+        padding: 1em;
+      }
+      form > ion-item {
+        border-radius: 10px;
+        margin-bottom: 8px;
+      }
       #footer-toolbar {
         --background: var(--ion-color-warning);
       }
@@ -52,24 +73,22 @@ class AppLogin extends LitElement {
       </ion-header>
 
       <ion-content>
-        <div
-          style="display: flex; flex-direction: column;  width: 100%; height: 100%"
-        >
+        <div id="login">
           <img
+            id="background-image"
             src="src/assets/img/interview.jpg"
             width="100%"
             height="100%"
-            style="object-fit: cover; position: absolute;"
           />
 
           <img
+            id="logo"
             src="src/assets/img/utalk_logo_white.png"
             alt="uTalk logo"
             width="100%"
-            style="z-index: 100"
           />
           <!--onsubmit="return false", damit die Form kein Redirect jeglicher Art macht oder Daten versendet z.B. in die URL -->
-          <div style="opacity: 0.7; padding: 1em">
+          <div id="form">
             <form onsubmit="return false" @submit=${() => this.onSubmit()}>
               <ion-item lines="full">
                 <ion-label position="floating">Email</ion-label>
