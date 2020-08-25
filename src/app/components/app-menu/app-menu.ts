@@ -1,11 +1,23 @@
-import { LitElement, html, customElement } from "lit-element";
+// Firebase App (the core Firebase SDK) is always required
+import firebase from "firebase/app";
+// Used firebase products
+import "firebase/auth";
+import { LitElement, html, customElement, internalProperty } from "lit-element";
 import { alertController } from "@ionic/core";
 import { AuthService } from "../../services/AuthService";
 
 @customElement("app-menu")
 class AppMenu extends LitElement {
+  @internalProperty()
+  protected user: string = "";
+
   constructor() {
     super();
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.user = user.email as string;
+      }
+    });
   }
 
   render() {
@@ -15,6 +27,7 @@ class AppMenu extends LitElement {
           <ion-toolbar translucent>
             <img src="src/assets/img/utalk_logo_v2.png" width="80px" />
             <ion-title>Menu</ion-title>
+            <ion-title size="small">${this.user}</ion-title>
           </ion-toolbar>
         </ion-header>
         <ion-content>
