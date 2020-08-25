@@ -24,7 +24,6 @@ class AppInterviewList extends LitElement {
 
   constructor() {
     super();
-    this.retrieveInterviewObjects();
   }
 
   static get styles() {
@@ -305,6 +304,22 @@ class AppInterviewList extends LitElement {
         ],
       })
       .then((alert) => alert.present());
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    //Only update the interview object in perstence when view is closed, not at every change on screen
+    this.addEventListener("ionViewWillEnter", () =>
+      this.retrieveInterviewObjects()
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    //Remove event Listeners connected on connectedCallback()
+    this.removeEventListener("ionViewWillEnter", () =>
+      this.retrieveInterviewObjects()
+    );
   }
 
   async retrieveInterviewObjects() {
