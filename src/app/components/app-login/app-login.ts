@@ -41,13 +41,15 @@ class AppLogin extends LitElement {
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 100%;
       }
       #background-image {
         object-fit: cover;
         position: absolute;
+        height: 100%;
       }
       #logo {
+        object-fit: contain;
+        height: 400px;
         z-index: 100;
       }
       #form {
@@ -78,7 +80,6 @@ class AppLogin extends LitElement {
             id="background-image"
             src="src/assets/img/interview.jpg"
             width="100%"
-            height="100%"
           />
 
           <img
