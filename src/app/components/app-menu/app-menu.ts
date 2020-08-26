@@ -35,38 +35,38 @@ class AppMenu extends LitElement {
           <ion-list>
             <ion-menu-toggle>
               <ion-item button @click=${this.openStart}>
-                <ion-icon name="home" slot="start" color="tertiary"></ion-icon>
+                <ion-icon name="home" slot="start" color="secondary"></ion-icon>
                 <ion-label>Start</ion-label>
               </ion-item>
             </ion-menu-toggle>
             <ion-menu-toggle>
               <ion-item button @click=${this.openCategories}>
-                <ion-icon name="help-outline" slot="start" color="tertiary"></ion-icon>
+                <ion-icon name="help-outline" slot="start" color="secondary"></ion-icon>
                 <ion-label>Fragen</ion-label>
               </ion-item>
             </ion-menu-toggle>
             </ion-menu-toggle>
             <ion-menu-toggle>
               <ion-item button @click=${this.openInterviews}>
-                <ion-icon name="chatbubbles" slot="start" color="tertiary"></ion-icon>
+                <ion-icon name="chatbubbles" slot="start" color="secondary"></ion-icon>
                 <ion-label>Interviews</ion-label>
               </ion-item>
             </ion-menu-toggle>
             <ion-menu-toggle>
               <ion-item button @click=${this.openSettings}>
-                <ion-icon name="settings" slot="start" color="tertiary"></ion-icon>
+                <ion-icon name="settings" slot="start" color="secondary"></ion-icon>
                 <ion-label>Einstellungen</ion-label>
               </ion-item>
             </ion-menu-toggle>
             <ion-menu-toggle>
             <ion-item button @click=${this.logout}>
-                <ion-icon name="log-out-outline" slot="start" color="tertiary"></ion-icon>
+                <ion-icon name="log-out-outline" slot="start" color="secondary"></ion-icon>
                 <ion-label>Logout</ion-label>
               </ion-item>
             </ion-menu-toggle>
             <ion-menu-toggle>
               <ion-item button @click=${this.openAboutUs}>
-                <ion-icon name="information-circle" slot="start" color="tertiary"></ion-icon>
+                <ion-icon name="information-circle" slot="start" color="secondary"></ion-icon>
                 <ion-label>Über uns</ion-label>
               </ion-item>
             </ion-menu-toggle>

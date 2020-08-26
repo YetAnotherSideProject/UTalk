@@ -11,7 +11,7 @@ class AppFab extends LitElement {
 
   static get styles() {
     return css`
-      #fab-button {
+      ion-fab-button {
         --ion-color-primary: var(--ion-color-tertiary);
         --ion-color-primary-shade: var(--ion-color-tertiary-shade);
       }
@@ -21,7 +21,7 @@ class AppFab extends LitElement {
   render() {
     return html`
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button id="fab-button" @click=${this.onFabClick}>
+        <ion-fab-button @click=${this.onFabClick}>
           <ion-icon name=${this.icon}></ion-icon>
         </ion-fab-button>
       </ion-fab>
