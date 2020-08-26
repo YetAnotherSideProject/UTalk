@@ -22,13 +22,19 @@ class AppRunInterview extends LitElement {
   @internalProperty() currentQuestionTotal: number = 0;
   @internalProperty() maxQuestions: number = 0;
 
+  @internalProperty() darkMode: boolean = false;
+
   constructor() {
     super();
   }
 
   static get styles() {
     return css`
-      ion-button {
+      .darkButton {
+        --background: black;
+        --background-activated: black;
+      }
+      .whiteButton {
         --background: white;
         --background-activated: white;
       }
@@ -59,7 +65,7 @@ class AppRunInterview extends LitElement {
               this.interview.interviewParts[this.currentPart].title
             }</ion-card-content
           >
-          <ion-progress-bar value=${progress}></ion-progress-bar>
+          <ion-progress-bar style="--progress-background: var(--ion-color-secondary);" value=${progress}></ion-progress-bar>
         </ion-card>
         <ion-slides @ionSlideNextEnd=${
           this.increaseQuestionCounter
@@ -93,9 +99,11 @@ class AppRunInterview extends LitElement {
         </ion-card>
         <div style="display: flex; justify-content: space-between; margin-top: 50px">
           <div style="display: flex; align-items: center">
-          <ion-button @click=${this.onClickPrevious}>
+          <ion-button class=${
+            this.darkMode ? "darkButton" : "whiteButton"
+          } @click=${this.onClickPrevious}>
             <ion-icon
-              style="font-size: 4em; color: var(--ion-color-primary);"
+              style="font-size: 4em; color: var(--ion-color-secondary);"
               name="arrow-back-outline"
             ></ion-icon>
           </ion-button>
@@ -103,9 +111,11 @@ class AppRunInterview extends LitElement {
           </div>
           <div style="display: flex; align-items: center">
           <p>Next</p>
-          <ion-button @click=${this.onClickNext}>
+          <ion-button class=${
+            this.darkMode ? "darkButton" : "whiteButton"
+          } @click=${this.onClickNext}>
           <ion-icon
-            style="font-size: 4em; color: var(--ion-color-primary);"
+            style="font-size: 4em; color: var(--ion-color-secondary);"
             name="arrow-forward-outline"
           ></ion-icon>
           </ion-button>
@@ -225,15 +235,24 @@ class AppRunInterview extends LitElement {
     InterviewDao.updateInterview(this.interview);
   }
 
+  // TODO Hack, da noch nicht herausgefunden wurde wie global die CSS-Eigenschaften von Shadow DOMs geändert werden können. Prüfen, ob eine bessere Methode gefunden werden kann
+  checkDarkMode() {
+    const darkMode = document.body.classList.contains("dark");
+    this.darkMode = darkMode;
+    console.log("Dark Mode is: ", darkMode);
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("ionViewWillEnter", this.loadInitialData);
+    this.addEventListener("ionViewWillEnter", this.checkDarkMode);
     this.addEventListener("ionViewWillLeave", this.saveInterview);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener("ionViewWillEnter", this.loadInitialData);
+    this.removeEventListener("ionViewWillEnter", this.checkDarkMode);
     this.removeEventListener("ionViewWillLeave", this.saveInterview);
   }
 }

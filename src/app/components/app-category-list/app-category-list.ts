@@ -22,6 +22,7 @@ class AppCategoryList extends LitElement {
   @internalProperty() categories: Category[] = [];
   @internalProperty() statusFilter: string = "All";
   @internalProperty() searchQuery: string = "";
+  @internalProperty() darkMode: boolean = false;
   mcArray: Array<HammerManager>;
 
   constructor() {
@@ -40,7 +41,11 @@ class AppCategoryList extends LitElement {
       ion-segment {
         background: var(--ion-color-light);
       }
-      ion-item > ion-button {
+      .darkButton {
+        --background: black;
+        --background-activated: black;
+      }
+      .whiteButton {
         --background: white;
         --background-activated: white;
       }
@@ -57,6 +62,10 @@ class AppCategoryList extends LitElement {
       #ion-option-end {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
+      }
+      ion-badge {
+        --background: var(--ion-color-secondary);
+        --color: var(--ion-color-secondary-contrast);
       }
     `;
   }
@@ -120,6 +129,7 @@ class AppCategoryList extends LitElement {
               >
                 <ion-button
                   slot="start"
+                  class=${this.darkMode ? "darkButton" : "whiteButton"}
                   @click=${(event: any) => {
                     event.stopPropagation();
                     this.toggleCategoryStatus(category);
@@ -408,13 +418,22 @@ class AppCategoryList extends LitElement {
     console.log("MC Array after filling: ", this.mcArray);
   }
 
+  // TODO Hack, da noch nicht herausgefunden wurde wie global die CSS-Eigenschaften von Shadow DOMs geändert werden können. Prüfen, ob eine bessere Methode gefunden werden kann
+  checkDarkMode() {
+    const darkMode = document.body.classList.contains("dark");
+    this.darkMode = darkMode;
+    console.log("Dark Mode is: ", darkMode);
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener("ionViewWillEnter", this.updateCategories);
+    this.addEventListener("ionViewWillEnter", this.checkDarkMode);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener("ionViewWillEnter", this.updateCategories);
+    this.removeEventListener("ionViewWillEnter", this.checkDarkMode);
   }
 }
