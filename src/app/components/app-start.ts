@@ -19,6 +19,7 @@ import "./app-toolbar/app-toolbar";
 import "./app-fab/app-fab";
 import { Theming } from "../models/Theming";
 import { ThemingService } from "../services/ThemingService";
+import { loadingController } from "@ionic/core";
 
 @customElement("app-start")
 class AppStart extends LitElement {
@@ -26,6 +27,8 @@ class AppStart extends LitElement {
   protected lastInterviews: Interview[] = [];
   @internalProperty()
   protected lastQuestions: Question[] = [];
+  @internalProperty()
+  protected loading: boolean = true;
 
   constructor() {
     super();
@@ -41,11 +44,14 @@ class AppStart extends LitElement {
         ]);
       }
     });
+    let timeout = setTimeout(() => {
+      this.loading = false;
+    }, 2000);
   }
 
   static get styles() {
     return css`
-      h1 {
+      .start__heading {
         margin-bottom: 10px;
         text-align: center;
         font-size: 1.3em;
@@ -58,6 +64,10 @@ class AppStart extends LitElement {
   }
 
   render() {
+    if (this.loading) {
+      this.showLoader();
+      return;
+    }
     if (firebase.auth().currentUser === null) {
       return html` <ion-content class="ion-padding"
         ><app-login></app-login>
@@ -67,7 +77,7 @@ class AppStart extends LitElement {
     return html`
       <app-toolbar></app-toolbar>
       <ion-content class="ion-padding">
-        <h1>Letzte Interviews</h1>
+        <h1 class="start__heading">Letzte Interviews</h1>
         ${
           this.lastInterviews.length > 0
             ? html` <ion-slides pager="true">
@@ -113,7 +123,7 @@ class AppStart extends LitElement {
                 </ion-card>
               `
         }
-        <h1>Letzte Fragen</h1>
+        <h1 class="start__heading">Letzte Fragen</h1>
         ${
           this.lastQuestions.length > 0
             ? html` <ion-slides pager="true">
@@ -190,5 +200,14 @@ class AppStart extends LitElement {
     //   "ion-nav"
     // ) as HTMLIonNavElement;
     // nav.push("app-interview-detail", { interviewId: interviewId });
+  }
+
+  async showLoader() {
+    const loading = await loadingController.create({
+      message: "Please wait...",
+      duration: 2000,
+    });
+
+    await loading.present();
   }
 }
