@@ -37,31 +37,41 @@ class AppLogin extends LitElement {
 
   static get styles() {
     return css`
-      #login {
+      .login {
         display: flex;
         flex-direction: column;
         width: 100%;
       }
-      #background-image {
+      .login__backgroundImage {
         object-fit: cover;
         position: absolute;
         height: 100%;
       }
-      #logo {
+      .login__logo {
         object-fit: contain;
         height: 400px;
         z-index: 100;
       }
-      #form {
+      .login__form {
         opacity: 0.7;
         padding: 1em;
+      }
+      .login__signin {
+        margin-top: 2em;
       }
       form > ion-item {
         border-radius: 10px;
         margin-bottom: 8px;
       }
-      #footer-toolbar {
+      .login__footer {
+        position: absolute;
+        bottom: 0px;
+      }
+      .login__footerToolbar {
         --background: var(--ion-color-warning);
+      }
+      .login__footerText {
+        font-size: 1.5em;
       }
     `;
   }
@@ -75,21 +85,21 @@ class AppLogin extends LitElement {
       </ion-header>
 
       <ion-content>
-        <div id="login">
+        <div class="login">
           <img
-            id="background-image"
+            class="login__backgroundImage"
             src="src/assets/img/interview.jpg"
             width="100%"
           />
 
           <img
-            id="logo"
+            class="login__logo"
             src="src/assets/img/utalk_logo_white.png"
             alt="uTalk logo"
             width="100%"
           />
           <!--onsubmit="return false", damit die Form kein Redirect jeglicher Art macht oder Daten versendet z.B. in die URL -->
-          <div id="form">
+          <div class="login__form">
             <form onsubmit="return false" @submit=${() => this.onSubmit()}>
               <ion-item lines="full">
                 <ion-label position="floating">Email</ion-label>
@@ -111,7 +121,7 @@ class AppLogin extends LitElement {
                   </ion-item>`
                 : html``}
 
-              <ion-row style="margin-top: 2em">
+              <ion-row class="login__signin">
                 <ion-col>
                   <ion-button
                     type="submit"
@@ -143,12 +153,9 @@ class AppLogin extends LitElement {
                 </ion-row>`}
           </div>
           ${!this.online
-            ? // TODO Nicht responsives Verhalten von bottom: 43px ändern. 0px funktioniert bisher nicht --> Ursachenforschung
-              html` <ion-footer style="position: absolute; bottom: 43px;">
-                <ion-toolbar id="footer-toolbar">
-                  <h1 style="font-size: 1.5em;">
-                    No connection detected!
-                  </h1>
+            ? html` <ion-footer class="login__footer">
+                <ion-toolbar class="login__footerToolbar">
+                  <h1 class="login__footerText">No connection detected!</h1>
                   <p>Checking for reconnection...</p>
                 </ion-toolbar>
               </ion-footer>`
