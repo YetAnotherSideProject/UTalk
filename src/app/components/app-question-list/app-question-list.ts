@@ -28,13 +28,13 @@ class AppQuestionList extends LitElement {
 
   static get styles() {
     return css`
-      #ion-option {
+      .questions__questionCard {
+        width: 100%;
+      }
+      .questions__optionDelete {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
-      /* ion-card {
-        height: 200px;
-      } */
     `;
   }
 
@@ -47,22 +47,15 @@ class AppQuestionList extends LitElement {
           ${this.questions.map((question, id) => {
             return html`<ion-item-sliding
               ><ion-item @click=${() => this.onItemClick(question)}>
-                <ion-card style="width: 100%">
-                  <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-                  <!-- <img src="src/assets/img/question.jpg" width="100%" /> -->
+                <ion-card class="questions__questionCard">
                   <ion-card-header>
                     <ion-card-subtitle>Question ${id + 1}</ion-card-subtitle>
-                    <!-- <ion-card-title
-                      >Kategorie: ${this.category.name}</ion-card-title
-                    > -->
                   </ion-card-header>
-                  <ion-card-content>
-                    ${question.text}
-                  </ion-card-content>
+                  <ion-card-content> ${question.text} </ion-card-content>
                 </ion-card> </ion-item
               ><ion-item-options side="end"
                 ><ion-item-option
-                  id="ion-option"
+                  class="questions__optionDelete"
                   @click=${() =>
                     this.onClickDelete(
                       question.firebaseId ? question.firebaseId : ""
