@@ -15,13 +15,17 @@ class AppInterviewDetail extends LitElement {
 
   static get styles() {
     return css`
-      #ion-option-delete {
-        --ion-color-primary: var(--ion-color-danger);
-        --ion-color-primary-contrast: var(--ion-color-danger-contrast);
+      .interviewDetail__title {
+        font-weight: bold;
+        font-size: 2em;
       }
-      #ion-button-iv_run {
+      .interviewDetail__runButton {
         --ion-color-primary: var(--ion-color-success);
         --ion-color-primary-contrast: var(--ion-color-success-contrast);
+      }
+      .interviewDetail__optionDelete {
+        --ion-color-primary: var(--ion-color-danger);
+        --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
     `;
   }
@@ -38,7 +42,7 @@ class AppInterviewDetail extends LitElement {
             <ion-card-subtitle>Interview</ion-card-subtitle>
             <ion-item lines="none">
               <ion-input
-                style="font-weight: bold; font-size: 2em"
+                class="interviewDetail__title"
                 slot="start"
                 type="text"
                 readonly=${this.interview.status !== "Draft"}
@@ -54,7 +58,7 @@ class AppInterviewDetail extends LitElement {
                     <ion-button
                       slot="end"
                       size="large"
-                      id="ion-button-iv_run"
+                      class="interviewDetail__runButton"
                       @click=${() => this.onRunInterview()}
                       ><ion-icon name="play-outline"></ion-icon
                     ></ion-button>
@@ -100,7 +104,7 @@ class AppInterviewDetail extends LitElement {
                 ${this.interview.status === "Draft"
                   ? html` <ion-item-options side="end">
                       <ion-item-option
-                        id="ion-option-delete"
+                        class="interviewDetail__optionDelete"
                         @click=${() => this.onInterviewpartSlideDelete(index)}
                         >Löschen</ion-item-option
                       >
