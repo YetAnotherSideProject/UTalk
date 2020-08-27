@@ -30,13 +30,37 @@ class AppRunInterview extends LitElement {
 
   static get styles() {
     return css`
-      .darkButton {
+      .interviewRun__progressBar {
+        --progress-background: var(--ion-color-secondary);
+      }
+      .interviewRun__questionCard {
+        width: 100%;
+        height: 200px;
+        background-color: lightGray;
+      }
+      .interviewRun__answerCard {
+        height: 185px;
+      }
+      .interviewRun__navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+      }
+      .interviewRun__navigationDirection {
+        display: flex;
+        align-items: center;
+      }
+      .interviewRun__navigationButton--dark {
         --background: black;
         --background-activated: black;
       }
-      .whiteButton {
+      .interviewRun__navigationButton--white {
         --background: white;
         --background-activated: white;
+      }
+      .interviewRun__navigationIcon {
+        font-size: 4em;
+        color: var(--ion-color-secondary);
       }
     `;
   }
@@ -65,16 +89,14 @@ class AppRunInterview extends LitElement {
               this.interview.interviewParts[this.currentPart].title
             }</ion-card-content
           >
-          <ion-progress-bar style="--progress-background: var(--ion-color-secondary);" value=${progress}></ion-progress-bar>
+          <ion-progress-bar class="interviewRun__progressBar" value=${progress}></ion-progress-bar>
         </ion-card>
         <ion-slides @ionSlideNextEnd=${
           this.increaseQuestionCounter
         } @ionSlidePrevEnd=${this.decreaseQuestionCounter}>
         ${this.questions.map(
           (question) => html`<ion-slide>
-            <ion-card
-              style="width: 100%; height: 200px; background-color: lightGray"
-            >
+            <ion-card class="interviewRun__questionCard">
               <ion-card-header>
                 <ion-card-subtitle>Frage</ion-card-subtitle>
               </ion-card-header>
@@ -83,7 +105,7 @@ class AppRunInterview extends LitElement {
           </ion-slide>`
         )}
         </ion-slides>
-        <ion-card style="height: 185px">
+        <ion-card class="interviewRun__answerCard">
           <ion-card-header>
             <ion-card-subtitle>Antwort</ion-card-subtitle>
           </ion-card-header>
@@ -97,25 +119,29 @@ class AppRunInterview extends LitElement {
             ></ion-textarea>
           </ion-card-content>
         </ion-card>
-        <div style="display: flex; justify-content: space-between; margin-top: 50px">
-          <div style="display: flex; align-items: center">
+        <div class="interviewRun__navigation">
+          <div class="interviewRun__navigationDirection">
           <ion-button class=${
-            this.darkMode ? "darkButton" : "whiteButton"
+            this.darkMode
+              ? "interviewRun__navigationButton--dark"
+              : "interviewRun__navigationButton--white"
           } @click=${this.onClickPrevious}>
             <ion-icon
-              style="font-size: 4em; color: var(--ion-color-secondary);"
+              class="interviewRun__navigationIcon"
               name="arrow-back-outline"
             ></ion-icon>
           </ion-button>
             <p>Prev</p>
           </div>
-          <div style="display: flex; align-items: center">
+          <div class="interviewRun__navigationDirection">
           <p>Next</p>
           <ion-button class=${
-            this.darkMode ? "darkButton" : "whiteButton"
+            this.darkMode
+              ? "interviewRun__navigationButton--dark"
+              : "interviewRun__navigationButton--white"
           } @click=${this.onClickNext}>
           <ion-icon
-            style="font-size: 4em; color: var(--ion-color-secondary);"
+            class="interviewRun__navigationIcon"
             name="arrow-forward-outline"
           ></ion-icon>
           </ion-button>
