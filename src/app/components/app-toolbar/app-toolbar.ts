@@ -1,4 +1,4 @@
-import { LitElement, html, customElement, property } from "lit-element";
+import { LitElement, html, css, customElement, property } from "lit-element";
 
 @customElement("app-toolbar")
 class AppToolbar extends LitElement {
@@ -17,6 +17,14 @@ class AppToolbar extends LitElement {
     super();
   }
 
+  static get styles() {
+    return css`
+      .toolbar__customBackButton {
+        margin-right: 0px !important;
+      }
+    `;
+  }
+
   render() {
     return html`
       <ion-header>
@@ -26,9 +34,7 @@ class AppToolbar extends LitElement {
             ${this.setBackButton()} ${this.setCustomBackButton()}
           </ion-buttons>
           <ion-title>uTalk</ion-title>
-          <ion-buttons slot="end">
-            ${this.setEditButton()}
-          </ion-buttons>
+          <ion-buttons slot="end"> ${this.setEditButton()} </ion-buttons>
         </ion-toolbar>
       </ion-header>
     `;
@@ -48,7 +54,7 @@ class AppToolbar extends LitElement {
     if (this.customBackButton) {
       return html`<ion-button @click=${this.customClick}
         ><ion-icon
-          style="margin-right: 0px"
+          class="toolbar__customBackButton"
           name="chevron-back-outline"
           slot="start"
         ></ion-icon>
