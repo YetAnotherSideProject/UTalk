@@ -1,9 +1,20 @@
-import { LitElement, html, css, query, customElement } from "lit-element";
+import {
+  LitElement,
+  html,
+  css,
+  query,
+  customElement,
+  internalProperty,
+} from "lit-element";
+import { Theming } from "../../models/Theming";
+import { ThemingService } from "../../services/ThemingService";
 
 @customElement("app-settings")
 class AppSettings extends LitElement {
   @query("#darkMode")
   darkMode!: HTMLIonToggleElement;
+  @internalProperty()
+  protected theming: Theming = {} as Theming;
 
   constructor() {
     super();
@@ -31,7 +42,7 @@ class AppSettings extends LitElement {
           <h1>Settings</h1>
           <div class="settings__attribute">
             <p>Dark Mode aktivieren</p>
-            <ion-toggle id="darkMode" />
+            <ion-toggle checked=${this.theming.darkMode} id="darkMode" />
           </div>
         </div>
       </ion-content>
@@ -39,12 +50,15 @@ class AppSettings extends LitElement {
   }
 
   toggleDarkModeClass(event: any) {
-    console.log("Toggle dark mode");
-    document.body.classList.toggle("dark", event.detail.checked);
+    console.log("Toggle dark mode: ", event.detail.checked);
+    const theming: Theming = { darkMode: event.detail.checked };
+    ThemingService.updateDarkMode(theming);
   }
 
-  registerEventListener() {
+  async registerEventListener() {
     this.darkMode.addEventListener("ionChange", this.toggleDarkModeClass);
+    this.theming = await ThemingService.getDarkModeConfig();
+    console.log("Theming: ", this.theming);
   }
 
   deregisterEventListener() {
@@ -54,7 +68,7 @@ class AppSettings extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    // Add Ionic Lifeccycle methods
+    // Add Ionic Lifecycle methods
     this.addEventListener("ionViewWillEnter", this.registerEventListener);
     this.addEventListener("ionViewWillLeave", this.deregisterEventListener);
   }
@@ -62,7 +76,7 @@ class AppSettings extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    // Remove Ionic Lifeccycle methods
+    // Remove Ionic Lifecycle methods
     this.removeEventListener("ionViewWillEnter", this.registerEventListener);
     this.removeEventListener("ionViewWillLeave", this.deregisterEventListener);
   }

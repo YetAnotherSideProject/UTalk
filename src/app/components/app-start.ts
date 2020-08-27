@@ -17,6 +17,8 @@ import { Question } from "../models/Question";
 import "./app-login/app-login";
 import "./app-toolbar/app-toolbar";
 import "./app-fab/app-fab";
+import { Theming } from "../models/Theming";
+import { ThemingService } from "../services/ThemingService";
 
 @customElement("app-start")
 class AppStart extends LitElement {
@@ -32,6 +34,7 @@ class AppStart extends LitElement {
         console.log(
           "User logged in, getting recent data for app-start component"
         );
+        ThemingService.activateDarkModeConfig();
         [this.lastInterviews, this.lastQuestions] = await Promise.all([
           UserDataService.getLastInterviews(),
           UserDataService.getLastQuestions(),
@@ -155,9 +158,7 @@ class AppStart extends LitElement {
                           slot="start"
                           name="add-circle-outline"
                         ></ion-icon>
-                        <ion-label slot="end">
-                          Neue Frage anlegen
-                        </ion-label>
+                        <ion-label slot="end"> Neue Frage anlegen </ion-label>
                       </ion-button>
                     </ion-item>
                   </ion-card-header>
