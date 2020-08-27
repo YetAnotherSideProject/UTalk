@@ -8,15 +8,15 @@ class AppAboutUs extends LitElement {
 
   static get styles() {
     return css`
-      #about-header {
+      .about__header {
         background-color: var(--ion-color-primary);
       }
-      #created {
+      .about__headerCreated {
         margin: 0px 0px 40px 0px;
         text-align: center;
         font-weight: bold;
       }
-      #version p {
+      .about__version p {
         margin: 0;
         text-align: center;
       }
@@ -25,14 +25,16 @@ class AppAboutUs extends LitElement {
         border: 2px solid black;
         margin-bottom: 2em;
       }
-      #about-content {
+      .about__content {
         width: 80%;
         margin: auto;
         margin-bottom: 2em;
         text-align: justify;
       }
-      #spacer {
-        margin-bottom: 4em;
+      .about__creditsHeader {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 1em;
       }
     `;
   }
@@ -41,20 +43,20 @@ class AppAboutUs extends LitElement {
     return html`
       <app-toolbar></app-toolbar>
       <ion-content class="padding">
-        <div id="about-header">
+        <div class="about__header">
           <img
             src="src/assets/img/utalk_logo_v3.png"
             alt="uTalk logo"
             width="100%"
           />
-          <p id="created">Created by Mario und Martin</p>
+          <p class="about__headerCreated">Created by Mario und Martin</p>
         </div>
-        <div id="version">
+        <div class="about__version">
           <p>Version 1.0</p>
           <p>Last update: 21.08.2020</p>
           <hr />
         </div>
-        <div id="about-content">
+        <div class="about__content">
           <p>
             <b>uTalk</b> ist aus einem Projekt der FH Münster entstanden und
             wurde für eine Prüfungsleistung im Fach
@@ -72,10 +74,8 @@ class AppAboutUs extends LitElement {
           </p>
         </div>
         <hr />
-        <p style="text-align: center; font-weight: bold; margin-bottom: 1em">
-          Credits
-        </p>
-        <div id="about-content">
+        <p class="about__creditsHeader">Credits</p>
+        <div class="about__content">
           <span
             >Photo by
             <a
@@ -102,7 +102,6 @@ class AppAboutUs extends LitElement {
             ></span
           >
         </div>
-        <div id="spacer"></div>
       </ion-content>
     `;
   }
