@@ -28,34 +28,34 @@ class AppInterviewList extends LitElement {
 
   static get styles() {
     return css`
-      #interview_searchbar {
+      .interviews__searchbar {
         background-color: var(--ion-color-light);
       }
-      #interview_filterbar_status {
+      .interviews__filterbarStatus {
         background-color: var(--ion-color-light);
       }
-      #interview_filterbar_date {
+      .interviews__filterbarDate {
         background-color: var(--ion-color-light);
       }
-      #ion-option-rename {
+      .interviews__statusBadge--Draft {
         --ion-color-primary: var(--ion-color-warning);
         --ion-color-primary-contrast: var(--ion-color-warning-contrast);
       }
-      #ion-option-delete {
-        --ion-color-primary: var(--ion-color-danger);
-        --ion-color-primary-contrast: var(--ion-color-danger-contrast);
-      }
-      #statusBadge_Draft {
-        --ion-color-primary: var(--ion-color-warning);
-        --ion-color-primary-contrast: var(--ion-color-warning-contrast);
-      }
-      #statusBadge_Active {
+      .interviews__statusBadge--Active {
         --ion-color-primary: var(--ion-color-success);
         --ion-color-primary-contrast: var(--ion-color-success-contrast);
       }
-      #statusBadge_Archived {
+      .interviews__statusBadge--Archived {
         --ion-color-primary: var(--ion-color-medium);
         --ion-color-primary-contrast: var(--ion-color-medium-contrast);
+      }
+      .interviews__optionRename {
+        --ion-color-primary: var(--ion-color-warning);
+        --ion-color-primary-contrast: var(--ion-color-warning-contrast);
+      }
+      .interviews__optionDelete {
+        --ion-color-primary: var(--ion-color-danger);
+        --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
     `;
   }
@@ -91,7 +91,7 @@ class AppInterviewList extends LitElement {
       <ion-searchbar
         @ionChange=${(event: any) =>
           (this.searchQuery = event.target.value.toLowerCase())}
-        id="interview_searchbar"
+        class="interviews__searchbar"
         animated
         autocomplete="on"
         clear-icon="trash-outline"
@@ -99,7 +99,7 @@ class AppInterviewList extends LitElement {
       ></ion-searchbar>
 
       <ion-segment
-        id="interview_filterbar_status"
+        class="interviews__filterbarStatus"
         value="All"
         @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) =>
           (this.statusFilter = detail.value || "All")}
@@ -118,7 +118,7 @@ class AppInterviewList extends LitElement {
         </ion-segment-button>
       </ion-segment>
       <ion-segment
-        id="interview_filterbar_date"
+        class="interviews__filterbarDate"
         value="Change"
         @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) =>
           (this.dateSortFilter = detail.value || "Change")}
@@ -162,10 +162,8 @@ class AppInterviewList extends LitElement {
       </ion-segment>
 
       <ion-content class="padding">
-        <ion-list id="interview_list">
-          <ion-list-header>
-            Interviews
-          </ion-list-header>
+        <ion-list>
+          <ion-list-header> Interviews </ion-list-header>
           ${filteredInterviews.map((interview) => {
             return html` <ion-item-sliding>
               <ion-item
@@ -174,20 +172,23 @@ class AppInterviewList extends LitElement {
                 @click=${() => this.onItemClick(interview)}
               >
                 <ion-label>${interview.title}</ion-label>
-                <ion-badge slot="end" id="statusBadge_${interview.status}" }
+                <ion-badge
+                  slot="end"
+                  class="interviews__statusBadge--${interview.status}"
+                  }
                   >${interview.status}</ion-badge
                 >
               </ion-item>
               <ion-item-options side="start">
                 <ion-item-option
-                  id="ion-option-rename"
+                  class="interviews__optionRename"
                   @click=${() => this.onSlideRename(interview)}
                   >Umbenennen</ion-item-option
                 >
               </ion-item-options>
               <ion-item-options side="end">
                 <ion-item-option
-                  id="ion-option-delete"
+                  class="interviews__optionDelete"
                   @click=${() => this.onSlideDelete(interview)}
                   >Löschen</ion-item-option
                 >
