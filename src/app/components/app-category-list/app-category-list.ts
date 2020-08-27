@@ -35,31 +35,31 @@ class AppCategoryList extends LitElement {
 
   static get styles() {
     return css`
-      #searchbar {
+      .categories__searchbar {
         background-color: var(--ion-color-light);
       }
       ion-segment {
         background: var(--ion-color-light);
       }
-      .darkButton {
+      .categories__favoriteButton--dark {
         --background: black;
         --background-activated: black;
       }
-      .whiteButton {
+      .categories__favoriteButton--white {
         --background: white;
         --background-activated: white;
       }
-      #statusIcon_Favorite {
+      .categories__status--Favorite {
         fill: gold;
       }
-      #statusIcon_Neutral {
+      .categories__status--Neutral {
         fill: var(--ion-color-light);
       }
-      #ion-option-start {
+      .categories__optionStart {
         --ion-color-primary: var(--ion-color-medium);
         --ion-color-primary-contrast: var(--ion-color-medium-contrast);
       }
-      #ion-option-end {
+      .categories__optionEnd {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
@@ -86,7 +86,7 @@ class AppCategoryList extends LitElement {
       <ion-searchbar
         @ionChange=${(event: any) =>
           (this.searchQuery = event.target.value.toLowerCase())}
-        id="searchbar"
+        class="categories__searchbar"
         animated
         autocomplete="on"
         clear-icon="trash-outline"
@@ -95,7 +95,6 @@ class AppCategoryList extends LitElement {
       <ion-segment
         value="All"
         @ionChange=${({ detail }: { detail: SegmentChangeEventDetail }) => {
-          console.log("Detail Ion Segment: ", detail.value);
           this.statusFilter = detail.value || "All";
         }}
       >
@@ -107,12 +106,12 @@ class AppCategoryList extends LitElement {
         </ion-segment-button>
       </ion-segment>
       <ion-content class="padding">
-        <ion-list id="test">
+        <ion-list>
           ${filteredInterviews.map((category) => {
             return html` <ion-item-sliding>
               <ion-item-options side="start">
                 <ion-item-option
-                  id="ion-option-start"
+                  class="categories__optionStart"
                   @click=${() => {
                     this.onRenameClick(category);
                   }}
@@ -129,14 +128,16 @@ class AppCategoryList extends LitElement {
               >
                 <ion-button
                   slot="start"
-                  class=${this.darkMode ? "darkButton" : "whiteButton"}
+                  class=${this.darkMode
+                    ? "categories__favoriteButton--dark"
+                    : "categories__favoriteButton--white"}
                   @click=${(event: any) => {
                     event.stopPropagation();
                     this.toggleCategoryStatus(category);
                   }}
                 >
                   <ion-icon
-                    id="statusIcon_${category.status}"
+                    class="categories__status--${category.status}"
                     name="star"
                   ></ion-icon>
                 </ion-button>
@@ -152,7 +153,7 @@ class AppCategoryList extends LitElement {
               </ion-item>
               <ion-item-options side="end">
                 <ion-item-option
-                  id="ion-option-end"
+                  class="categories__optionEnd"
                   @click=${() =>
                     this.onClickDelete(
                       category.firebaseId ? category.firebaseId : ""
