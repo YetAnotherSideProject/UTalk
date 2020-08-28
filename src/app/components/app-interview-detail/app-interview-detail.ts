@@ -147,7 +147,7 @@ class AppInterviewDetail extends LitElement {
                           </ion-item>
                           <ion-item-options side="end">
                             <ion-item-option
-                              id="ion-option-delete"
+                              class="interviewDetail__optionDelete"
                               @click=${() =>
                                 this.onQuestionSlideDelete(
                                   interviewpart,
