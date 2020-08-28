@@ -9,6 +9,8 @@ import {
 
 import { Interview } from "../../models/Interview";
 import { InterviewDao } from "../../dao/InterviewDao";
+import { alertController } from "@ionic/core";
+import { InterviewService } from "../../services/InterviewService";
 
 @customElement("app-interview-run")
 class AppRunInterview extends LitElement {
@@ -50,6 +52,10 @@ class AppRunInterview extends LitElement {
         display: flex;
         align-items: center;
       }
+      .interviewRun__navigationButton {
+        --padding-start: 0;
+        --padding-end: 0;
+      }
       .interviewRun__navigationButton--dark {
         --background: black;
         --background-activated: black;
@@ -59,8 +65,12 @@ class AppRunInterview extends LitElement {
         --background-activated: white;
       }
       .interviewRun__navigationIcon {
-        font-size: 4em;
+        font-size: 3.5em;
         color: var(--ion-color-secondary);
+      }
+      .interviewRun__navigationControls {
+        display: flex;
+        align-items: center;
       }
     `;
   }
@@ -121,11 +131,11 @@ class AppRunInterview extends LitElement {
         </ion-card>
         <div class="interviewRun__navigation">
           <div class="interviewRun__navigationDirection">
-          <ion-button class=${
+          <ion-button class=${`${
             this.darkMode
               ? "interviewRun__navigationButton--dark"
               : "interviewRun__navigationButton--white"
-          } @click=${this.onClickPrevious}>
+          } interviewRun__navigationButton`} @click=${this.onClickPrevious}>
             <ion-icon
               class="interviewRun__navigationIcon"
               name="arrow-back-outline"
@@ -133,13 +143,35 @@ class AppRunInterview extends LitElement {
           </ion-button>
             <p>Prev</p>
           </div>
-          <div class="interviewRun__navigationDirection">
-          <p>Next</p>
-          <ion-button class=${
+          <div class="interviewRun__navigationControls">
+          <ion-button class=${`${
             this.darkMode
               ? "interviewRun__navigationButton--dark"
               : "interviewRun__navigationButton--white"
-          } @click=${this.onClickNext}>
+          } interviewRun__navigationButton`} @click=${this.onClickPause}>
+          <ion-icon
+            class="interviewRun__navigationIcon"
+            name="pause-circle-outline"
+          ></ion-icon>
+          </ion-button>
+          <ion-button class=${`${
+            this.darkMode
+              ? "interviewRun__navigationButton--dark"
+              : "interviewRun__navigationButton--white"
+          } interviewRun__navigationButton`} @click=${this.onClickStop}>
+          <ion-icon
+            class="interviewRun__navigationIcon"
+            name="stop-circle-outline"
+          ></ion-icon>
+          </ion-button>
+          </div>
+          <div class="interviewRun__navigationDirection">
+          <p>Next</p>
+          <ion-button class=${`${
+            this.darkMode
+              ? "interviewRun__navigationButton--dark"
+              : "interviewRun__navigationButton--white"
+          } interviewRun__navigationButton`} @click=${this.onClickNext}>
           <ion-icon
             class="interviewRun__navigationIcon"
             name="arrow-forward-outline"
@@ -158,6 +190,14 @@ class AppRunInterview extends LitElement {
     nav.pop();
   }
 
+  navigateTo(url: string) {
+    let nav: HTMLIonNavElement = document.querySelector(
+      "ion-nav"
+    ) as HTMLIonNavElement;
+
+    nav.push(url);
+  }
+
   onClickNext() {
     const swiper = this.shadowRoot?.querySelector(
       "ion-slides"
@@ -170,6 +210,57 @@ class AppRunInterview extends LitElement {
       "ion-slides"
     ) as HTMLIonSlidesElement;
     swiper.slidePrev();
+  }
+
+  onClickPause() {
+    this.showAlert(
+      "Willst Du das Interview wirklich pausieren?",
+      this.pauseInterview
+    );
+  }
+
+  onClickStop() {
+    this.showAlert(
+      "Willst Du das Interview wirklich abschließen?",
+      this.stopInterview
+    );
+  }
+
+  pauseInterview = () => {
+    this.showToast("Interview pausiert");
+    this.navigateTo("app-interview-list");
+  };
+
+  stopInterview = () => {
+    // const newInterview = { ...this.interview, status: "Archived" } as Interview;
+    this.interview.status = "Archived";
+    InterviewService.updateInterview(this.interview)
+      .then(() => {
+        console.log("Interview status changed successfully!");
+      })
+      .catch((error) => {
+        console.log("Error while stopping interview: ", error.message);
+      });
+    this.showToast("Interview ist abgeschlossen");
+    this.navigateTo("app-interview-list");
+  };
+
+  async showAlert(text: string, confirmAction: Function) {
+    const alert = await alertController.create({
+      header: text,
+      buttons: [
+        {
+          text: "Ja",
+          handler: () => confirmAction(),
+        },
+        {
+          text: "Nein, doch nicht!",
+          role: "cancel",
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
   increaseQuestionCounter() {
@@ -259,6 +350,16 @@ class AppRunInterview extends LitElement {
 
     // Save interview in firebase
     InterviewDao.updateInterview(this.interview);
+  }
+
+  // Utils
+  async showToast(message: string) {
+    const toast = document.createElement("ion-toast");
+    toast.message = message;
+    toast.duration = 2000;
+
+    document.body.appendChild(toast);
+    return toast.present();
   }
 
   // TODO Hack, da noch nicht herausgefunden wurde wie global die CSS-Eigenschaften von Shadow DOMs geändert werden können. Prüfen, ob eine bessere Methode gefunden werden kann
