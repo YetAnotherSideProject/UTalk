@@ -27,6 +27,11 @@ class AppInterviewDetail extends LitElement {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
+      .interviewDetail__questionAnswer {
+        --min-height: 0px;
+        font-weight: normal;
+        font-size: small;
+      }
     `;
   }
 
@@ -82,95 +87,118 @@ class AppInterviewDetail extends LitElement {
         </ion-card>
         <ion-list>
           ${this.interview.interviewParts.map((interviewpart, index) => {
-            return html`
-              <ion-item-sliding>
+            if (this.interview.status === "Draft") {
+              return html`
+                <ion-item-sliding>
+                  <ion-item>
+                    <ion-list-header
+                      ><ion-input
+                        style="font-size: large;"
+                        value=${interviewpart.title}
+                        @ionBlur=${({
+                          target,
+                        }: {
+                          target: HTMLIonInputElement;
+                        }) => {
+                          if (target.value !== ``) {
+                            interviewpart.title = target.value as string;
+                          }
+                        }}
+                      ></ion-input
+                    ></ion-list-header>
+                  </ion-item>
+                  <ion-item-options side="end">
+                    <ion-item-option
+                      class="interviewDetail__optionDelete"
+                      @click=${() => this.onInterviewpartSlideDelete(index)}
+                      >Löschen</ion-item-option
+                    >
+                  </ion-item-options>
+                </ion-item-sliding>
+
+                <ion-reorder-group
+                  disabled=${this.interview.status !== "Draft"}
+                  @ionItemReorder=${({
+                    detail,
+                  }: {
+                    detail: ItemReorderEventDetail;
+                  }) => this.handleReorder(detail, interviewpart)}
+                >
+                  ${interviewpart.interviewQuestions.map(
+                    (interviewQuestion, index) => {
+                      return html`
+                        <ion-item-sliding>
+                          <ion-item>
+                            <ion-input
+                              value=${interviewQuestion.question}
+                              @ionBlur=${({
+                                target,
+                              }: {
+                                target: HTMLIonInputElement;
+                              }) => {
+                                if (target.value !== ``) {
+                                  interviewQuestion.question = target.value as string;
+                                }
+                              }}
+                            >
+                            </ion-input>
+                            <ion-reorder slot="end"></ion-reorder>
+                          </ion-item>
+                          <ion-item-options side="end">
+                            <ion-item-option
+                              id="ion-option-delete"
+                              @click=${() =>
+                                this.onQuestionSlideDelete(
+                                  interviewpart,
+                                  index
+                                )}
+                              >Löschen</ion-item-option
+                            >
+                          </ion-item-options>
+                        </ion-item-sliding>
+                      `;
+                    }
+                  )}
+                </ion-reorder-group>
+                <ion-item>
+                  <ion-input
+                    placeholder="Weitere Frage ..."
+                    @ionBlur=${({ target }: { target: HTMLIonInputElement }) =>
+                      this.onNewQuestion(interviewpart, target)}
+                  ></ion-input>
+                </ion-item>
+              `;
+            } else {
+              return html`
                 <ion-item>
                   <ion-list-header
-                    ><ion-input
-                      value=${interviewpart.title}
-                      readonly=${this.interview.status !== "Draft"}
-                      @ionBlur=${({
-                        target,
-                      }: {
-                        target: HTMLIonInputElement;
-                      }) => {
-                        if (target.value !== ``) {
-                          interviewpart.title = target.value as string;
-                        }
-                      }}
-                    ></ion-input
-                  ></ion-list-header>
+                    ><ion-label>
+                      <h1>${interviewpart.title}</h1>
+                    </ion-label></ion-list-header
+                  >
                 </ion-item>
-                ${this.interview.status === "Draft"
-                  ? html` <ion-item-options side="end">
-                      <ion-item-option
-                        class="interviewDetail__optionDelete"
-                        @click=${() => this.onInterviewpartSlideDelete(index)}
-                        >Löschen</ion-item-option
-                      >
-                    </ion-item-options>`
-                  : html``}
-              </ion-item-sliding>
-              <ion-reorder-group
-                disabled=${this.interview.status !== "Draft"}
-                @ionItemReorder=${({
-                  detail,
-                }: {
-                  detail: ItemReorderEventDetail;
-                }) => this.handleReorder(detail, interviewpart)}
-              >
                 ${interviewpart.interviewQuestions.map(
                   (interviewQuestion, index) => {
                     return html`
-                      <ion-item-sliding>
-                        <ion-item>
-                          <ion-input
-                            readonly=${this.interview.status !== "Draft"}
-                            value=${interviewQuestion.question}
-                            @ionBlur=${({
-                              target,
-                            }: {
-                              target: HTMLIonInputElement;
-                            }) => {
-                              if (target.value !== ``) {
-                                interviewQuestion.question = target.value as string;
-                              }
-                            }}
-                          >
-                          </ion-input>
-                          <ion-reorder slot="end"></ion-reorder>
-                        </ion-item>
-                        ${this.interview.status === "Draft"
-                          ? html` <ion-item-options side="end">
-                              <ion-item-option
-                                id="ion-option-delete"
-                                @click=${() =>
-                                  this.onQuestionSlideDelete(
-                                    interviewpart,
-                                    index
-                                  )}
-                                >Löschen</ion-item-option
-                              >
-                            </ion-item-options>`
-                          : html``}
-                      </ion-item-sliding>
+                      ${interviewQuestion.answer !== undefined
+                        ? html`<ion-item lines="none">
+                              <ion-label>
+                                ${interviewQuestion.question}
+                              </ion-label>
+                            </ion-item>
+                            <ion-item class="interviewDetail__questionAnswer"
+                              ><ion-text
+                                >${interviewQuestion.answer}</ion-text
+                              ></ion-item
+                            >`
+                        : html`<ion-item>
+                            <ion-label>${interviewQuestion.question}</ion-label>
+                          </ion-item>`}
                     `;
                   }
                 )}
-              </ion-reorder-group>
-              ${this.interview.status === "Draft"
-                ? html`<ion-item>
-                    <ion-input
-                      placeholder="Weitere Frage ..."
-                      @ionBlur=${({
-                        target,
-                      }: {
-                        target: HTMLIonInputElement;
-                      }) => this.onNewQuestion(interviewpart, target)}
-                    ></ion-input>
-                  </ion-item>`
-                : html``}
-            `;
+              `;
+            }
           })}
         </ion-list>
       </ion-content>
