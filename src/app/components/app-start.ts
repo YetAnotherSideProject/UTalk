@@ -144,12 +144,7 @@ class AppStart extends LitElement {
                         <img src="src/assets/img/question.jpg" width="100%" />
                         <ion-card-header>
                           <ion-card-subtitle>Question</ion-card-subtitle>
-                          <ion-card-title
-                            >Kategorie: ${question.categoryId}</ion-card-title
-                          >
-                          <ion-card-title
-                            >Frage: ${question.text}</ion-card-title
-                          >
+                          <ion-card-title>${question.text}</ion-card-title>
                         </ion-card-header>
                       </ion-card>
                     </ion-slide>
