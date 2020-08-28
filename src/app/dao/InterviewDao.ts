@@ -49,7 +49,7 @@ export class InterviewDao {
   }
 
   static async getInterviewsWhere(
-    field: firebase.firestore.FieldPath,
+    field: firebase.firestore.FieldPath | string,
     operator: firebase.firestore.WhereFilterOp,
     operand: any
   ) {

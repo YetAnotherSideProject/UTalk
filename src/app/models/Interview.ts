@@ -16,7 +16,7 @@ export interface InterviewPart {
   interviewQuestions: InterviewQuestion[];
 }
 
-interface InterviewQuestion {
+export interface InterviewQuestion {
   question: string;
   answer?: string;
 }

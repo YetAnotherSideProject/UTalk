@@ -1,12 +1,21 @@
 // Firebase App (the core Firebase SDK) is always required
 import firebase from "firebase/app";
 
-import { Interview } from "../models/Interview";
+import {
+  Interview,
+  InterviewPart,
+  InterviewQuestion,
+} from "../models/Interview";
 import { InterviewDao } from "../dao/InterviewDao";
+import { QuestionDao } from "../dao/QuestionDao";
 
 export class InterviewService {
   static async getAllInterviews() {
     return InterviewDao.getAllInterviews();
+  }
+
+  static async getAllDraftInterviews() {
+    return InterviewDao.getInterviewsWhere("status", "==", "Draft");
   }
 
   static async addInterview(interviewTitle: string) {
@@ -42,6 +51,25 @@ export class InterviewService {
       interview.title = newTitle;
       await InterviewDao.updateInterview(interview);
     }
+  }
+
+  static async addCategoryToInterview(
+    interview: Interview,
+    categoryName: string,
+    categoryId: string
+  ) {
+    let newPart: InterviewPart = {
+      title: categoryName,
+      interviewQuestions: [],
+    };
+    let questions = await QuestionDao.getAllQuestions(categoryId);
+    questions.forEach((question) => {
+      newPart.interviewQuestions.push({
+        question: question.text,
+      } as InterviewQuestion);
+    });
+    interview.interviewParts.push(newPart);
+    InterviewService.updateInterview(interview);
   }
 
   static async updateInterview(interview: Interview) {

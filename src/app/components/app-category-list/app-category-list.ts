@@ -17,6 +17,8 @@ import { Category } from "../../models/Category";
 import { CategoryDao } from "../../dao/CategoryDao";
 import { QuestionDao } from "../../dao/QuestionDao";
 
+import "./app-interview-select-modal";
+
 @customElement("app-category-list")
 class AppCategoryList extends LitElement {
   @internalProperty() categories: Category[] = [];
@@ -208,6 +210,11 @@ class AppCategoryList extends LitElement {
           text: "Umbenennen",
           handler: () => this.onRenameClick(category),
         },
+        {
+          text: "Als Part zu Interview hinzufügen",
+          role: "destructive",
+          handler: () => this.addCategoryToInterview(category),
+        },
         { text: "Abbrechen", role: "cancel" },
       ],
     });
@@ -289,6 +296,30 @@ class AppCategoryList extends LitElement {
         );
         console.log("Error: ", error.message);
       });
+  }
+
+  async addCategoryToInterview(category: Category) {
+    if (
+      (await this.getNumberOfQuestionsforCategory(
+        category.firebaseId ? category.firebaseId : ""
+      )) <= 0
+    ) {
+      this.showToast("Kategorie enthält keine Fragen!");
+      return;
+    }
+
+    // Create the modal with the defined component
+    const modalElement = document.createElement("ion-modal");
+    modalElement.component = "app-interview-select-modal";
+    //TODO
+    modalElement.cssClass = "my-custom-class";
+    modalElement.componentProps = {
+      categoryName: category.name,
+      categoryId: category.firebaseId,
+    };
+    // Present the modal
+    document.body.appendChild(modalElement);
+    modalElement.present();
   }
 
   toggleCategoryStatus(category: Category | undefined) {
