@@ -66,7 +66,7 @@ class AppLogin extends LitElement {
         margin-bottom: 8px;
       }
       .login__footer {
-        position: absolute;
+        position: fixed;
         bottom: 0px;
       }
       .login__footerToolbar {
