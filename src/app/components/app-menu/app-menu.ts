@@ -2,14 +2,22 @@
 import firebase from "firebase/app";
 // Used firebase products
 import "firebase/auth";
-import { LitElement, html, customElement, internalProperty } from "lit-element";
+import {
+  LitElement,
+  html,
+  css,
+  customElement,
+  internalProperty,
+} from "lit-element";
 import { alertController } from "@ionic/core";
 import { AuthService } from "../../services/AuthService";
+import { ClassWatcherService } from "../../services/ClassWatcherService";
 
 @customElement("app-menu")
 class AppMenu extends LitElement {
   @internalProperty()
   protected user: string = "";
+  @internalProperty() protected darkMode: boolean = false;
 
   constructor() {
     super();
@@ -20,14 +28,31 @@ class AppMenu extends LitElement {
     });
   }
 
+  static get styles() {
+    return css`
+      .menu__header {
+        display: flex;
+        align-items: center;
+      }
+      .menu__headerUser {
+        font-size: 0.8em;
+        margin-left: 1em;
+      }
+    `;
+  }
+
   render() {
     return html`
       <ion-menu side="start" menu-id="main" content-id="main">
         <ion-header>
           <ion-toolbar translucent>
-          <div style="display: flex; align-items: center">
-            <img src="src/assets/img/utalk_logo_v2.png" width="80px" />
-            <p style="font-size: 0.8em; margin-left: 1em;">${this.user}</p>
+          <div class="menu__header">
+            <img src=${
+              this.darkMode
+                ? "src/assets/img/utalk_logo_white.png"
+                : "src/assets/img/utalk_logo_v2.png"
+            } width="80px" />
+            <p class="menu__headerUser">${this.user}</p>
           </div>
           </ion-toolbar>
         </ion-header>
@@ -133,5 +158,28 @@ class AppMenu extends LitElement {
       ],
     });
     await alert.present();
+  }
+
+  // TODO Hack, da noch nicht herausgefunden wurde wie global die CSS-Eigenschaften von Shadow DOMs geändert werden können. Prüfen, ob eine bessere Methode gefunden werden kann
+  checkDarkMode() {
+    const _darkMode = document.body.classList.contains("dark");
+    this.darkMode = _darkMode;
+    console.log("Dark Mode in Menu is: ", _darkMode);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    //this.addEventListener("ionViewWillEnter", this.checkDarkMode);
+    let classWatcher = new ClassWatcherService(
+      document.body,
+      "dark",
+      this.checkDarkMode,
+      this.checkDarkMode
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    //this.removeEventListener("ionViewWillEnter", this.checkDarkMode);
   }
 }
