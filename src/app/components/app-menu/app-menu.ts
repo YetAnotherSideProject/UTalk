@@ -12,6 +12,8 @@ import {
 import { alertController } from "@ionic/core";
 import { AuthService } from "../../services/AuthService";
 import { ClassWatcherService } from "../../services/ClassWatcherService";
+import UTalkLogo_White from "../../../assets/img/utalk_logo_white.png";
+import UTalkLogo_V2 from "../../../assets/img/utalk_logo_v2.png";
 
 @customElement("app-menu")
 class AppMenu extends LitElement {
@@ -48,9 +50,7 @@ class AppMenu extends LitElement {
           <ion-toolbar translucent>
           <div class="menu__header">
             <img src=${
-              this.darkMode
-                ? "src/assets/img/utalk_logo_white.png"
-                : "src/assets/img/utalk_logo_v2.png"
+              this.darkMode ? UTalkLogo_White : UTalkLogo_V2
             } width="80px" />
             <p class="menu__headerUser">${this.user}</p>
           </div>
