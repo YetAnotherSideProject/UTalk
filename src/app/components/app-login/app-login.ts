@@ -9,6 +9,8 @@ import {
 import { Plugins } from "@capacitor/core";
 const { Network } = Plugins;
 import { AuthService } from "../../services/AuthService";
+import InterviewImage from "../../../assets/img/interview.jpg";
+import UTalkLogo_White from "../../../assets/img/utalk_logo_white.png";
 
 @customElement("app-login")
 class AppLogin extends LitElement {
@@ -88,13 +90,13 @@ class AppLogin extends LitElement {
         <div class="login">
           <img
             class="login__backgroundImage"
-            src="src/assets/img/interview.jpg"
+            src="${InterviewImage}"
             width="100%"
           />
 
           <img
             class="login__logo"
-            src="src/assets/img/utalk_logo_white.png"
+            src="${UTalkLogo_White}"
             alt="uTalk logo"
             width="100%"
           />

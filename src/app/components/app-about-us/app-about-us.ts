@@ -1,5 +1,7 @@
 import { LitElement, html, css, customElement } from "lit-element";
 
+import UTalkLogo_V3 from "../../../assets/img/utalk_logo_v3.png";
+
 @customElement("app-about-us")
 class AppAboutUs extends LitElement {
   constructor() {
@@ -44,11 +46,7 @@ class AppAboutUs extends LitElement {
       <app-toolbar></app-toolbar>
       <ion-content class="padding">
         <div class="about__header">
-          <img
-            src="src/assets/img/utalk_logo_v3.png"
-            alt="uTalk logo"
-            width="100%"
-          />
+          <img src="${UTalkLogo_V3}" alt="uTalk logo" width="100%" />
           <p class="about__headerCreated">Created by Mario und Martin</p>
         </div>
         <div class="about__version">

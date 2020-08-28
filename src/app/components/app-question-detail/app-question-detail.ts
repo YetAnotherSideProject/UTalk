@@ -4,6 +4,7 @@ import { alertController } from "@ionic/core";
 import { Category } from "../../models/Category";
 import { QuestionDao } from "../../dao/QuestionDao";
 import { Question } from "../../models/Question";
+import QuestionImage from "../../../assets/img/question.jpg";
 import { UserDataService } from "../../services/UserDataService";
 
 @customElement("app-question-detail")
@@ -26,7 +27,7 @@ class AppQuestionDetail extends LitElement {
       <ion-content class="padding">
         <ion-card>
           <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-          <img src="src/assets/img/question.jpg" width="100%" />
+          <img src="${QuestionImage}" width="100%" />
           <ion-card-header>
             <ion-card-subtitle>Question</ion-card-subtitle>
             <ion-card-title><u>Kategorie</u></ion-card-title>

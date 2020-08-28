@@ -12,7 +12,9 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { UserDataService } from "../services/UserDataService";
 import { Interview } from "../models/Interview";
+import InterviewImage from "../../assets/img/interview.jpg";
 import { Question } from "../models/Question";
+import QuestionImage from "../../assets/img/question.jpg";
 
 import "./app-login/app-login";
 import "./app-toolbar/app-toolbar";
@@ -91,8 +93,7 @@ class AppStart extends LitElement {
                       }}
                     >
                       <ion-card>
-                        <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-                        <img src="src/assets/img/interview.jpg" width="100%" />
+                        <img src="${InterviewImage}" width="100%" />
                         <ion-card-header>
                           <ion-card-subtitle>Interview</ion-card-subtitle>
                           <ion-card-title>${interview.title}</ion-card-title>
@@ -105,7 +106,7 @@ class AppStart extends LitElement {
             : html`
                 <ion-card>
                   <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-                  <img src="src/assets/img/interview.jpg" width="100%" />
+                  <img src="${InterviewImage}" width="100%" />
                   <ion-card-header>
                     <ion-card-subtitle>Interview</ion-card-subtitle>
                     <ion-item lines="none">
@@ -141,7 +142,7 @@ class AppStart extends LitElement {
                     >
                       <ion-card>
                         <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-                        <img src="src/assets/img/question.jpg" width="100%" />
+                        <img src="${QuestionImage}" width="100%" />
                         <ion-card-header>
                           <ion-card-subtitle>Question</ion-card-subtitle>
                           <ion-card-title>${question.text}</ion-card-title>
@@ -154,7 +155,7 @@ class AppStart extends LitElement {
             : html`
                 <ion-card>
                   <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-                  <img src="src/assets/img/question.jpg" width="100%" />
+                  <img src="${QuestionImage}" width="100%" />
                   <ion-card-header>
                     <ion-card-subtitle>Noch recht leer hier</ion-card-subtitle>
                     <ion-item lines="none">
