@@ -7,6 +7,8 @@ import { Question } from "../../models/Question";
 import QuestionImage from "../../../assets/img/question.jpg";
 import { UserDataService } from "../../services/UserDataService";
 
+import "./app-interviewpart-select-modal";
+
 @customElement("app-question-detail")
 class AppQuestionDetail extends LitElement {
   @property({ type: Boolean }) updatable = false;
@@ -48,6 +50,7 @@ class AppQuestionDetail extends LitElement {
           </ion-card-content>
         </ion-card>
       </ion-content>
+      <app-fab icon="copy-outline" @click=${this.onFabClick}></app-fab>
     `;
   }
 
@@ -68,6 +71,20 @@ class AppQuestionDetail extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.pop();
+  }
+
+  async onFabClick() {
+    // Create the modal with the defined component
+    const modalElement = document.createElement("ion-modal");
+    modalElement.component = "app-interviewpart-select-modal";
+    //TODO
+    modalElement.cssClass = "my-custom-class";
+    modalElement.componentProps = {
+      question: this.question.text,
+    };
+    // Present the modal
+    document.body.appendChild(modalElement);
+    modalElement.present();
   }
 
   saveQuestion() {
