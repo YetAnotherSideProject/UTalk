@@ -204,7 +204,7 @@ class AppStart extends LitElement {
 
   async showLoader() {
     const loading = await loadingController.create({
-      message: "Please wait...",
+      message: "Bitte warten...",
       duration: 2000,
     });
 
