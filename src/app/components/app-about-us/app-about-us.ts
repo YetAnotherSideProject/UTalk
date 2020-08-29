@@ -24,14 +24,13 @@ class AppAboutUs extends LitElement {
       }
       hr {
         width: 80%;
-        border: 2px solid black;
+        border: 2px solid var(--ion-color-primary-contrast);
         margin-bottom: 2em;
       }
       .about__content {
         width: 80%;
         margin: auto;
         margin-bottom: 2em;
-        text-align: justify;
       }
       .about__creditsHeader {
         text-align: center;

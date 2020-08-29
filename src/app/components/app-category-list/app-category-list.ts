@@ -65,6 +65,9 @@ class AppCategoryList extends LitElement {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
+      .categories__alert {
+        color: var(--ion-color-medium);
+      }
       ion-badge {
         --background: var(--ion-color-secondary);
         --color: var(--ion-color-secondary-contrast);
@@ -209,10 +212,11 @@ class AppCategoryList extends LitElement {
         {
           text: "Umbenennen",
           handler: () => this.onRenameClick(category),
+          cssClass: "categories__alert",
         },
         {
           text: "Als Part zu Interview hinzufügen",
-          role: "destructive",
+          //role: "destructive",
           handler: () => this.addCategoryToInterview(category),
         },
         { text: "Abbrechen", role: "cancel" },

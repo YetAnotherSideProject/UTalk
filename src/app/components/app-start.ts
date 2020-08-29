@@ -96,7 +96,7 @@ class AppStart extends LitElement {
                         <img src="${InterviewImage}" width="100%" />
                         <ion-card-header>
                           <ion-card-subtitle>Interview</ion-card-subtitle>
-                          <ion-card-title>${interview.title}</ion-card-title>
+                          <h2>${interview.title}</h2>
                         </ion-card-header>
                       </ion-card>
                     </ion-slide>
@@ -145,7 +145,7 @@ class AppStart extends LitElement {
                         <img src="${QuestionImage}" width="100%" />
                         <ion-card-header>
                           <ion-card-subtitle>Question</ion-card-subtitle>
-                          <ion-card-title>${question.text}</ion-card-title>
+                          <h2>${question.text}</h2>
                         </ion-card-header>
                       </ion-card>
                     </ion-slide>
