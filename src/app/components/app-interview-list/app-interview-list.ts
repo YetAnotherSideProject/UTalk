@@ -236,11 +236,28 @@ class AppInterviewList extends LitElement {
     items.closeSlidingItems();
   }
 
-  onSlideDelete(interview: Interview) {
-    InterviewService.deleteInterview(interview).then(() => {
-      this.retrieveInterviewObjects();
-      this.showToast("Interview gelöscht!");
+  async onSlideDelete(interview: Interview) {
+    const alert = await alertController.create({
+      header: "Interview löschen?",
+      message: "Diesen Interview wirklich final löschen?",
+      buttons: [
+        {
+          text: "Löschen",
+          handler: () => {
+            InterviewService.deleteInterview(interview).then(() => {
+              this.retrieveInterviewObjects();
+              this.showToast("Interview gelöscht!");
+            });
+          },
+        },
+        {
+          text: "Abbrechen",
+          role: "cancel",
+        },
+      ],
     });
+    await alert.present();
+
     // Important to entry the shadow root to get the reference on ion-list
     let items: HTMLIonListElement = this.shadowRoot?.querySelector(
       "ion-list"
