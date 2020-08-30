@@ -8,7 +8,7 @@
     "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "ionic:build": "webpack --config webpack.prod.js",
-    "sync_natives": "ionic capacitor copy android && ionic capacitor copy ios"
+    "prepare-natives": "ionic capacitor copy android && ionic capacitor copy ios"
   },
   "dependencies": {
     "@capacitor/android": "2.2.1",
