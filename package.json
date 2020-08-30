@@ -8,11 +8,12 @@
     "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "ionic:build": "webpack --config webpack.prod.js",
-    "sync_natives": "ionic capacitor copy android"
+    "sync_natives": "ionic capacitor copy android && ionic capacitor copy ios"
   },
   "dependencies": {
     "@capacitor/android": "2.2.1",
     "@capacitor/core": "2.2.1",
+    "@capacitor/ios": "2.2.1",
     "@ionic/core": "5.2.3",
     "firebase": "7.16.1",
     "hammerjs": "2.0.8",
