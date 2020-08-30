@@ -3,3 +3,10 @@ export interface Question {
   text: string;
   categoryId?: string;
 }
+
+export interface Category {
+  firebaseId?: string;
+  name: string;
+  status: "Favorite" | "Neutral";
+  questions?: Question[];
+}

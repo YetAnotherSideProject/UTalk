@@ -4,7 +4,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
-import { Category } from "../models/Category";
+import { Category } from "../models/Question";
 
 export class CategoryDao {
   private static dbUsers = firebase.firestore().collection("users");

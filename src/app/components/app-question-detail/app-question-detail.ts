@@ -1,9 +1,8 @@
 import { LitElement, html, customElement, property } from "lit-element";
 import { alertController } from "@ionic/core";
 
-import { Category } from "../../models/Category";
 import { QuestionDao } from "../../dao/QuestionDao";
-import { Question } from "../../models/Question";
+import { Question, Category } from "../../models/Question";
 import QuestionImage from "../../../assets/img/question.jpg";
 import { UserDataService } from "../../services/UserDataService";
 

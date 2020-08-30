@@ -13,7 +13,7 @@ import {
 } from "@ionic/core";
 import Hammer from "hammerjs";
 
-import { Category } from "../../models/Category";
+import { Category } from "../../models/Question";
 import { CategoryDao } from "../../dao/CategoryDao";
 import { QuestionDao } from "../../dao/QuestionDao";
 

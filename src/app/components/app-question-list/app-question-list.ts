@@ -9,8 +9,7 @@ import {
 import { actionSheetController } from "@ionic/core";
 import Hammer from "hammerjs";
 
-import { Category } from "../../models/Category";
-import { Question } from "../../models/Question";
+import { Question, Category } from "../../models/Question";
 import { QuestionDao } from "../../dao/QuestionDao";
 
 @customElement("app-question-list")
