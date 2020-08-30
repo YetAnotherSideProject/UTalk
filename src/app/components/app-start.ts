@@ -133,11 +133,7 @@ class AppStart extends LitElement {
                     <ion-slide
                       button
                       @click=${() => {
-                        //TODO
-                        this.onQuestionClick(
-                          question.categoryId,
-                          question.firebaseId
-                        );
+                        this.onQuestionClick(question);
                       }}
                     >
                       <ion-card>
@@ -184,18 +180,11 @@ class AppStart extends LitElement {
     nav.push("app-interview-detail", { interview: interview });
   }
 
-  onQuestionClick(
-    categoryId: string | undefined,
-    questionId: string | undefined
-  ) {
-    //TODO
-    console.log(
-      `Clicked on last Question: ${questionId} of Category ${categoryId}`
-    );
-    // let nav: HTMLIonNavElement = document.querySelector(
-    //   "ion-nav"
-    // ) as HTMLIonNavElement;
-    // nav.push("app-interview-detail", { interviewId: interviewId });
+  onQuestionClick(question: Question) {
+    let nav: HTMLIonNavElement = document.querySelector(
+      "ion-nav"
+    ) as HTMLIonNavElement;
+    nav.push("app-question-detail", { question: question });
   }
 
   async showLoader() {
