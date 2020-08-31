@@ -217,6 +217,10 @@ class AppInterviewDetail extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
 
+    if (this.interview.status === "Draft") {
+      this.interview.status = "Active";
+      InterviewService.updateInterview(this.interview);
+    }
     nav.push("app-interview-run", { interview: this.interview });
   }
 
