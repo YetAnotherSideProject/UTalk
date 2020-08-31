@@ -50,7 +50,8 @@ class AppAboutUs extends LitElement {
         </div>
         <div class="about__version">
           <p>Version 1.0</p>
-          <p>Last update: 21.08.2020</p>
+          <!-- TODO Build Timestamp automatisieren -->
+          <p>09.09.2020</p>
           <hr />
         </div>
         <div class="about__content">
