@@ -24,6 +24,10 @@ class AppInterviewDetail extends LitElement {
         --ion-color-primary: var(--ion-color-success);
         --ion-color-primary-contrast: var(--ion-color-success-contrast);
       }
+      .interviewDetail__cancelActive {
+        --ion-color-primary: var(--ion-color-danger);
+        --ion-color-primary-contrast: var(--ion-color-danger-contrast);
+      }
       .interviewDetail__optionDelete {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
@@ -45,34 +49,45 @@ class AppInterviewDetail extends LitElement {
           <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
           <img src="${InterviewImage}" width="100%" />
           <ion-card-header>
-            <ion-card-subtitle>Interview</ion-card-subtitle>
-            <ion-item lines="none">
-              <ion-input
-                class="interviewDetail__title"
-                slot="start"
-                type="text"
-                readonly=${this.interview.status !== "Draft"}
-                value=${this.interview.title}
-                @ionBlur=${({ target }: { target: HTMLIonInputElement }) => {
-                  if (target.value !== ``) {
-                    this.interview.title = target.value as string;
-                  }
-                }}
-              ></ion-input>
-              ${this.interview.status !== "Archived"
-                ? html`
-                    <ion-button
-                      slot="end"
-                      size="large"
-                      class="interviewDetail__runButton"
-                      @click=${() => this.onRunInterview()}
-                      ><ion-icon name="play-outline"></ion-icon
-                    ></ion-button>
-                  `
-                : html``}
-            </ion-item>
+            <ion-card-subtitle
+              >Interview mit Status ${this.interview.status}</ion-card-subtitle
+            >
           </ion-card-header>
           <ion-card-content>
+            <ion-input
+              class="interviewDetail__title"
+              slot="start"
+              type="text"
+              readonly=${this.interview.status !== "Draft"}
+              value=${this.interview.title}
+              @ionBlur=${({ target }: { target: HTMLIonInputElement }) => {
+                if (target.value !== ``) {
+                  this.interview.title = target.value as string;
+                }
+              }}
+            ></ion-input>
+            ${this.interview.status !== "Archived"
+              ? html`
+                  <ion-item lines="none">
+                    <ion-button
+                      slot="end"
+                      size="medium"
+                      class="interviewDetail__runButton"
+                      @click=${() => this.onRunInterview()}
+                      ><ion-icon name="play-outline"></ion-icon>
+                    </ion-button>
+                    ${this.interview.status === "Active"
+                      ? html`<ion-button
+                          slot="start"
+                          size="medium"
+                          class="interviewDetail__cancelActive"
+                          @click=${() => this.onCancelActiveMode()}
+                          ><ion-icon name="backspace-outline"></ion-icon
+                        ></ion-button>`
+                      : html``}
+                  </ion-item>
+                `
+              : html``}
             <ion-textarea
               readonly=${this.interview.status !== "Draft"}
               auto-grow="true"
@@ -222,6 +237,34 @@ class AppInterviewDetail extends LitElement {
       InterviewService.updateInterview(this.interview);
     }
     nav.push("app-interview-run", { interview: this.interview });
+  }
+
+  async onCancelActiveMode() {
+    const alert = await alertController.create({
+      header: "Zu Entwurf zurückkehren?",
+      message:
+        "Das Interview wirklich in den Entwurfsmodus zurückstellen? Dabei gehen alle bisherigen Antowrten verloren",
+      buttons: [
+        {
+          text: "Zum Entwurf",
+          handler: () => {
+            this.interview.interviewParts.forEach((interviewpart) => {
+              interviewpart.interviewQuestions.forEach((question) => {
+                delete question.answer;
+              });
+            });
+            this.interview.status = "Draft";
+            InterviewService.updateInterview(this.interview);
+            this.requestUpdate();
+          },
+        },
+        {
+          text: "Abbrechen",
+          role: "cancel",
+        },
+      ],
+    });
+    await alert.present();
   }
 
   handleReorder(detail: ItemReorderEventDetail, interviewpart: InterviewPart) {
