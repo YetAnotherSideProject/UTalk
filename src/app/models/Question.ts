@@ -1,7 +1,7 @@
 export interface Question {
-  firebaseId?: string;
+  firebaseId: string;
   text: string;
-  categoryId?: string;
+  categoryId: string;
 }
 
 export interface Category {

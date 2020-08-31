@@ -154,14 +154,7 @@ class AppStart extends LitElement {
                   <img src="${QuestionImage}" width="100%" />
                   <ion-card-header>
                     <ion-card-subtitle>Noch recht leer hier</ion-card-subtitle>
-                    <ion-item lines="none">
-                      <ion-button>
-                        <ion-icon
-                          slot="start"
-                          name="add-circle-outline"
-                        ></ion-icon>
-                        <ion-label slot="end"> Neue Frage anlegen </ion-label>
-                      </ion-button>
+                    <ion-text>Noch keine Kategorien oder Fragen angelegt</ion-text>
                     </ion-item>
                   </ion-card-header>
                 </ion-card>

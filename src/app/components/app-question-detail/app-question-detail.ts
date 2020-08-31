@@ -10,7 +10,6 @@ import "./app-interviewpart-select-modal";
 
 @customElement("app-question-detail")
 class AppQuestionDetail extends LitElement {
-  @property({ type: Boolean }) updatable = false;
   @property({ type: Object }) category = {} as Category;
   @property({ type: Object }) question = {} as Question;
 
@@ -35,7 +34,6 @@ class AppQuestionDetail extends LitElement {
             <ion-input
               disabled
               readonly
-              placeholder="Kategorie eingeben ..."
               value=${this.category.name}
             ></ion-input>
           </ion-card-header>
@@ -45,6 +43,11 @@ class AppQuestionDetail extends LitElement {
               placeholder="Deine Frage ..."
               value=${this.question.text ? this.question.text : ""}
               auto-grow="true"
+              @ionBlur=${({ target }: { target: HTMLIonTextareaElement }) => {
+                if (target.value !== ``) {
+                  this.question.text = target.value as string;
+                }
+              }}
             ></ion-textarea>
           </ion-card-content>
         </ion-card>
@@ -55,14 +58,7 @@ class AppQuestionDetail extends LitElement {
 
   // Aus irgendeinem Grund funktioniert der BackButton nicht. Scheinbar wird die pop()-Methode nicht aufgerufen, sondern auf die angegebene defaultHref geleitet. Deshalb dieser kleine Workaround (s. app-toolbar customBackButton)
   onClickBackButton() {
-    const text = this.shadowRoot?.querySelector("ion-textarea")?.value || "";
-
-    // Prove if text is not empty before saving
-    if (text.length > 0) {
-      this.navigateBack();
-    } else {
-      this.showEmptyQuestionAlert();
-    }
+    this.navigateBack();
   }
 
   navigateBack() {
@@ -87,15 +83,17 @@ class AppQuestionDetail extends LitElement {
   }
 
   saveQuestion() {
-    const text = this.shadowRoot?.querySelector("ion-textarea")?.value || "";
-    const question: Question = { text: text };
+    // Prove if text is not empty before saving
+    if (this.question.text.length <= 0) {
+      this.showToast("Frage ohne Texte wurde nicht gespeichert");
+      return;
+    }
 
-    if (this.updatable) {
-      QuestionDao.updateQuestion(
-        this.category.firebaseId ? this.category.firebaseId : "",
-        this.question.firebaseId ? this.question.firebaseId : "",
-        question
-      )
+    if (
+      this.question.firebaseId == "" &&
+      this.category.firebaseId !== undefined
+    ) {
+      QuestionDao.addQuestion(this.question)
         .then(() => {
           this.showToast("Frage wurde gespeichert");
         })
@@ -105,8 +103,12 @@ class AppQuestionDetail extends LitElement {
           );
         });
     } else {
-      QuestionDao.addQuestion(this.category.firebaseId, question)
+      QuestionDao.updateQuestion(this.question)
         .then(() => {
+          UserDataService.updateLastQuestion(
+            this.category.firebaseId || "",
+            this.question.firebaseId
+          );
           this.showToast("Frage wurde gespeichert");
         })
         .catch((error) => {
@@ -127,40 +129,14 @@ class AppQuestionDetail extends LitElement {
     return toast.present();
   }
 
-  async showEmptyQuestionAlert() {
-    const alert = await alertController.create({
-      header: "Möchtest du keine Frage eingeben?",
-      buttons: [
-        {
-          text: "Abbrechen ohne Frage einzugeben",
-          handler: () => this.navigateBack(),
-        },
-        {
-          text: "Doch!",
-          role: "cancel",
-        },
-      ],
-    });
-
-    await alert.present();
-  }
-
   connectedCallback() {
     super.connectedCallback();
-
     // Add Ionic Lifeccycle methods
     this.addEventListener("ionViewWillLeave", this.saveQuestion);
-
-    //TODO ändern
-    UserDataService.updateLastQuestion(
-      this.category.firebaseId || "",
-      this.question.firebaseId || ""
-    );
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-
     // Remove Ionic Lifeccycle methods
     this.removeEventListener("ionViewWillLeave", this.saveQuestion);
   }

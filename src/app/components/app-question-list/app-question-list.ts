@@ -81,9 +81,12 @@ class AppQuestionList extends LitElement {
     ) as HTMLIonNavElement;
 
     nav.push("app-question-detail", {
-      updatable: false,
       category: this.category,
-      question: {},
+      question: {
+        firebaseId: "",
+        categoryId: this.category.firebaseId,
+        text: "",
+      },
     });
   }
 
@@ -132,7 +135,7 @@ class AppQuestionList extends LitElement {
     this.deleteQuestion(questionId);
   }
 
-  deleteQuestion(questionId: string | undefined) {
+  deleteQuestion(questionId: string) {
     QuestionDao.deleteQuestion(this.category.firebaseId, questionId)
       .then(() => {
         this.showToast("Frage wurde gelöscht");
@@ -165,7 +168,6 @@ class AppQuestionList extends LitElement {
   destroyHammerManager() {
     this.mcArray.forEach((manager) => manager.destroy());
     this.mcArray = [];
-    console.log("MC Array after destroying: ", this.mcArray);
   }
 
   updated() {
@@ -182,14 +184,12 @@ class AppQuestionList extends LitElement {
         const question = ev.target
           .closest("ion-item")
           ?.querySelector("ion-card-content")?.innerText;
-        console.log("Question on Press: ", question);
         this.onItemPress(question ? question : "");
       });
 
       // Add to mcArray
       this.mcArray.push(mc);
     });
-    console.log("MC Array after filling: ", this.mcArray);
   }
 
   connectedCallback() {

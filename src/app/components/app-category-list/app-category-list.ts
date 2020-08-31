@@ -424,7 +424,6 @@ class AppCategoryList extends LitElement {
   destroyHammerManager() {
     this.mcArray.forEach((manager) => manager.destroy());
     this.mcArray = [];
-    console.log("MC Array after destroying: ", this.mcArray);
   }
 
   sortAlphabetically(a: Category, b: Category) {
@@ -451,7 +450,6 @@ class AppCategoryList extends LitElement {
       // Add to mcArray
       this.mcArray.push(mc);
     });
-    console.log("MC Array after filling: ", this.mcArray);
   }
 
   // TODO Hack, da noch nicht herausgefunden wurde wie global die CSS-Eigenschaften von Shadow DOMs geändert werden können. Prüfen, ob eine bessere Methode gefunden werden kann

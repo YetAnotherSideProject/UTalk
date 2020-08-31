@@ -5,34 +5,33 @@ import "firebase/firestore";
 import "firebase/auth";
 
 import { Question } from "../models/Question";
+import { UserDataService } from "../services/UserDataService";
 
 export class QuestionDao {
   private static dbUsers = firebase.firestore().collection("users");
 
-  static addQuestion(
-    questionCategoryId: string | undefined,
-    question: Question
-  ) {
-    return QuestionDao.dbUsers
+  static addQuestion(question: Question) {
+    let doc = QuestionDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")
-      .doc(questionCategoryId)
+      .doc(question.categoryId)
       .collection("questions")
-      .doc()
-      .set(question);
+      .doc();
+    question.firebaseId = doc.id;
+    UserDataService.updateLastQuestion(
+      question.categoryId,
+      question.firebaseId
+    );
+    return doc.set(question);
   }
 
-  static updateQuestion(
-    questionCategoryId: string,
-    questionId: string,
-    question: Question
-  ) {
+  static updateQuestion(question: Question) {
     return QuestionDao.dbUsers
       .doc(firebase.auth().currentUser?.uid)
       .collection("questioncategories")
-      .doc(questionCategoryId)
+      .doc(question.categoryId)
       .collection("questions")
-      .doc(questionId)
+      .doc(question.firebaseId)
       .update(question);
   }
 
