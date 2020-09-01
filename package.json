@@ -6,6 +6,7 @@
   "main": "./src/main.ts",
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",
+    "test": "tsc && karma start",
     "build": "webpack --config webpack.prod.js",
     "ionic:build": "webpack --config webpack.prod.js",
     "prepare-natives": "ionic capacitor copy android && ionic capacitor copy ios"
@@ -22,11 +23,18 @@
   "devDependencies": {
     "@capacitor/cli": "2.2.1",
     "@types/hammerjs": "2.0.36",
+    "@types/jasmine": "3.5.14",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "6.0.3",
     "css-loader": "3.6.0",
     "file-loader": "6.0.0",
     "html-webpack-plugin": "4.3.0",
+    "jasmine-core": "3.6.0",
+    "karma": "5.2.0",
+    "karma-chrome-launcher": "3.1.0",
+    "karma-jasmine": "4.0.1",
+    "karma-jasmine-html-reporter": "1.5.4",
+    "karma-webpack": "4.0.2",
     "mini-css-extract-plugin": "0.9.0",
     "node-sass": "4.14.1",
     "sass-loader": "9.0.2",
