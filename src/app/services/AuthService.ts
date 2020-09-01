@@ -2,7 +2,6 @@
 import firebase from "firebase/app";
 // Used firebase products
 import "firebase/auth";
-import { UserDataService } from "./UserDataService";
 import { UserDataDao } from "../dao/UserDataDao";
 
 export class AuthService {

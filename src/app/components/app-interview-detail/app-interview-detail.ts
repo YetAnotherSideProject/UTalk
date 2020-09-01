@@ -243,7 +243,7 @@ class AppInterviewDetail extends LitElement {
     const alert = await alertController.create({
       header: "Zu Entwurf zurückkehren?",
       message:
-        "Das Interview wirklich in den Entwurfsmodus zurückstellen? Dabei gehen alle bisherigen Antowrten verloren",
+        "Das Interview wirklich in den Entwurfsmodus zurückstellen? Dabei gehen alle bisherigen Antworten verloren",
       buttons: [
         {
           text: "Zum Entwurf",
