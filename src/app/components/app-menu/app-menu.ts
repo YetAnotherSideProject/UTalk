@@ -6,10 +6,12 @@ import {
   LitElement,
   html,
   css,
+  query,
   customElement,
   internalProperty,
 } from "lit-element";
 import { alertController } from "@ionic/core";
+import { menuController } from "@ionic/core";
 import { AuthService } from "../../services/AuthService";
 import { ClassWatcherService } from "../../services/ClassWatcherService";
 import UTalkLogo_White from "../../../assets/img/utalk_logo_white.png";
@@ -20,6 +22,7 @@ class AppMenu extends LitElement {
   @internalProperty()
   protected user: string = "";
   @internalProperty() protected darkMode: boolean = false;
+  @query("ion-menu") menu!: HTMLIonMenuElement;
 
   constructor() {
     super();
@@ -45,7 +48,7 @@ class AppMenu extends LitElement {
 
   render() {
     return html`
-      <ion-menu side="start" menu-id="main" content-id="main">
+      <ion-menu content-id="main">
         <ion-header>
           <ion-toolbar translucent>
             <div class="menu__header">
@@ -59,52 +62,50 @@ class AppMenu extends LitElement {
         </ion-header>
         <ion-content>
           <ion-list>
-            <ion-menu-toggle>
-              <ion-item button @click=${this.openStart}>
-                <ion-icon name="home" slot="start" color="secondary"></ion-icon>
-                <ion-label>Start</ion-label>
-              </ion-item>
-              <ion-item button @click=${this.openCategories}>
-                <ion-icon
-                  name="help-outline"
-                  slot="start"
-                  color="secondary"
-                ></ion-icon>
-                <ion-label>Fragen</ion-label>
-              </ion-item>
-              <ion-item button @click=${this.openInterviews}>
-                <ion-icon
-                  name="chatbubbles"
-                  slot="start"
-                  color="secondary"
-                ></ion-icon>
-                <ion-label>Interviews</ion-label>
-              </ion-item>
-              <ion-item button @click=${this.openSettings}>
-                <ion-icon
-                  name="settings"
-                  slot="start"
-                  color="secondary"
-                ></ion-icon>
-                <ion-label>Einstellungen</ion-label>
-              </ion-item>
-              <ion-item button @click=${this.logout}>
-                <ion-icon
-                  name="log-out-outline"
-                  slot="start"
-                  color="secondary"
-                ></ion-icon>
-                <ion-label>Logout</ion-label>
-              </ion-item>
-              <ion-item button @click=${this.openAboutUs}>
-                <ion-icon
-                  name="information-circle"
-                  slot="start"
-                  color="secondary"
-                ></ion-icon>
-                <ion-label>Über uns</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
+            <ion-item button @click=${this.openStart}>
+              <ion-icon name="home" slot="start" color="secondary"></ion-icon>
+              <ion-label>Start</ion-label>
+            </ion-item>
+            <ion-item button @click=${this.openCategories}>
+              <ion-icon
+                name="help-outline"
+                slot="start"
+                color="secondary"
+              ></ion-icon>
+              <ion-label>Fragen</ion-label>
+            </ion-item>
+            <ion-item button @click=${this.openInterviews}>
+              <ion-icon
+                name="chatbubbles"
+                slot="start"
+                color="secondary"
+              ></ion-icon>
+              <ion-label>Interviews</ion-label>
+            </ion-item>
+            <ion-item button @click=${this.openSettings}>
+              <ion-icon
+                name="settings"
+                slot="start"
+                color="secondary"
+              ></ion-icon>
+              <ion-label>Einstellungen</ion-label>
+            </ion-item>
+            <ion-item button @click=${this.logout}>
+              <ion-icon
+                name="log-out-outline"
+                slot="start"
+                color="secondary"
+              ></ion-icon>
+              <ion-label>Logout</ion-label>
+            </ion-item>
+            <ion-item button @click=${this.openAboutUs}>
+              <ion-icon
+                name="information-circle"
+                slot="start"
+                color="secondary"
+              ></ion-icon>
+              <ion-label>Über uns</ion-label>
+            </ion-item>
           </ion-list>
         </ion-content>
       </ion-menu>
@@ -116,6 +117,7 @@ class AppMenu extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.push("app-start");
+    this.closeMenu();
   }
 
   openCategories() {
@@ -123,6 +125,7 @@ class AppMenu extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.push("app-category-list");
+    this.closeMenu();
   }
 
   openInterviews() {
@@ -130,6 +133,7 @@ class AppMenu extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.push("app-interview-list");
+    this.closeMenu();
   }
 
   openSettings() {
@@ -137,6 +141,7 @@ class AppMenu extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.push("app-settings");
+    this.closeMenu();
   }
 
   openAboutUs() {
@@ -144,6 +149,13 @@ class AppMenu extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.push("app-about-us");
+    this.closeMenu();
+  }
+
+  closeMenu() {
+    if (window.innerWidth <= 768) {
+      this.menu.close();
+    }
   }
 
   async logout() {
@@ -177,9 +189,20 @@ class AppMenu extends LitElement {
     console.log("Dark Mode in Menu is: ", _darkMode);
   }
 
+  checkDisplayWidth = () => {
+    if (window.innerWidth > 768) {
+      this.menu.open();
+    } else {
+      this.menu.close();
+    }
+  };
+
   connectedCallback() {
     super.connectedCallback();
     //this.addEventListener("ionViewWillEnter", this.checkDarkMode);
+
+    window.onresize = this.checkDisplayWidth;
+
     let classWatcher = new ClassWatcherService(
       document.body,
       "dark",
