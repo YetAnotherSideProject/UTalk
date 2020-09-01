@@ -57,11 +57,11 @@ class AppCategoryList extends LitElement {
       .categories__status--Neutral {
         fill: var(--ion-color-light);
       }
-      .categories__optionStart {
+      .categories__optionRename {
         --ion-color-primary: var(--ion-color-medium);
         --ion-color-primary-contrast: var(--ion-color-medium-contrast);
       }
-      .categories__optionEnd {
+      .categories__optionDelete {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
@@ -116,7 +116,7 @@ class AppCategoryList extends LitElement {
             return html` <ion-item-sliding>
               <ion-item-options side="start">
                 <ion-item-option
-                  class="categories__optionStart"
+                  class="categories__optionRename"
                   @click=${() => {
                     this.onRenameClick(category);
                   }}
@@ -158,7 +158,7 @@ class AppCategoryList extends LitElement {
               </ion-item>
               <ion-item-options side="end">
                 <ion-item-option
-                  class="categories__optionEnd"
+                  class="categories__optionDelete"
                   @click=${() =>
                     this.onClickDelete(
                       category.firebaseId ? category.firebaseId : ""

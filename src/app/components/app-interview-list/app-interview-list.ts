@@ -50,8 +50,8 @@ class AppInterviewList extends LitElement {
         --ion-color-primary-contrast: var(--ion-color-medium-contrast);
       }
       .interviews__optionRename {
-        --ion-color-primary: var(--ion-color-warning);
-        --ion-color-primary-contrast: var(--ion-color-warning-contrast);
+        --ion-color-primary: var(--ion-color-medium);
+        --ion-color-primary-contrast: var(--ion-color-medium-contrast);
       }
       .interviews__optionDelete {
         --ion-color-primary: var(--ion-color-danger);
