@@ -25,6 +25,7 @@ class AppCategoryList extends LitElement {
   @internalProperty() statusFilter: string = "All";
   @internalProperty() searchQuery: string = "";
   @internalProperty() darkMode: boolean = false;
+  @internalProperty() isFooterActive: boolean = false;
   mcArray: Array<HammerManager>;
 
   constructor() {
@@ -72,6 +73,18 @@ class AppCategoryList extends LitElement {
         --background: var(--ion-color-secondary);
         --color: var(--ion-color-secondary-contrast);
       }
+      .categories__footer {
+        position: fixed;
+        bottom: 0px;
+        z-index: 1000;
+      }
+      .categories__footerToolbar {
+        --background: var(--ion-color-medium);
+        padding: 1em;
+      }
+      .categories__footerText {
+        font-size: 1.5em;
+      }
     `;
   }
 
@@ -87,7 +100,10 @@ class AppCategoryList extends LitElement {
       .sort(this.sortAlphabetically);
 
     return html`
-      <app-toolbar></app-toolbar>
+      <app-toolbar
+        infoButton="true"
+        .onInfoClick=${() => this.toggleFooter()}
+      ></app-toolbar>
       <ion-searchbar
         @ionChange=${(event: any) =>
           (this.searchQuery = event.target.value.toLowerCase())}
@@ -169,9 +185,25 @@ class AppCategoryList extends LitElement {
             </ion-item-sliding>`;
           })}
         </ion-list>
+        ${this.isFooterActive
+          ? html` <ion-footer class="categories__footer">
+              <ion-toolbar class="categories__footerToolbar">
+                <h1 class="categories__footerText">Info</h1>
+                <p>
+                  Gib hier mit Hilfe des Floating Action Buttons unten rechts
+                  deine gewünschten Kategorien ein. Für weitere Aktionen drücke
+                  lange auf eine Kategorie oder swipe nach links oder rechts.
+                </p>
+              </ion-toolbar>
+            </ion-footer>`
+          : html``}
       </ion-content>
       <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
     `;
+  }
+
+  toggleFooter() {
+    this.isFooterActive = !this.isFooterActive;
   }
 
   onItemClick(categoryId: string) {
