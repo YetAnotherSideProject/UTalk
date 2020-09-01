@@ -57,8 +57,7 @@ export class AppRoot extends LitElement {
           ></ion-route>
           <ion-route url="/settings" component="app-settings"></ion-route>
         </ion-router>
-        <app-menu></app-menu>
-        <ion-nav id="main"></ion-nav>
+        <app-menu />
       </ion-app>
     `;
   }
