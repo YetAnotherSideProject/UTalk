@@ -10,8 +10,8 @@ class AppToolbar extends LitElement {
   @property({ type: Function }) customClickAction = new Function();
 
   // Edit button properties
-  @property({ type: Boolean }) editButton = false;
-  @property({ type: Function }) onEditClick = new Function();
+  @property({ type: Boolean }) infoButton = false;
+  @property({ type: Function }) onInfoClick = new Function();
 
   constructor() {
     super();
@@ -34,7 +34,7 @@ class AppToolbar extends LitElement {
             ${this.setBackButton()} ${this.setCustomBackButton()}
           </ion-buttons>
           <ion-title>uTalk</ion-title>
-          <ion-buttons slot="end"> ${this.setEditButton()} </ion-buttons>
+          <ion-buttons slot="end"> ${this.setInfoButton()} </ion-buttons>
         </ion-toolbar>
       </ion-header>
     `;
@@ -65,11 +65,13 @@ class AppToolbar extends LitElement {
     }
   }
 
-  setEditButton() {
-    if (this.editButton) {
-      return html`<ion-button @click=${this.onEditClick}>
-        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+  setInfoButton() {
+    if (this.infoButton) {
+      return html`<ion-button @click=${this.onInfoClick}>
+        <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
       </ion-button>`;
+    } else {
+      return;
     }
   }
 }
