@@ -78,11 +78,11 @@ class AppInterviewDetail extends LitElement {
                     </ion-button>
                     ${this.interview.status === "Active"
                       ? html`<ion-button
-                          slot="start"
+                          slot="end"
                           size="medium"
                           class="interviewDetail__cancelActive"
                           @click=${() => this.onCancelActiveMode()}
-                          ><ion-icon name="backspace-outline"></ion-icon
+                          ><ion-icon name="arrow-undo-outline"></ion-icon
                         ></ion-button>`
                       : html``}
                   </ion-item>
