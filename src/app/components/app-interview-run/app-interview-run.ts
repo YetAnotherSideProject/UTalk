@@ -199,6 +199,13 @@ class AppRunInterview extends LitElement {
   }
 
   onClickNext() {
+    if (this.currentQuestionTotal + 1 === this.maxQuestions) {
+      console.log("Interview beenden?");
+      this.showAlert(
+        "Willst Du das Interview abschließen?",
+        this.stopInterview
+      );
+    }
     const swiper = this.shadowRoot?.querySelector(
       "ion-slides"
     ) as HTMLIonSlidesElement;
