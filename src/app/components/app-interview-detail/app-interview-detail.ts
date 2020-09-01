@@ -145,7 +145,8 @@ class AppInterviewDetail extends LitElement {
                       return html`
                         <ion-item-sliding>
                           <ion-item>
-                            <ion-input
+                            <ion-textarea
+                              auto-grow="true"
                               value=${interviewQuestion.question}
                               @ionBlur=${({
                                 target,
@@ -157,7 +158,7 @@ class AppInterviewDetail extends LitElement {
                                 }
                               }}
                             >
-                            </ion-input>
+                            </ion-textarea>
                             <ion-reorder slot="end"></ion-reorder>
                           </ion-item>
                           <ion-item-options side="end">
@@ -198,7 +199,7 @@ class AppInterviewDetail extends LitElement {
                     return html`
                       ${interviewQuestion.answer !== undefined
                         ? html`<ion-item lines="none">
-                              <ion-label>
+                              <ion-label class="ion-text-wrap">
                                 ${interviewQuestion.question}
                               </ion-label>
                             </ion-item>
