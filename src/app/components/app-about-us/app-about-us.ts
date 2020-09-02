@@ -12,6 +12,12 @@ class AppAboutUs extends LitElement {
     return css`
       .about__header {
         background-color: var(--ion-color-primary);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .about__header > img {
+        max-width: 400px;
       }
       .about__headerCreated {
         margin: 0px 0px 40px 0px;
