@@ -48,6 +48,23 @@ export class InterviewDao {
     return interviews;
   }
 
+  static async getInterviewById(
+    interviewId: string
+  ): Promise<Interview | null> {
+    let interview: Interview | null = null;
+    await InterviewDao.usersDb
+      .doc(firebase.auth().currentUser?.uid)
+      .collection("interviews")
+      .where(firebase.firestore.FieldPath.documentId(), "==", interviewId)
+      .get()
+      .then((querySnap) => {
+        if (!querySnap.empty) {
+          interview = querySnap.docs[0].data() as Interview;
+        }
+      });
+    return interview;
+  }
+
   static async getInterviewsWhere(
     field: firebase.firestore.FieldPath | string,
     operator: firebase.firestore.WhereFilterOp,

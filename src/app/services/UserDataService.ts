@@ -107,4 +107,29 @@ export class UserDataService {
 
     UserDataDao.updateUserData(userData);
   }
+
+  static async getLastActiveInterview() {
+    let userData = await UserDataDao.getUserData();
+    if (userData.lastActiveInterview === undefined) {
+      return null;
+    }
+
+    let interview = await InterviewDao.getInterviewById(
+      userData.lastActiveInterview
+    );
+    if (interview?.status !== "Active") {
+      return null;
+    }
+    return interview;
+  }
+
+  static async updateLastActiveInterview(interviewId: string | undefined) {
+    let userData = await UserDataDao.getUserData();
+    if (userData.lastActiveInterview === interviewId) {
+      return;
+    } else {
+      userData.lastActiveInterview = interviewId;
+    }
+    await UserDataDao.updateUserData(userData);
+  }
 }

@@ -11,6 +11,7 @@ import { Interview } from "../../models/Interview";
 import { InterviewDao } from "../../dao/InterviewDao";
 import { alertController } from "@ionic/core";
 import { InterviewService } from "../../services/InterviewService";
+import { UserDataService } from "../../services/UserDataService";
 
 @customElement("app-interview-run")
 class AppRunInterview extends LitElement {
@@ -80,7 +81,7 @@ class AppRunInterview extends LitElement {
 
     console.log("Progress: ", progress);
     // TODO
-    // Responsiv machen
+    // Responsiver machen
     return html`
       <app-toolbar
         customBackButton="true"
@@ -381,6 +382,13 @@ class AppRunInterview extends LitElement {
     this.addEventListener("ionViewWillEnter", this.loadInitialData);
     this.addEventListener("ionViewWillEnter", this.checkDarkMode);
     this.addEventListener("ionViewWillLeave", this.saveInterview);
+    this.addEventListener("ionViewWillLeave", () => {
+      if (this.interview.status === "Archived") {
+        UserDataService.updateLastActiveInterview(undefined);
+      } else {
+        UserDataService.updateLastActiveInterview(this.interview.firebaseId);
+      }
+    });
   }
 
   disconnectedCallback() {
@@ -388,5 +396,12 @@ class AppRunInterview extends LitElement {
     this.removeEventListener("ionViewWillEnter", this.loadInitialData);
     this.removeEventListener("ionViewWillEnter", this.checkDarkMode);
     this.removeEventListener("ionViewWillLeave", this.saveInterview);
+    this.removeEventListener("ionViewWillLeave", () => {
+      if (this.interview.status === "Archived") {
+        UserDataService.updateLastActiveInterview(undefined);
+      } else {
+        UserDataService.updateLastActiveInterview(this.interview.firebaseId);
+      }
+    });
   }
 }

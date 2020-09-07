@@ -1,3 +1,7 @@
+// Firebase App (the core Firebase SDK) is always required
+import firebase from "firebase/app";
+// Used firebase products
+import "firebase/auth";
 import {
   LitElement,
   html,
@@ -5,23 +9,18 @@ import {
   customElement,
   internalProperty,
 } from "lit-element";
-
-// Firebase App (the core Firebase SDK) is always required
-import firebase from "firebase/app";
-// Used firebase products
-import "firebase/auth";
-import { UserDataService } from "../services/UserDataService";
 import { Interview } from "../models/Interview";
-import InterviewImage from "../../assets/img/interview.jpg";
 import { Question } from "../models/Question";
+import { UserDataService } from "../services/UserDataService";
+import { ThemingService } from "../services/ThemingService";
+import { loadingController, alertController } from "@ionic/core";
+
+import InterviewImage from "../../assets/img/interview.jpg";
 import QuestionImage from "../../assets/img/question.jpg";
 
 import "./app-login/app-login";
 import "./app-toolbar/app-toolbar";
 import "./app-fab/app-fab";
-import { Theming } from "../models/Theming";
-import { ThemingService } from "../services/ThemingService";
-import { loadingController } from "@ionic/core";
 
 @customElement("app-start")
 class AppStart extends LitElement {
@@ -29,6 +28,8 @@ class AppStart extends LitElement {
   protected lastInterviews: Interview[] = [];
   @internalProperty()
   protected lastQuestions: Question[] = [];
+  @internalProperty()
+  protected lastActiveInterview: Interview | null = null;
   @internalProperty()
   protected loading: boolean = true;
 
@@ -40,9 +41,14 @@ class AppStart extends LitElement {
           "User logged in, getting recent data for app-start component"
         );
         ThemingService.activateDarkModeConfig();
-        [this.lastInterviews, this.lastQuestions] = await Promise.all([
+        [
+          this.lastInterviews,
+          this.lastQuestions,
+          this.lastActiveInterview,
+        ] = await Promise.all([
           UserDataService.getLastInterviews(),
           UserDataService.getLastQuestions(),
+          UserDataService.getLastActiveInterview(),
         ]);
       }
     });
@@ -162,7 +168,15 @@ class AppStart extends LitElement {
         }
         </ion-slides>
       </ion-content>
-      <app-fab icon="play-outline"></app-fab>
+      ${
+        this.lastActiveInterview === null
+          ? html``
+          : html`<app-fab
+              icon="play-outline"
+              .onFabClick=${() => this.runLastInterview()}
+            ></app-fab>`
+      }
+      
     `;
   }
 
@@ -178,6 +192,32 @@ class AppStart extends LitElement {
       "ion-nav"
     ) as HTMLIonNavElement;
     nav.push("app-question-detail", { question: question });
+  }
+
+  async runLastInterview() {
+    const alert = await alertController.create({
+      header: "Aktives Interview fortführen?",
+      message: `Wirklich das zuletzt geführte Interview ${this.lastActiveInterview?.title} fortführen?`,
+      buttons: [
+        {
+          text: "Interview fortführen",
+          handler: () => {
+            let nav: HTMLIonNavElement = document.querySelector(
+              "ion-nav"
+            ) as HTMLIonNavElement;
+
+            nav.push("app-interview-run", {
+              interview: this.lastActiveInterview,
+            });
+          },
+        },
+        {
+          text: "Abbrechen",
+          role: "cancel",
+        },
+      ],
+    });
+    await alert.present();
   }
 
   async showLoader() {
