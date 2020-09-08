@@ -31,6 +31,9 @@ class AppInterviewList extends LitElement {
       .interviews__searchbar {
         background-color: var(--ion-color-light);
       }
+      ion-segment-button {
+        --color-checked: var(--ion-color-medium);
+      }
       .interviews__filterbarStatus {
         background-color: var(--ion-color-light);
       }

@@ -44,6 +44,9 @@ class AppCategoryList extends LitElement {
       ion-segment {
         background: var(--ion-color-light);
       }
+      ion-segment-button {
+        --color-checked: var(--ion-color-medium);
+      }
       .categories__favoriteButton--dark {
         --background: var(--ion-color-dark-contrast-rgb);
         --background-activated: black;
