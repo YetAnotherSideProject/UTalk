@@ -26,6 +26,7 @@ class AppRunInterview extends LitElement {
   @internalProperty() maxQuestions: number = 0;
 
   @internalProperty() darkMode: boolean = false;
+  @internalProperty() isFooterActive: boolean = false;
 
   constructor() {
     super();
@@ -76,6 +77,18 @@ class AppRunInterview extends LitElement {
         display: flex;
         align-items: center;
       }
+      .interviewRun__footer {
+        position: fixed;
+        bottom: 0px;
+        z-index: 1000;
+      }
+      .interviewRun__footerToolbar {
+        --background: var(--ion-color-medium);
+        padding: 1em;
+      }
+      .interviewRun__footerText {
+        font-size: 1.5em;
+      }
     `;
   }
 
@@ -89,6 +102,8 @@ class AppRunInterview extends LitElement {
       <app-toolbar
         customBackButton="true"
         .customClick=${() => this.navigateBack()}
+        infoButton="true"
+        .onInfoClick=${() => this.toggleFooter()}
       ></app-toolbar>
       <ion-content class="padding">
         <ion-card>
@@ -182,8 +197,32 @@ class AppRunInterview extends LitElement {
           ></ion-icon>
           </ion-button>
         </div>
+        ${
+          this.isFooterActive
+            ? html` <ion-footer class="interviewRun__footer">
+                <ion-toolbar class="interviewRun__footerToolbar">
+                  <h1 class="interviewRun__footerText">Info</h1>
+                  <p>
+                    Führe hier dein Interview durch und trage die Antworten
+                    unten in das entsprechende Feld ein. Swipe nach links oder
+                    rechts oder navigiere mit Hilfe der Pfeiltasten im unteren
+                    Bildschirmbereich, um die nächste oder vorherige Frage
+                    anzuzeigen. Mit dem Pause-Button unterbrichst du das
+                    Interview und kannst es später fortsetzen, mit dem
+                    Stop-Button beendest du es ganz. Im oberen Bildschirmbereich
+                    findest du einen Überblick über den aktuellen Interviewpart
+                    sowie den Gesamtstatus.
+                  </p>
+                </ion-toolbar>
+              </ion-footer>`
+            : html``
+        }
       </ion-content>
     `;
+  }
+
+  toggleFooter() {
+    this.isFooterActive = !this.isFooterActive;
   }
 
   navigateBack() {

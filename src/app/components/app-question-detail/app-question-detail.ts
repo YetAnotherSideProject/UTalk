@@ -1,4 +1,11 @@
-import { LitElement, html, customElement, property } from "lit-element";
+import {
+  LitElement,
+  html,
+  css,
+  customElement,
+  property,
+  internalProperty,
+} from "lit-element";
 import { alertController } from "@ionic/core";
 
 import { QuestionDao } from "../../dao/QuestionDao";
@@ -12,9 +19,27 @@ import "./app-interviewpart-select-modal";
 class AppQuestionDetail extends LitElement {
   @property({ type: Object }) category = {} as Category;
   @property({ type: Object }) question = {} as Question;
+  @internalProperty() isFooterActive: boolean = false;
 
   constructor() {
     super();
+  }
+
+  static get styles() {
+    return css`
+      .questionDetail__footer {
+        position: fixed;
+        bottom: 0px;
+        z-index: 1000;
+      }
+      .questionDetail__footerToolbar {
+        --background: var(--ion-color-medium);
+        padding: 1em;
+      }
+      .questionDetail__footerText {
+        font-size: 1.5em;
+      }
+    `;
   }
 
   render() {
@@ -23,6 +48,8 @@ class AppQuestionDetail extends LitElement {
       <app-toolbar
         customBackButton="true"
         .customClick=${() => this.onClickBackButton()}
+        infoButton="true"
+        .onInfoClick=${() => this.toggleFooter()}
       ></app-toolbar>
       <ion-content class="padding">
         <ion-card>
@@ -51,9 +78,25 @@ class AppQuestionDetail extends LitElement {
             ></ion-textarea>
           </ion-card-content>
         </ion-card>
+        ${this.isFooterActive
+          ? html` <ion-footer class="questionDetail__footer">
+              <ion-toolbar class="questionDetail__footerToolbar">
+                <h1 class="questionDetail__footerText">Info</h1>
+                <p>
+                  Gib hier unter "Frage" deinen gewünschten Fragentext ein. Für
+                  weitere Aktionen drücke auf den Floating Action Button unten
+                  rechts, um die Frage direkt einem Interview hinzuzufügen.
+                </p>
+              </ion-toolbar>
+            </ion-footer>`
+          : html``}
       </ion-content>
       <app-fab icon="copy-outline" @click=${this.onFabClick}></app-fab>
     `;
+  }
+
+  toggleFooter() {
+    this.isFooterActive = !this.isFooterActive;
   }
 
   // Aus irgendeinem Grund funktioniert der BackButton nicht. Scheinbar wird die pop()-Methode nicht aufgerufen, sondern auf die angegebene defaultHref geleitet. Deshalb dieser kleine Workaround (s. app-toolbar customBackButton)

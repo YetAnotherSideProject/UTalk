@@ -1,4 +1,11 @@
-import { LitElement, html, css, customElement, property } from "lit-element";
+import {
+  LitElement,
+  html,
+  css,
+  customElement,
+  property,
+  internalProperty,
+} from "lit-element";
 import { ItemReorderEventDetail, alertController } from "@ionic/core";
 import { Interview, InterviewPart } from "../../models/Interview";
 import InterviewImage from "../../../assets/img/interview.jpg";
@@ -9,6 +16,7 @@ import { InterviewService } from "../../services/InterviewService";
 class AppInterviewDetail extends LitElement {
   @property()
   interview: Interview = {} as Interview;
+  @internalProperty() isFooterActive: boolean = false;
 
   constructor() {
     super();
@@ -48,12 +56,29 @@ class AppInterviewDetail extends LitElement {
         font-weight: normal;
         font-size: small;
       }
+      .interviewDetail__footer {
+        position: fixed;
+        bottom: 0px;
+        z-index: 1000;
+      }
+      .interviewDetail__footerToolbar {
+        --background: var(--ion-color-medium);
+        padding: 1em;
+      }
+      .interviewDetail__footerText {
+        font-size: 1.5em;
+      }
     `;
   }
 
   render() {
     return html`
-      <app-toolbar backButton="true" defaultHref="/interviewlist"></app-toolbar>
+      <app-toolbar
+        backButton="true"
+        defaultHref="/interviewlist"
+        infoButton="true"
+        .onInfoClick=${() => this.toggleFooter()}
+      ></app-toolbar>
       <ion-content class="padding">
         <h1 class="interviewDetail__heading">Interview Detail</h1>
         <ion-card>
@@ -229,6 +254,26 @@ class AppInterviewDetail extends LitElement {
             }
           })}
         </ion-list>
+        ${this.isFooterActive
+          ? html` <ion-footer class="interviewDetail__footer">
+              <ion-toolbar class="interviewDetail__footerToolbar">
+                <h1 class="interviewDetail__footerText">Info</h1>
+                <p>
+                  Je nach Status (Draft, Active, Archived) kannst du auf dieser
+                  Seite verschiedene Interkationen durchführen. Gib z.B. mit
+                  Hilfe des Floating Action Buttons unten rechts einen neuen
+                  Interviewpart ein. Die zwei Balken rechts neben den Fragen
+                  signalisieren, dass du sie nach deinen Vorstellungen
+                  umsortieren kannst. Eine weitere Frage fügst du über das
+                  entsprechend gekennzeichnete Feld ein. Mit dem grünen
+                  Play-Button startest du ein Interview oder führst es fort.
+                  Außerdem hast du bei einem aktiven Interview die Möglichkeit
+                  deine bisher aufgenommenen Antworten zurückzusetzen. Sei damit
+                  aber vorsichtig!
+                </p>
+              </ion-toolbar>
+            </ion-footer>`
+          : html``}
       </ion-content>
       ${this.interview.status === "Draft"
         ? html` <app-fab
@@ -237,6 +282,10 @@ class AppInterviewDetail extends LitElement {
           ></app-fab>`
         : html``}
     `;
+  }
+
+  toggleFooter() {
+    this.isFooterActive = !this.isFooterActive;
   }
 
   onRunInterview() {

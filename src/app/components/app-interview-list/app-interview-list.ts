@@ -21,6 +21,7 @@ class AppInterviewList extends LitElement {
   dateSortFilter: string = "Change";
   @internalProperty()
   sortReverse: boolean = false;
+  @internalProperty() isFooterActive: boolean = false;
 
   constructor() {
     super();
@@ -60,6 +61,18 @@ class AppInterviewList extends LitElement {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
+      .interviews__footer {
+        position: fixed;
+        bottom: 0px;
+        z-index: 1000;
+      }
+      .interviews__footerToolbar {
+        --background: var(--ion-color-medium);
+        padding: 1em;
+      }
+      .interviews__footerText {
+        font-size: 1.5em;
+      }
     `;
   }
 
@@ -89,7 +102,10 @@ class AppInterviewList extends LitElement {
       });
 
     return html`
-      <app-toolbar></app-toolbar>
+      <app-toolbar
+        infoButton="true"
+        .onInfoClick=${() => this.toggleFooter()}
+      ></app-toolbar>
 
       <ion-searchbar
         @ionChange=${(event: any) =>
@@ -199,9 +215,27 @@ class AppInterviewList extends LitElement {
             </ion-item-sliding>`;
           })}
         </ion-list>
+        ${this.isFooterActive
+          ? html` <ion-footer class="interviews__footer">
+              <ion-toolbar class="interviews__footerToolbar">
+                <h1 class="interviews__footerText">Info</h1>
+                <p>
+                  Lege hier mit Hilfe des Floating Action Buttons unten rechts
+                  ein neues Interview an. Für weitere Aktionen swipe die
+                  Interview-Einträge nach links oder rechts. Über der
+                  Interview-Liste findest du zwei Ebenen, mit denen du nach
+                  mehreren Kriterien sortieren kannst.
+                </p>
+              </ion-toolbar>
+            </ion-footer>`
+          : html``}
       </ion-content>
       <app-fab icon="add-outline" @click=${this.onFabClick}></app-fab>
     `;
+  }
+
+  toggleFooter() {
+    this.isFooterActive = !this.isFooterActive;
   }
 
   sortByDate(s1: number, s2: number, reverse: boolean): number {
