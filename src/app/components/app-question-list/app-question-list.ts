@@ -4,7 +4,7 @@ import {
   css,
   customElement,
   property,
-  TemplateResult,
+  internalProperty,
 } from "lit-element";
 import { actionSheetController } from "@ionic/core";
 import Hammer from "hammerjs";
@@ -15,6 +15,7 @@ import { QuestionDao } from "../../dao/QuestionDao";
 @customElement("app-question-list")
 class AppQuestionList extends LitElement {
   @property({ type: Object }) category = {} as Category;
+  @internalProperty() isFooterActive: boolean = false;
 
   questions: Question[] = [];
   mcArray: Array<HammerManager>;
@@ -34,12 +35,29 @@ class AppQuestionList extends LitElement {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
+      .questions__footer {
+        position: fixed;
+        bottom: 0px;
+        z-index: 1000;
+      }
+      .questions__footerToolbar {
+        --background: var(--ion-color-medium);
+        padding: 1em;
+      }
+      .questions__footerText {
+        font-size: 1.5em;
+      }
     `;
   }
 
   render() {
     return html`
-      <app-toolbar backButton="true" defaultHref="/categorylist"></app-toolbar>
+      <app-toolbar
+        backButton="true"
+        defaultHref="/categorylist"
+        infoButton="true"
+        .onInfoClick=${() => this.toggleFooter()}
+      ></app-toolbar>
       <ion-content class="padding">
         <ion-list>
           <ion-list-header>Fragen zu ${this.category.name} </ion-list-header>
@@ -65,12 +83,28 @@ class AppQuestionList extends LitElement {
             >`;
           })}
         </ion-list>
+        ${this.isFooterActive
+          ? html` <ion-footer class="questions__footer">
+              <ion-toolbar class="questions__footerToolbar">
+                <h1 class="questions__footerText">Info</h1>
+                <p>
+                  Gib hier mit Hilfe des Floating Action Buttons unten rechts
+                  deine gewünschte Frage ein. Für weitere Aktionen drücke lange
+                  auf eine Kategorie oder swipe nach links oder rechts.
+                </p>
+              </ion-toolbar>
+            </ion-footer>`
+          : html``}
       </ion-content>
       <app-fab
         icon="add-outline"
         .onFabClick=${() => this.addQuestion()}
       ></app-fab>
     `;
+  }
+
+  toggleFooter() {
+    this.isFooterActive = !this.isFooterActive;
   }
 
   // TODO
