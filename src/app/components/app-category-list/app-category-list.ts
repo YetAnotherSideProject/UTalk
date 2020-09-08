@@ -45,18 +45,20 @@ class AppCategoryList extends LitElement {
         background: var(--ion-color-light);
       }
       .categories__favoriteButton--dark {
-        --background: black;
+        --background: var(--ion-color-dark-contrast-rgb);
         --background-activated: black;
+        --box-shadow: none;
       }
       .categories__favoriteButton--white {
         --background: white;
         --background-activated: white;
+        --box-shadow: none;
       }
       .categories__status--Favorite {
         fill: gold;
       }
       .categories__status--Neutral {
-        fill: var(--ion-color-light);
+        fill: var(--ion-color-light-tint);
       }
       .categories__optionRename {
         --ion-color-primary: var(--ion-color-medium);
