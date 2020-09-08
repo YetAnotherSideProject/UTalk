@@ -56,14 +56,17 @@ class AppRunInterview extends LitElement {
       .interviewRun__navigationButton {
         --padding-start: 0;
         --padding-end: 0;
+        height: 100%;
       }
       .interviewRun__navigationButton--dark {
         --background: black;
         --background-activated: black;
+        --box-shadow: none;
       }
       .interviewRun__navigationButton--white {
         --background: white;
         --background-activated: white;
+        --box-shadow: none;
       }
       .interviewRun__navigationIcon {
         font-size: 3.5em;
