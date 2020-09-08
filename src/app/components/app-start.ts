@@ -68,6 +68,9 @@ class AppStart extends LitElement {
       ion-card {
         margin-top: 0px;
       }
+      .start__interviewButton {
+        --background: var(--ion-color-light-tint);
+      }
     `;
   }
 
@@ -116,7 +119,7 @@ class AppStart extends LitElement {
                   <ion-card-header>
                     <ion-card-subtitle>Interview</ion-card-subtitle>
                     <ion-item lines="none">
-                      <ion-button>
+                      <ion-button class="start__interviewButton">
                         <ion-icon
                           slot="start"
                           name="add-circle-outline"

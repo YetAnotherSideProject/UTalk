@@ -212,11 +212,6 @@ body.dark {
 
   --ion-toolbar-color: var(--ion-color-primary);
 
-  ion-button::part(native) {
-    --background: black;
-    --background-activated: black;
-  }
-
   ion-action-sheet {
     --background: var(--ion-color-dark);
     --button-background-selected: var(--ion-color-danger);
