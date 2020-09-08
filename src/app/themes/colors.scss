@@ -130,6 +130,15 @@
 
   --ion-toolbar-background: var(--ion-color-primary);
   --ion-toolbar-color: var(--ion-color-primary-contrast);
+
+  ion-action-sheet {
+    --background: var(--ion-color-dark);
+    --button-background-selected: var(--ion-color-danger);
+  }
+
+  ion-alert button {
+    color: var(--ion-color-primary-contrast) !important;
+  }
 }
 
 /*
@@ -207,6 +216,11 @@ body.dark {
     --background: black;
     --background-activated: black;
   }
+
+  ion-action-sheet {
+    --background: var(--ion-color-dark);
+    --button-background-selected: var(--ion-color-danger);
+  }
 }
 
 /*
@@ -246,6 +260,11 @@ body.dark {
   --ion-item-background: #000000;
 
   --ion-card-background: #1c1c1d;
+
+  ion-action-sheet {
+    --background: var(--ion-color-step-100);
+    --button-background-selected: var(--ion-color-danger);
+  }
 }
 
 /*
