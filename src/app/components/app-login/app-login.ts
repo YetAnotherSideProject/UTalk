@@ -211,4 +211,17 @@ class AppLogin extends LitElement {
     document.body.appendChild(toast);
     return toast.present();
   }
+
+  hideMenu() {
+    let menu: HTMLIonMenuElement = document.querySelector(
+      "ion-menu"
+    ) as HTMLIonMenuElement;
+    menu.hidden = true;
+  }
+
+  // Lifecycle events
+  connectedCallback() {
+    super.connectedCallback();
+    this.hideMenu();
+  }
 }
