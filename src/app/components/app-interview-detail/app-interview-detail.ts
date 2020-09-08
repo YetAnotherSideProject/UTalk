@@ -32,6 +32,14 @@ class AppInterviewDetail extends LitElement {
         --ion-color-primary: var(--ion-color-danger);
         --ion-color-primary-contrast: var(--ion-color-danger-contrast);
       }
+      ion-textarea {
+        white-space: unset !important;
+      }
+      ion-reorder {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+      }
       .interviewDetail__questionAnswer {
         --min-height: 0px;
         font-weight: normal;
