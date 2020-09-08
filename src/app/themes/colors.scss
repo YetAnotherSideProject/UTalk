@@ -131,10 +131,10 @@
   --ion-toolbar-background: var(--ion-color-primary);
   --ion-toolbar-color: var(--ion-color-primary-contrast);
 
-  ion-action-sheet {
-    --background: var(--ion-color-dark);
-    --button-background-selected: var(--ion-color-danger);
-  }
+  // ion-action-sheet {
+  //   --background: var(--ion-color-dark);
+  //   --button-background-selected: var(--ion-color-danger);
+  // }
 
   ion-alert button {
     color: var(--ion-color-primary-contrast) !important;
@@ -303,4 +303,9 @@ body.dark {
   --ion-tab-bar-background: #1f1f1f;
 
   --ion-card-background: #1e1e1e;
+
+  ion-action-sheet {
+    --background: var(--ion-color-step-100);
+    --button-background-selected: var(--ion-color-danger);
+  }
 }
