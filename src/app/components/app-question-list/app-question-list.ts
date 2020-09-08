@@ -58,7 +58,7 @@ class AppQuestionList extends LitElement {
         infoButton="true"
         .onInfoClick=${() => this.toggleFooter()}
       ></app-toolbar>
-      <ion-content class="padding">
+      <ion-content @click=${() => this.closeFooter()} class="padding">
         <ion-list>
           <ion-list-header>Fragen zu ${this.category.name} </ion-list-header>
           ${this.questions.map((question, id) => {
@@ -105,6 +105,10 @@ class AppQuestionList extends LitElement {
 
   toggleFooter() {
     this.isFooterActive = !this.isFooterActive;
+  }
+
+  closeFooter() {
+    this.isFooterActive = false;
   }
 
   // TODO

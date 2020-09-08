@@ -180,7 +180,7 @@ class AppInterviewList extends LitElement {
         </ion-segment-button>
       </ion-segment>
 
-      <ion-content class="padding">
+      <ion-content @click=${() => this.closeFooter()} class="padding">
         <ion-list>
           <ion-list-header> Interviews </ion-list-header>
           ${filteredInterviews.map((interview) => {
@@ -236,6 +236,10 @@ class AppInterviewList extends LitElement {
 
   toggleFooter() {
     this.isFooterActive = !this.isFooterActive;
+  }
+
+  closeFooter() {
+    this.isFooterActive = false;
   }
 
   sortByDate(s1: number, s2: number, reverse: boolean): number {

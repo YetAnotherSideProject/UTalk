@@ -51,7 +51,7 @@ class AppQuestionDetail extends LitElement {
         infoButton="true"
         .onInfoClick=${() => this.toggleFooter()}
       ></app-toolbar>
-      <ion-content class="padding">
+      <ion-content @click=${() => this.closeFooter()} class="padding">
         <ion-card>
           <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
           <img src="${QuestionImage}" width="100%" />
@@ -97,6 +97,10 @@ class AppQuestionDetail extends LitElement {
 
   toggleFooter() {
     this.isFooterActive = !this.isFooterActive;
+  }
+
+  closeFooter() {
+    this.isFooterActive = false;
   }
 
   // Aus irgendeinem Grund funktioniert der BackButton nicht. Scheinbar wird die pop()-Methode nicht aufgerufen, sondern auf die angegebene defaultHref geleitet. Deshalb dieser kleine Workaround (s. app-toolbar customBackButton)

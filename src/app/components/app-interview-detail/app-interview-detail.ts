@@ -79,7 +79,7 @@ class AppInterviewDetail extends LitElement {
         infoButton="true"
         .onInfoClick=${() => this.toggleFooter()}
       ></app-toolbar>
-      <ion-content class="padding">
+      <ion-content @click=${() => this.closeFooter()} class="padding">
         <h1 class="interviewDetail__heading">Interview Detail</h1>
         <ion-card>
           <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
@@ -286,6 +286,10 @@ class AppInterviewDetail extends LitElement {
 
   toggleFooter() {
     this.isFooterActive = !this.isFooterActive;
+  }
+
+  closeFooter() {
+    this.isFooterActive = false;
   }
 
   onRunInterview() {

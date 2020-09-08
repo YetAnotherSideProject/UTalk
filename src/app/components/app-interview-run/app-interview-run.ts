@@ -105,7 +105,7 @@ class AppRunInterview extends LitElement {
         infoButton="true"
         .onInfoClick=${() => this.toggleFooter()}
       ></app-toolbar>
-      <ion-content class="padding">
+      <ion-content @click=${() => this.closeFooter()} class="padding">
         <ion-card>
           <ion-card-header>
             <ion-card-subtitle>Interview</ion-card-subtitle>
@@ -223,6 +223,10 @@ class AppRunInterview extends LitElement {
 
   toggleFooter() {
     this.isFooterActive = !this.isFooterActive;
+  }
+
+  closeFooter() {
+    this.isFooterActive = false;
   }
 
   navigateBack() {

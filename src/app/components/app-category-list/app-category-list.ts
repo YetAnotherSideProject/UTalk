@@ -131,7 +131,7 @@ class AppCategoryList extends LitElement {
           <ion-label>Favoriten</ion-label>
         </ion-segment-button>
       </ion-segment>
-      <ion-content class="padding">
+      <ion-content @click=${() => this.closeFooter()} class="padding">
         <ion-list>
           ${filteredInterviews.map((category) => {
             return html` <ion-item-sliding>
@@ -209,6 +209,10 @@ class AppCategoryList extends LitElement {
 
   toggleFooter() {
     this.isFooterActive = !this.isFooterActive;
+  }
+
+  closeFooter() {
+    this.isFooterActive = false;
   }
 
   onItemClick(categoryId: string) {
