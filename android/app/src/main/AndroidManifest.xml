@@ -15,6 +15,7 @@
             android:name="de.fhms.me.utalk.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:screenOrientation="sensor"
             android:launchMode="singleTask">
 
             <intent-filter>
