@@ -27,6 +27,13 @@ class AppQuestionDetail extends LitElement {
 
   static get styles() {
     return css`
+      .questionDetail__image {
+        width: 100%;
+        text-align: center;
+      }
+      .questionDetail__image > img {
+        max-width: 700px;
+      }
       .questionDetail__footer {
         position: fixed;
         bottom: 0px;
@@ -53,8 +60,10 @@ class AppQuestionDetail extends LitElement {
       ></app-toolbar>
       <ion-content @click=${() => this.closeFooter()} class="padding">
         <ion-card>
-          <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-          <img src="${QuestionImage}" width="100%" />
+          <div class="questionDetail__image">
+            <!-- <span>Photo by <a href="https://unsplash.com/@brucemars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">bruce mars</a> on <a href="https://unsplash.com/s/photos/questions?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
+            <img src="${QuestionImage}" width="100%" />
+          </div>
           <ion-card-header>
             <ion-card-subtitle>Question</ion-card-subtitle>
             <ion-card-title><u>Kategorie</u></ion-card-title>
