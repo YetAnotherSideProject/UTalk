@@ -31,8 +31,8 @@ class AppStart extends LitElement {
   protected lastQuestions: Question[] = [];
   @internalProperty()
   protected lastActiveInterview: Interview | null = null;
-  @internalProperty()
-  protected loading: boolean = true;
+  // @internalProperty()
+  // protected loading: boolean = true;
 
   constructor() {
     super();
@@ -53,9 +53,9 @@ class AppStart extends LitElement {
         ]);
       }
     });
-    let timeout = setTimeout(() => {
-      this.loading = false;
-    }, 2000);
+    // let timeout = setTimeout(() => {
+    //   this.loading = false;
+    // }, 2000);
   }
 
   static get styles() {
@@ -76,10 +76,10 @@ class AppStart extends LitElement {
   }
 
   render() {
-    if (this.loading) {
-      this.showLoader();
-      return;
-    }
+    // if (this.loading) {
+    //   this.showLoader();
+    //   return;
+    // }
     if (firebase.auth().currentUser === null) {
       return html` <ion-content class="ion-padding"
         ><app-login></app-login>
@@ -234,12 +234,12 @@ class AppStart extends LitElement {
     await alert.present();
   }
 
-  async showLoader() {
-    const loading = await loadingController.create({
-      message: "Bitte warten...",
-      duration: 2000,
-    });
+  // async showLoader() {
+  //   const loading = await loadingController.create({
+  //     message: "Bitte warten...",
+  //     duration: 2000,
+  //   });
 
-    await loading.present();
-  }
+  //   await loading.present();
+  // }
 }
