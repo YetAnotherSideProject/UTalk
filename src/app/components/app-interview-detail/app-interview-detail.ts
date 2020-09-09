@@ -27,6 +27,13 @@ class AppInterviewDetail extends LitElement {
       .interviewDetail__heading {
         text-align: center;
       }
+      .interviewDetail__image {
+        width: 100%;
+        text-align: center;
+      }
+      .interviewDetail__image > img {
+        max-width: 700px;
+      }
       .interviewDetail__title {
         font-weight: bold;
         font-size: 2em;
@@ -82,8 +89,10 @@ class AppInterviewDetail extends LitElement {
       <ion-content @click=${() => this.closeFooter()} class="padding">
         <h1 class="interviewDetail__heading">Interview Detail</h1>
         <ion-card>
-          <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
-          <img src="${InterviewImage}" width="100%" />
+          <div class="interviewDetail__image">
+            <!-- <span>Photo by <a href="https://unsplash.com/@davidvondiemar?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">David von Diemar</a> on <a href="https://unsplash.com/s/photos/press-conference?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span> -->
+            <img src="${InterviewImage}" width="100%" />
+          </div>
           <ion-card-header>
             <ion-card-subtitle
               >Interview mit Status ${this.interview.status}</ion-card-subtitle
