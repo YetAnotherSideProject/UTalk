@@ -46,7 +46,6 @@ class AppLogin extends LitElement {
         width: 100%;
         height: 100%;
         position: relative;
-        background-image: url("src/assets/img/interview.jpg");
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
@@ -101,7 +100,7 @@ class AppLogin extends LitElement {
         </ion-header>
 
         <ion-content>
-          <div class="login">
+          <div class="login" style="background-image: url(${InterviewImage})">
             <img
               class="login__logo"
               src="${UTalkLogo_White}"
@@ -217,6 +216,11 @@ class AppLogin extends LitElement {
       "ion-menu"
     ) as HTMLIonMenuElement;
     menu.hidden = true;
+  }
+
+  setBackgroundImage() {
+    let login = document.querySelector(".login");
+    console.log("Login div: ", login);
   }
 
   // Lifecycle events
