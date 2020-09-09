@@ -85,6 +85,7 @@ class AppStart extends LitElement {
       </ion-content>`;
     }
 
+    this.showMenu();
     return html`
       <app-toolbar></app-toolbar>
       <ion-content class="ion-padding">
@@ -181,6 +182,14 @@ class AppStart extends LitElement {
       }
       
     `;
+  }
+
+  showMenu() {
+    console.log("Show menu");
+    let menu: HTMLIonMenuElement = document.querySelector(
+      "ion-menu"
+    ) as HTMLIonMenuElement;
+    menu.hidden = false;
   }
 
   onInterviewClick(interview: Interview) {
