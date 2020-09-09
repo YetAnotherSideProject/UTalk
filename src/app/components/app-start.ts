@@ -204,7 +204,7 @@ class AppStart extends LitElement {
     let nav: HTMLIonNavElement = document.querySelector(
       "ion-nav"
     ) as HTMLIonNavElement;
-    let category = CategoryDao.getCategoryById(question.categoryId);
+    let category = await CategoryDao.getCategoryById(question.categoryId);
     nav.push("app-question-detail", { question: question, category: category });
   }
 
