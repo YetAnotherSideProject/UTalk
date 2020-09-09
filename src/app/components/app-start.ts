@@ -21,6 +21,7 @@ import QuestionImage from "../../assets/img/question.jpg";
 import "./app-login/app-login";
 import "./app-toolbar/app-toolbar";
 import "./app-fab/app-fab";
+import { CategoryDao } from "../dao/CategoryDao";
 
 @customElement("app-start")
 class AppStart extends LitElement {
@@ -199,11 +200,12 @@ class AppStart extends LitElement {
     nav.push("app-interview-detail", { interview: interview });
   }
 
-  onQuestionClick(question: Question) {
+  async onQuestionClick(question: Question) {
     let nav: HTMLIonNavElement = document.querySelector(
       "ion-nav"
     ) as HTMLIonNavElement;
-    nav.push("app-question-detail", { question: question });
+    let category = CategoryDao.getCategoryById(question.categoryId);
+    nav.push("app-question-detail", { question: question, category: category });
   }
 
   async runLastInterview() {
