@@ -216,6 +216,7 @@ class AppLogin extends LitElement {
       "ion-menu"
     ) as HTMLIonMenuElement;
     menu.hidden = true;
+    menu.disabled = true;
   }
 
   setBackgroundImage() {

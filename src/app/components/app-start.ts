@@ -191,6 +191,7 @@ class AppStart extends LitElement {
       "ion-menu"
     ) as HTMLIonMenuElement;
     menu.hidden = false;
+    menu.disabled = false;
   }
 
   onInterviewClick(interview: Interview) {
