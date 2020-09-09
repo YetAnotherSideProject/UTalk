@@ -23,6 +23,7 @@ class AppAboutUs extends LitElement {
         margin: 0px 0px 40px 0px;
         text-align: center;
         font-weight: bold;
+        color: black;
       }
       .about__version p {
         margin: 0;
