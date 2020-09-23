@@ -2,6 +2,8 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin"); // installed via
 const HtmlPlugin = require("html-webpack-plugin"); // installed via npm
 const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // installed via npm
 const CopyPlugin = require("copy-webpack-plugin"); // installed via npm
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin; // installed via npm
 module.exports = {
   mode: "production",
   resolve: { extensions: [".ts", ".js"] },
@@ -41,5 +43,6 @@ module.exports = {
         },
       ],
     }),
+    new BundleAnalyzerPlugin(),
   ],
 };
