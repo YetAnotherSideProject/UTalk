@@ -8,7 +8,8 @@
     "start": "webpack-dev-server --config webpack.dev.js",
     "test": "tsc && karma start",
     "build": "webpack --config webpack.prod.js",
-    "ionic:build": "webpack --config webpack.prod.js",
+    "analyze": "webpack --config webpack.prod.js --analyze",
+    "ionic:build": "npm run build",
     "prepare-natives": "ionic capacitor copy android && ionic capacitor copy ios"
   },
   "dependencies": {

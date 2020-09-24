@@ -4,45 +4,54 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // installed vi
 const CopyPlugin = require("copy-webpack-plugin"); // installed via npm
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin; // installed via npm
-module.exports = {
-  mode: "production",
-  resolve: { extensions: [".ts", ".js"] },
-  module: {
-    rules: [
-      { test: /.ts$/, use: "ts-loader" },
-      {
-        test: /.scss$/,
-        use: [
-          { loader: MiniCssExtractPlugin.loader },
-          "css-loader",
-          "sass-loader",
-        ],
-      },
-      {
-        test: /\.(png|svg|jpg|gif|ttf)$/,
-        use: ["file-loader"],
-      },
-    ],
-  },
-  entry: "./src/main.ts",
-  output: {
-    path: __dirname + "/dist",
-  },
-  plugins: [
-    new CleanWebpackPlugin(),
-    //Base ist wichtig, da sich hiervon relativ die index.html Ionic Core zieht
-    new HtmlPlugin({ template: "./src/index.html", base: "./ionic/core" }),
-    new MiniCssExtractPlugin(),
-    new CopyPlugin({
-      patterns: [
-        //Prod: Ionic Core wird Teil der lokalen Distro und wird deshalb kopiert
-        { from: "./node_modules/@ionic/core/css", to: "ionic/core/css" },
+
+module.exports = () => {
+  const config = {
+    mode: "production",
+    resolve: { extensions: [".ts", ".js"] },
+    module: {
+      rules: [
+        { test: /.ts$/, use: "ts-loader" },
         {
-          from: "./node_modules/@ionic/core/dist/ionic",
-          to: "ionic/core/dist/ionic",
+          test: /.scss$/,
+          use: [
+            { loader: MiniCssExtractPlugin.loader },
+            "css-loader",
+            "sass-loader",
+          ],
+        },
+        {
+          test: /\.(png|svg|jpg|gif|ttf)$/,
+          use: ["file-loader"],
         },
       ],
-    }),
-    new BundleAnalyzerPlugin(),
-  ],
+    },
+    entry: "./src/main.ts",
+    output: {
+      path: __dirname + "/dist",
+    },
+    plugins: [
+      new CleanWebpackPlugin(),
+      //Base ist wichtig, da sich hiervon relativ die index.html Ionic Core zieht
+      new HtmlPlugin({ template: "./src/index.html", base: "./ionic/core" }),
+      new MiniCssExtractPlugin(),
+      new CopyPlugin({
+        patterns: [
+          //Prod: Ionic Core wird Teil der lokalen Distro und wird deshalb kopiert
+          { from: "./node_modules/@ionic/core/css", to: "ionic/core/css" },
+          {
+            from: "./node_modules/@ionic/core/dist/ionic",
+            to: "ionic/core/dist/ionic",
+          },
+        ],
+      }),
+    ],
+  };
+
+  if (process.argv.includes("--analyze")) {
+    //Bundle analyzer only runs in analyze mode entered via --analyze
+    config.plugins.push(new BundleAnalyzerPlugin());
+  }
+
+  return config;
 };
